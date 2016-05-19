@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  19 MAY 2016 10:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  19 MAY 2016 16:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1001,19 +1001,19 @@ Chapter 2.
 
 ]
 Chapter 3.
-[11
-
-]
-Chapter 4.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 83.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 87.
-[12
+[11
+
+] [12]
+Chapter 4.
+[13
 
 ]
 Chapter 5.
-[13
+[14
 
 ]
 Chapter 6.
@@ -1029,25 +1029,25 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\normalfont \rmfamily ' on input line 119.
+(scrreprt)              by `\normalfont \rmfamily ' on input line 130.
 
 
-LaTeX Warning: Reference `fig:ch0-gran-labels' on page 14 undefined on input li
-ne 148.
+LaTeX Warning: Reference `fig:ch0-gran-labels' on page 15 undefined on input li
+ne 159.
 
 
-LaTeX Warning: Citation `Ohlbach06' on page 14 undefined on input line 154.
+LaTeX Warning: Citation `Ohlbach06' on page 15 undefined on input line 165.
 
 
-LaTeX Warning: Citation `ical98' on page 14 undefined on input line 154.
+LaTeX Warning: Citation `ical98' on page 15 undefined on input line 165.
 
-[14
+[15
 
 ]
 
-LaTeX Warning: Citation `Niezette92' on page 15 undefined on input line 173.
+LaTeX Warning: Citation `Niezette92' on page 16 undefined on input line 184.
 
-[15]
+[16]
 Chapter 7.
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1061,7 +1061,7 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\mathrm ' on input line 234.
+(scrreprt)              by `\mathrm ' on input line 245.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\bf'!
@@ -1075,7 +1075,7 @@ Class scrreprt Warning: Usage of deprecated font command `\bf'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\bf' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\bf'
-(scrreprt)              by `\normalfont \bfseries ' on input line 239.
+(scrreprt)              by `\normalfont \bfseries ' on input line 250.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1089,7 +1089,7 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\normalfont \rmfamily ' on input line 239.
+(scrreprt)              by `\normalfont \rmfamily ' on input line 250.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1103,7 +1103,7 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\mathrm ' on input line 242.
+(scrreprt)              by `\mathrm ' on input line 253.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1117,7 +1117,7 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\mathrm ' on input line 250.
+(scrreprt)              by `\mathrm ' on input line 261.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1131,7 +1131,7 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\mathrm ' on input line 250.
+(scrreprt)              by `\mathrm ' on input line 261.
 
 
 Class scrreprt Warning: Usage of deprecated font command `\rm'!
@@ -1145,13 +1145,13 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 (scrreprt)              Note also, that KOMA-Script will remove the definition
 (scrreprt)              of `\rm' anytime until release of about version 3.20.
 (scrreprt)              But for now, KOMA-Script will replace deprecated `\rm'
-(scrreprt)              by `\mathrm ' on input line 250.
+(scrreprt)              by `\mathrm ' on input line 261.
 
-[16
+[17
 
 ]
 No file ifiThesisEx.bbl.
-[17
+[18
 
 ] (./ifiThesisEx.aux)
 
@@ -1165,7 +1165,7 @@ Here is how much of TeX's memory you used:
  19795 multiletter control sequences out of 15000+600000
  46314 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,8n,60p,451b,741s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,8n,60p,1415b,741s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
@@ -1183,10 +1183,10 @@ xmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist
 type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/
 times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on ifiThesisEx.pdf (17 pages, 227646 bytes).
+Output written on ifiThesisEx.pdf (18 pages, 231724 bytes).
 PDF statistics:
- 157 PDF objects out of 1000 (max. 8388607)
- 115 compressed objects within 2 object streams
+ 160 PDF objects out of 1000 (max. 8388607)
+ 117 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

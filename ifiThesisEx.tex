@@ -73,19 +73,19 @@ I especially would like to thank my supervisor Kevin Wellenzohn, who has support
 \listoftables
 
 \listofalgorithms
-\addtocontents{loa}{\def\string\figurename{Algorithm}}
+
 
 \chapter{Introduction}
+The financial stock market, wireless sensor networks, weather forecasts or monitoring systems use streaming time series. A streaming time series is a unbounded sequence of data points that is continuously extended, potentially even forever.\\Since it is unbounded, a system cannot hold the constantly generated data in his main memory endlessly. Therefore, the data that is kept in main memory needs to be limited to a part of the time series. Besides, in order to be practical for a application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises. 
+
 \chapter{Background and Related Work}
 \chapter{Problem Statement}
-
-\chapter{Solution}
 \section{Handling Duplicate Values}
 
 B+ trees are often 
 
 \subsection{Add the time to the key}
-If you would add the timestamp to the keys would be unique. So if the case occurs where you have the same keys but in different leaves because the leaves were full and had therefore be splitted you could include the timestamp which divides the two different values to the parent. --> every key with timestamp smaller than the parents timestamp is in the left leaf and every key with timestamp bigger or equal is in the right one --> 
+If you would add the timestamps to keys would be unique. So if the case occurs where you have the same keys but in different leaves because the leaves were full and had therefore be splitted you could include the timestamps which divides the two different values to the parent. --> every key with timestamp smaller than the parents timestamp is in the left leaf and every key with timestamp bigger or equal is in the right one --> 
 Problems: more memory needed. always check needed if there is a timestamp in the leaf
 + neighbour method would still work because you have the value and the set of time stamps 
 
@@ -93,6 +93,17 @@ Problems: more memory needed. always check needed if there is a timestamp in the
 
 The second was to have just one entry for each key, but the 'payload' associated with each key points to a different block of data, which is a linked list pointing to all instances of items that are having the same key
 
+
+\subsection{Not change insertion but the search algorithm}
+There are several different ways of handling duplicate keys. One way is use an unmodified insert algorithm which allows duplicate keys in blocks but is otherwise unchanged. The issue with a structure such as this is the search algorithm must be modified to take into account several corner cases which arise
+For instance one of the invariants of a B+Tree may be violated in this structure. Specifically if there are many duplicate keys, a copy of one of the keys may be in a non-leaf block. However, the key may appear in blocks that which appear logically before the block which is pointed at by the key in the internal block. Thus the search algorithm must be modified to look in the previous blocks to the one suggested by the unmodified search algorithm. This will slow down the common case for search.There is another issue with this straight forward implementation, if there are many duplicate keys in the index, the index size may be taller than necessary. Consider a situation were for each unique key there are perhaps hundreds of duplicates, the index size will be proportional to the total number of keys in the main file, however, you only need to index an index on the unique keys. One of the files indexed in our program will be indexing has such characteristics to its data. It indexes strings (as the keys) with associated instances where those strings show up in our documents. There can be hundreds to thousands of instances of each unique string.
+Therefore the approach I took was to store only the unique keys in the index, and have the duplicates captured in overflow blocks in the main file. An example of such a tree can be seen in figure 2. Consider key 6; there are 5 instances of this key in the tree. The tree is order 3, indicating the keys cannot all fit in one block. To handle this situation an overflow block is chained to the block which is indexed by the tree structure. The overflow block then points to the next relevant block in the tree.To create a structure such as this, the insert algorithm had to be modified. Like the previous version these modifications do not come without a cost, in particular the invariant which states all block must be at least half full has been relaxed. This is not true in this B+Tree, some blocks like the one containing key number 7, are not half full. This problem could be partially solved by using key rotations to balance the tree better. However, there are still corner cases where there would be a block which is under-full. One such corner case includes when a key falls between two keys which have overflow blocks. It must then be in a block by itself, since this B+Tree has the invariant which state that if a block is overflowing it can only contain one unique key. In the future we would like to implement key rotations to help partially alleviate the problem of under-full blocks.
+
+The advantage of this approach to B+Trees with duplicate keys is the index size is small no matter how the ratio of duplicate keys to the total number of keys in the file. This property allows our searches to be conducted quicker. Since the overflow blocks are chained into the B+Tree structure we still have the property of being able to fast sequential scans. One consequence is we have defined all queries on our B+Trees to be range queries. This is fine because all of our queries were already range queries. In conclusion we relax the condition that all blocks must be at least half full to gain higher performance during search.
+
+http://hackthology.com/lessons-learned-while-implementing-a-btree.html
+
+\chapter{Solution}
 
 
 
@@ -102,7 +113,7 @@ The second was to have just one entry for each key, but the 'payload' associated
 \section{Runtime Complexity}
 \section{Space Complexity}
 
-\chapter{Summary and Conclusions}
+\chapter{Summary and Conclusion}
 
 \section{Fixed-Period Problems: The Sublinear Case}
 
