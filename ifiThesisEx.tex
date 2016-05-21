@@ -12,6 +12,13 @@
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{chapterbib}
+
+
+
 
 
 
@@ -71,22 +78,45 @@ I especially would like to thank my supervisor Kevin Wellenzohn, who has support
 \tableofcontents
 \listoffigures
 \listoftables
-
 \listofalgorithms
 
 
 \chapter{Introduction}
-The financial stock market, wireless sensor networks, weather forecasts or monitoring systems use streaming time series. A streaming time series is a unbounded sequence of data points that is continuously extended, potentially even forever.\\Since it is unbounded, a system cannot hold the constantly generated data in his main memory endlessly. Therefore, the data that is kept in main memory needs to be limited to a part of the time series. Besides, in order to be practical for a application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises. 
+A streaming time series \(s\) is a unbounded sequence of data points that is continuously extended, potentially forever. They are relevant to applications in diverse domains like in finance, meteorology or sensor networks to name a few. All these applications need to be fed continuously with the latest data. But the processing of large volumes of time series data is impractical because a system can only keep a limited size of data in main memory.\\
+Since streaming time series are unbounded, a system cannot hold the constantly generated data in his main memory endlessly. Therefore, the data that is kept in main memory needs to be limited to just a portion of the streaming time series. Besides, in order to be practical for a application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises.\\
+The thesis presents a way to implement the described data structures after discussing the requirements. Furthermore, it documents the out coming experimental results.
+In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be summarized and concluded.
 
 \chapter{Background and Related Work}
-\chapter{Problem Statement}
+Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: \\
+\begin{itemize}  
+	\item The algorithm needs to be efficient enough to complete the data imputation before the new measurement arrives. 
+	\item The imputation must rely on past measurements.\\
+\end{itemize}
+The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. 
+
+
+The algorithm is described in Section \ref{sec:TKCM}. 
+
+\label{sec:TKCM}
+\section{TKCM}
+
+
+The implementation of the index structure described in the following thesis is a fundamental part of the TKCM algorithm.  
+
+
+
+\chapter{Preliminaries}
+\label{sec:P}
+
+
 \section{Handling Duplicate Values}
 
 B+ trees are often 
 
 \subsection{Add the time to the key}
 If you would add the timestamps to keys would be unique. So if the case occurs where you have the same keys but in different leaves because the leaves were full and had therefore be splitted you could include the timestamps which divides the two different values to the parent. --> every key with timestamp smaller than the parents timestamp is in the left leaf and every key with timestamp bigger or equal is in the right one --> 
-Problems: more memory needed. always check needed if there is a timestamp in the leaf
+Problems: more memory needed. always check needed if there is a timestamps in the leaf
 + neighbour method would still work because you have the value and the set of time stamps 
 
 \subsection{Add several times to the key}
@@ -103,192 +133,50 @@ The advantage of this approach to B+Trees with duplicate keys is the index size 
 
 http://hackthology.com/lessons-learned-while-implementing-a-btree.html
 
-\chapter{Solution}
+\chapter{Implementation}
+\label{sec:Implementation}
 
 
+Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the newest time point for which the stream produced a new value. \\\\The system uses two different data structures: a circular array and a $B+$ tree. needs to be efficiently perform the following operations on the streaming time series $s$ in a sliding window $|W|$: \\
+\begin{itemize}  
+	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
+	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
+	\item neighbour$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
+\end{itemize}
 
 
 \chapter{Experimental Evaluation}
-
-\section{Runtime Complexity}
-\section{Space Complexity}
+\label{sec:Experimental}
+\section{Experimental Setup}
+\section{Results}
+\section{Discussion}
 
 \chapter{Summary and Conclusion}
+\label{sec:Summary}
+"The conclusion (10 to 12 per cent of the whole research thesis) does not only summarize the whole research thesis, but it also evaluates the results of the scientific inquiry. Do the results confirm or reject previously formulated hypotheses? The conclusion draws both theoretical and practical lessons that could be used in future analyses. These lessons are to be embedded as
+2
+recommendations for the research community and for policy-makers (note: policy relevance instead of policy prescriptive). In addition, the conclusion gives insights for further research."
 
-\section{Fixed-Period Problems: The Sublinear Case}
+\begin{thebibliography}{99}
+	\bibliographystyle{alpha}
+	
+	\bibitem{BScT} K. Wellenzohn, M. Böhlen, A. Dignos, J. Gamper, and H. Mitterer: \emph{Continuous imputation of missing values in highly correlated streams of time series data}; Unpublished, 2016.
+	
+	\bibitem{OnlineAmnesicAppr} Themistoklis Palapanas, Michail Vlachos, Eamonn Keogh, Dimitrios Gunopulos, Wagner Truppel: \emph{Online Amnesic Approximation of Streaming Time Series}; University of California, Riverside, USA, 2004. \url{http://www.cs.ucr.edu/~eamonn/ICDM_2004.pdf}
+	
+	\bibitem{AuthentificationMethod} Xiaomei Dong, Xiaohua Li: \emph{An Authentification Method for Self Nodes Based on Watermarking in Wireless Sensor Networks}; Northeastern University, Liaoning, China, 2009.
+	\bibitem{AuthentificationMethod} Xiaomei Dong, Xiaohua Li: \emph{An Authentification Method for Self Nodes Based on Watermarking in Wireless Sensor Networks}; Northeastern University, Liaoning, China, 2009.
+	\bibitem{SecInWSN:IssChall} All-Sakib Khan Pathan, Hyung-Woo Lee, Choong Seon Hong: \emph{Security in Wireless Sensor Networks: Issues and Challenges}; ISBN 89-5519-129-4, DOI: 10.1109/ICACT.2006.206151, Februar 2006. \url{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1625756&isnumber=34121}
+		
+	
 
-With this chapter, the preliminaries are over, and we begin the search
-for periodic solutions to Hamiltonian systems. All this will be done
-in the convex case; that is, we shall study the boundary-value problem
-\begin{eqnarray*}
-  \dot{x}&=&JH' (t,x)\\
-  x(0) &=& x(T)
-\end{eqnarray*}
-with $H(t,\cdot)$ a convex function of $x$, going to $+\infty$ when
-$\left\|x\right\| \to \infty$.
 
-\begin{example} [{\rm(External forcing)}]
-Consider the system:
-\begin{equation}
-  \dot{x} = JH' (x) + f(t)
-\end{equation}
-where the Hamiltonian $H$ is $\left(0,b_{\infty}\right)$-subquadratic,
-and the forcing term is a distribution on the circle.
-\end{example}
 
-\subsection{Autonomous Systems}
+\end{thebibliography}
 
-We assume a \emph{time domain}, $\mathcal{A}$, as a set of time
-instants equipped with a total order $\leq$ and isomorph to integers.
-Time granularities are partitionings of subsets of $\mathcal{A}$ into
-non-empty intervals of time instants, termed \emph{granules}.
-Examples of time granularities are minutes ($\mathit{min}$), hours
-($\mathit{hou}$), days ($\mathit{day}$), weeks ($\mathit{wee}$),
-months ($\mathit{mth}$), and years ($\mathit{yea}$).  The granularity
-$\mathit{day}$, for instance, divides the time domain into granules of
-1440 minutes.  We assume a \emph{bottom granularity}, $G_\bot$, such
-that each granule of $G_\bot$ contains exactly one time instant.  In
-our running example minutes represent the bottom granularity, and we
-use the ISO~8601:2004 notation to denote time instants, e.g.,
-\mbox{2007-02-12 07:15}.  The granules of each granularity $G$ are
-ordered according to the time domain order and indexed with a subset
-of integers, $\mathcal{L}_G$, such that the indexing function
-$\mathcal{M}_G : \mathcal{L}_G \to G$ is an isomorphism that preserves
-the total order $\leq$. For each granularity we assume that the
-granule with index~0 contains the time instant 2000-01-01-00:00.
-Figure~\ref{fig:ch0-gran-labels} illustrates some correspondences of
-indexes between different granularities, e.g.,
-$\mathcal{M}_\mathit{day}(2599)$ = [2007-02-12 00:00, 2007-02-12
-23:59].
 
-For the conversion between different granularities, we adopt the
-\emph{bigger-part-inside semantics}~\cite{Ohlbach06,ical98}.  The
-conversion from a coarser granularity $H$ to a finer granularity $G$
-is defined as
-\begin{align*}
-  \downharpoonright^{H}_{G}(i) = \{ j \mid
-  & |\mathcal{M}_{G}(j) \cap
-  \mathcal{M}_{H}(i)| > |\mathcal{M}_{G}(j) \setminus
-  \mathcal{M}_{H}(i)| \lor {}
-  \\
-  & (|\mathcal{M}_{G}(j) \cap \mathcal{M}_{H}(i)| =
-  |\mathcal{M}_{G}(j) \setminus \mathcal{M}_{H}(i)| \land
-  \max(\mathcal{M}_{G}(j)) \in \mathcal{M}_{H}(i) )\}
-\end{align*}
-$\downharpoonright^{H}_{G}(i)$ returns the indexes of those granules
-in $G$ that are covered by granule $i$ in $H$ for more than a half or,
-if exactly half of a granule in $G$ is covered, the second half.
 
-\section{Time Slices and Multislices}
 
-A (time) \emph{slice}~\cite{Niezette92} is a finite list of pairs,
-$\lambda = (G_1X_1,\ldots,G_dX_d)$, where $G_l$ are granularities and
-$X_l$ are \emph{selectors} that are defined as sets of integers.  Each
-selector $X_{l+1}$ specifies a set of granules in $G_{l+1}$ with a
-relative positioning with respect to granularity $G_l$.  The sequence
-of granularities $(G_1,\ldots,G_d)$ is the \emph{hierarchy} of the
-slice.  
 
-Consider the slice $(\mathit{yea}\{7\}, \mathit{wee}\{\text{0-25}\},
-\mathit{day}\{\text{0-4}\}, \mathit{hou}\{7\},
-\mathit{min}\{\text{0,25,55}\})$.  The hierarchy is $(\mathit{wee},
-\mathit{day}, \mathit{hou}, \mathit{min})$.  The first selector
-$\{7\}$ selects the year 2007, the selector \{0-25\} selects the first
-26 weeks of this year, the selector \{0-4\} selects the days from
-Monday to Friday from each of these weeks, etc.
-
-The semantics of a slice $\lambda$ = $(G_1X_1$, \ldots, $G_dX_d)$ is
-defined through the following mapping $\mathcal{I}$ to a subset of the
-time domain:
-
-\begin{equation*}
-  \mathcal{I} (\lambda) =
-  \begin{cases}
-    \bigcup_{k \in X_1} \mathcal{M}_{G_1}(k) & d=1 \\[1ex]
-    \mathcal{I} \left( (G_2\bigcup_{k \in X_1}(
-      \downharpoonright^{G_1}_{G_2}(k)/^+X_2), \ldots, G_dX_d)
-    \right) & d>1
-  \end{cases}
-\end{equation*}
-
-Here, $\downharpoonright^{G_1}_{G_2}$ is a bigger-part-inside
-conversion from a granularity $G_1$ to a granularity $G_2$, and
-$\downharpoonright^{G_1}_{G_2}(k)/^+X_2$ is defined as
-$\downharpoonright^{G_1}_{G_2}(k) \cap \{
-\min(\downharpoonright^{G_1}_{G_2}(k)) + i \mid i \in X_2 \}$.
-
-\begin{figure}[htbp]\centering
-  \begin{tikzpicture}[scale=0.13]
-    \tikzstyle{every node}=[scale=0.7]
-    \draw[->] (0,0) -- (30,0);
-    \foreach \t in {0,5,10,15,20,25,30} \node at (\t,-0.9) {\t};
-    \draw (28,-2.5) node {TT};
-    \draw[->] (0,0) -- (0,30);
-    \foreach \t in {0,5,10,15,20,25,30} \node at (-1.5,\t) {\t};
-    \draw (-3.5,27) node {VT};
-    \draw[<->] (22,10) -- (15,10) -- (15,5) -- (10,5) -- (10,10)
-      -- (5,10) -- (5,15) -- (10,15) -- (10,20) -- (15,20) -- (15,15)
-      -- (22,15);
-    \draw (20,10) -- (20,15);
-    \draw (10,12.5) node {(Jake,Ship)};
-    \draw (25,12.5) node {(Jake,Load)};
-    \draw[<->] (22,25) -- (20,25) -- (20,30) -- (22,30);
-    \draw (25,27.5) node {(Kate,Ship)};
-  \end{tikzpicture}
-  \caption{Relationships between $P$, $M$, and $M_\mathrm{min}$}
-  \label{fig:ch2-singular-minimal-mapping}
-\end{figure}
-
-\chapter{The Final One}
-
-\begin{lemma}
-Assume that $H$ is $C^{2}$ on $\bbbr^{2n} \setminus \{ 0\}$ and
-that $H'' (x)$ is non-de\-gen\-er\-ate for any $x\ne 0$. Then any local
-minimizer $\widetilde{qx}$ of $\psi$ has minimal period $T$.
-\end{lemma}
-
-\begin{proof}
-We know that $\widetilde{x}$, or
-$\widetilde{x} + \xi$ for some constant $\xi
-\in \bbbr^{2n}$, is a $T$-periodic solution of the Hamiltonian system:
-\begin{equation}
-  \dot{x} = JH' (x)\ .
-\end{equation}
-
-There is no loss of generality in taking $\xi = 0$. So
-$\psi (x) \ge \psi (\widetilde{x} )$
-for all $\widetilde{x}$ in some neighbourhood of $x$ in
-$W^{1,2} \left(\bbbr / T\bbbz ; \bbbr^{2n}\right)$.
-
-But this index is precisely the index
-$i_{T} (\widetilde{x} )$ of the $T$-periodic
-solution $\widetilde{x}$ over the interval
-$(0,T)$, as defined in Sect.~2.6. So
-\begin{equation}
-  i_{T} (\widetilde{x} ) = 0\ .
-  \label{eq:five}
-\end{equation}
-
-Now if $\widetilde{x}$ has a lower period, $T/k$ say,
-we would have, by Corollary 31:
-\begin{equation}
-  i_{T} (\widetilde{x} ) =
-  i_{kT/k}(\widetilde{x} ) \ge
-  ki_{T/k} (\widetilde{x} ) + k-1 \ge k-1 \ge 1\ .
-\end{equation}
-
-This would contradict (~\ref{eq:five}), and thus cannot happen.
-\end{proof}
-
-\begin{figure}[htbp]\centering
-
-\end{figure}
-
-A reference to a Figure~
-
-\chapter*{Bibliography}
-
-\bibliographystyle{alpha}
-\bibliography{}
 
 \end{document}
