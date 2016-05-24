@@ -9,7 +9,6 @@
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{amsfonts}
-\usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{mathtools}
@@ -84,55 +83,96 @@ Since streaming time series are unbounded, a system cannot hold the constantly g
 The thesis presents a way to implement the described data structures after discussing the requirements. Furthermore, it documents the out coming experimental results.
 In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be summarized and concluded.
 
+\section{Thesis Outline}
+...First...
+
 \chapter{Background and Related Work}
-Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: \\
+Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: 
 \begin{itemize}  
 	\item The algorithm needs to be efficient enough to complete the data imputation before the new measurement arrives. 
-	\item The imputation must rely on past measurements.\\
+	\item The imputation must rely on past measurements.
 \end{itemize}
-The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. In the following, the data set of the \emph{SBM} is described in Section \ref{sec:DS}. After, the TKCM algorithm is introduced in Section \ref{sec:TKCM}.
+The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. In the following, the data set of the \emph{SBM} is described in Section \ref{sec:DS}. After, the TKCM algorithm is introduced in Section \ref{sec:TKCM}. Finally, the connection to this paper is made in Section \ref{sec:ImpTKCM} and the implementation is introduced. 
 
-\label{sec:DS}
+
 \section{The Data Set}
+\label{sec:DS}
 The \emph{SBR} operates 115 weather stations in South Tyrol. Each of the weather stations records temperature every five minutes. 8\% of the data set is missing. Missing values often occur in groups either due to transmission problems which lead to smaller missing groups of no more than 5 consecutive missing values or sensor failures which may lead to larger missing groups. 87\% of the missing blocks are small and therefore not more than 5 blocks in length. The algorithm is described in Section \ref{sec:TKCM}. 
 
-\label{sec:TKCM}
+
 \section{TKCM}
+\label{sec:TKCM}
 The implementation of the index structure described in the following thesis is a fundamental part of the TKCM algorithm.\\
 The algorithm is a \emph{k}-Nearest Neighbor Imputation algorithm that uses reference time series to find similar weather situations in the past. \\Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the current time point for which the stream produced a new value. Besides, consider a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series \emph{s} e S at time \emph{t} is denoted as $s(t)$. Only the values in the time window $W$ are kept in main memory. If the current value of the time series is missing we write $s(\bar{t})=NIL$. However, all the time points $t < \bar{t}$ have a time series \emph{s} that is complete. Hence, $\forall t < \bar{t} : s(t) \ne NIL$ since \emph{s} contains imputed values if the real ones were missing. To impute the missing values, reference time series are used. Let $R_s = [r_1, r_2, ...]$ be a sequence of \emph{reference time series} $r_i \in S \setminus \{s\}$ for time series \emph{s}. TKCM chooses for each base time series $s \in S$ the ranked sequence of reference time series $R_s$. The fundamental idea is to search for a co-occurrence for two time points $t$, $\bar{t}$ where the reference time series \emph{r} has values $r(\bar{t})\approx r(t)$, then also $s(\bar{t}) \approx s(t)$. Parameter \emph{l} stands for the number of reference time series that TKCM should consider. $R_s$ is computed using the Case Matching Algorithm further described in the paper. It consists of \emph{l} reference values at time $\bar{t}$. Further, we define $R_s^l$ as the first \emph{l} time series of $R_s$ that have a value $r_i(\bar{t}) \ne NIL$. \\
 The two-dimensional query pattern $P_{\bar{t}}$ is defined with \emph{l} reference time series on the spatial dimension and a time window of length \emph{p} on the time dimension.
 \newtheorem{defn}{Definition}[section]
 \begin{defn}
-	Query-Pattern. Let p and o denote the pattern length and pattern offset, respectively, where $p > 1$ and $0 \leq o < p$. Query pattern $P_{\bar{t}}$ contains all values of time series $R_s^l \cup \{s\}$ in the window of time $[\bar{t} - p, \bar{t}]$, except the missing value $s(\bar{t}) = NIL$. $P_{\bar{t}}$ is a set of triples $(r,o,r( \bar{t}-o))$, such that:\\\\
-	$P_{\bar{t}}=\{(r,o,r( \bar{t}-o))| r \in \{s\} \cup R_s^l \land 0 \cup 0 \leq o < p\} \ne \{(s,0,s(\bar{t}))\}$\\\\
+	Query-Pattern. Let p and o denote the pattern length and pattern offset, respectively, where $p > 1$ and $0 \leq o < p$. Query pattern $P_{\bar{t}}$ contains all values of time series $R_s^l \cup \{s\}$ in the window of time $[\bar{t} - p, \bar{t}]$, except the missing value $s(\bar{t}) = NIL$. $P_{\bar{t}}$ is a set of triples $(r,o,r( \bar{t}-o))$, such that:
+	\begin{align*}
+P_{\bar{t}}=\{(r,o,r( \bar{t}-o))| r \in \{s\} \cup R_s^l \land 0 \cup 0 \leq o < p\} \ne \{(s,0,s(\bar{t}))\}
+	\end{align*}
 	The value of a cell is given by $P_{\bar{t}}^{r,o}$, hence $(r, o, P_{\bar{t}}^{r,o}) \in P_{\bar{t}}$.
 \end{defn}
 \newtheorem{exmp}{Example}[section]
 \begin{exmp}
 A data example for a triple is $(r_1,0,20.5^{\circ}C)$, where $r_1$ represents the reference values, $0$ is the pattern offset \emph{o} and $20.5^{\circ}C$ represents the degree at time $\bar{t}$. A pattern example for l = 2 and p = 1 would be: $P_{\bar{t}}=\{(r_1,0,20.5^{\circ}C),(r_2,0,19.5^{\circ}C)\}$.
 \end{exmp}
-The TKCM algorithm searches for the \emph{k} patterns $P_t$ in the time window $W$ that best match the query pattern $P_{\bar{t}}$. The pattern $P_t$ matches the query patter $P_{\bar{t}}$ if for each cell $P_{\bar{t}}^{r,o} \in P_{\bar{t}}$ a corresponding cell  $P_{t}^{r,o} \in P_t$ exists. The error between a pattern $P_t$ and $P_{\bar{t}}$  is the sum of the cell-wise differences in the patterns:\\\\
-$\delta(P_{t}, P_{\bar{t}}) = \displaystyle\sum_{P_{\bar{t}}^{r,o} \in P_{\bar{t}}}^{}$ $|P_{t}^{r,o} - P_{\bar{t}}^{r,o}|$\\
-The \emph{k} patterns that minimize $\delta(P_{t}, P_{\bar{t}})$ are matched by the TKCM. Further, their time points \emph{t} is collected in a set $T_k$:\\\\
+The TKCM algorithm searches for the \emph{k} patterns $P_t$ in the time window $W$ that best match the query pattern $P_{\bar{t}}$. The pattern $P_t$ matches the query patter $P_{\bar{t}}$ if for each cell $P_{\bar{t}}^{r,o} \in P_{\bar{t}}$ a corresponding cell  $P_{t}^{r,o} \in P_t$ exists. The error between a pattern $P_t$ and $P_{\bar{t}}$  is the sum of the cell-wise differences in the patterns:
+\begin{align*}
+\delta(P_{t}, P_{\bar{t}}) = \displaystyle\sum_{P_{\bar{t}}^{r,o} \in P_{\bar{t}}}^{} |P_{t}^{r,o} - P_{\bar{t}}^{r,o}|
+\end{align*}
+The \emph{k} patterns that minimize $\delta(P_{t}, P_{\bar{t}})$ are matched by the TKCM. Further, their time points \emph{t} is collected in a set $T_k$:
 \newcommand*{\argmin}{\operatornamewithlimits{argmin}\limits}
-$T_i = T_{i-1} \cup \{\argmin_{%
+\begin{align*}
+T_i = T_{i-1} \cup \{\argmin_{%
 	\substack{%
 		\text t \in W \\
 		\text t \neq \bar{t} \wedge t \notin T_{i-1}
 	}
-}	\delta(P_{t}, P_{\bar{t}})\}$\\\\
-The matched time points $T_k$ are used for the imputation. The value $\hat{s}(t)$ that is calculated as the average of the values $\{s(t) | t \in T_k\}$ will be imputed. The calculation is as follows: \\\\
-$\hat{s}(t) = \frac{1}{|T_k|} \displaystyle\sum_{t \in T_k}^{} s(t)$
-
+}	\delta(P_{t}, P_{\bar{t}})\}
+\end{align*}
+The matched time points $T_k$ are used for the imputation. The value $\hat{s}(t)$ that is calculated as the average of the values $\{s(t) | t \in T_k\}$ will be imputed. The calculation is as follows: 
+\begin{align*}
+\hat{s}(t) = \frac{1}{|T_k|} \displaystyle\sum_{t \in T_k}^{} s(t)
+\end{align*}
 \begin{exmp}
-	A data example for a triple is $(r_1,0,20.5^{\circ}C)$, where $r_1$ represents the reference values, $0$ is the pattern offset \emph{o} and $20.5^{\circ}C$ represents the degree at time $\bar{t}$. A pattern example for l = 2 and p = 1 would be: $P_{\bar{t}}=\{(r_1,0,20.5^{\circ}C),(r_2,0,19.5^{\circ}C)\}$.
+	If the base time series s has a missing value at time $\bar{t}=20:20$ the value needs to be imputed. The query pattern $P_{\bar{t}}$ is defined in this example with $l=2$ reference time series and pattern length $p=2$. Assumed that the $k=3$ most similar matches are $P_{20:15} = 19.5^{\circ}C$, $P_{20:10}= 19.1^{\circ}C$ and $P_{19:40} = 19.9^{\circ}C$, the computation for $\hat{s}(t)$ is as follows: $\hat{s}(t) = \frac{1}{3}(19.5^{\circ}C + 19.1^{\circ}C + 19.9^{\circ}C) = 19.5^{\circ}C$. Hence, $19.5^{\circ}C$ is imputed for the missing value at time $\bar{t}=20:20$.
 \end{exmp}
+In conclusion, TKCM is able to calculate an estimation of a missing value in streaming time series data. To achieve this, TKCM uses three parameters, \emph{k, l} and \emph{p}. Parameter \emph{k} represent the number of patterns TKCM matches and collects. In practice $k =[1,40]$ most useful, since the impact of an exceptional outlier is less aggravated. The parameters \emph{l} and \emph{p} define the size of the two dimensional query pattern $P_{\bar{t}}$. The two dimensions are \emph{l} for space and \emph{p} for time. The accuracy of the imputation value increases as both parameters \emph{l,p} increase, because more relevant query patterns can be matched. But the runtime of TKCM increases with large query patterns. Since the missing values often occur in blocks, as described in Section \ref{sec:DS}, the parameters \emph{l} and \emph{p} generally can be set moderately. E.g. 
+$l \in [3,5]$ and $p \in [2,6]$ because most of the missing blocks are no more than 5 consecutive values. If 
+$p \in [2,6]$, the query pattern $P_{\bar{t}}$ contains at least one past value of the base time series \emph{s} in 87\% of the cases.
 
 
-
+\section{Implementing TKCM}
 \label{sec:ImpTKCM}
-\section{Connection with the Thesis}
-\subsection{Implementing TKCM}
+The TKCM must not only insert missing values, but also process the newest arriving values efficiently. Therefore, TKCM must provide an insertion method for new arriving values to insert the new value into the time window $W$. Since the time window has a limited size $|W|$, a old value has to be deleted for the new arriving value. Provided that, the oldest time \emph{t} does not fit in the time window any more if the window is already full. Besides, the most similar base time values for a given value \emph{v} should be efficiently found and returned. \\
+The implementation of these requirements is the main topic of the present thesis. Therefore, the implementation of the TKCM is introduced in the following.
+
+\subsection{Methods Definition}
+Retrieving the \emph{k} most similar patterns to a query pattern $P_{\bar{t}}$ is the computationally most expensive part of TKCM. \\
+TKCM initializes a set $T =\{\}$. The set is filled during execution with all time points \emph{t} for which pattern $P_t$ has already been compared to the query pattern $P_{\bar{t}}$. Besides, TKCM initializes a set $T^*=\{\}$ that contains the \emph{k} time points $t \in T$ that minimize the error $\delta(P_{t}, P_{\bar{t}})$. Therefore, $T^* \subseteq T$ is always true during execution. 
+\\TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and \emph{sorted} access. The two methods are defined as follows: 
+\begin{defn}
+	Random Access. Random access returns value r(t), given time series r and time point t.	
+\end{defn}
+\begin{defn}
+Sorted Access. Sorted access returns the next yet unseen time point $t_s \notin T$ such that the value $r(t_s-o)$ is most similar to a given pattern cell $P_{\bar{t}}^{r,o}$. $t(s)$ is defined as:
+\begin{align*}
+t_s = \argmin_{t_s \in W \setminus T} |r(t_s-o) - P_{\bar{t}}^{r,o}|
+\end{align*}
+\end{defn}
+After $T$ and $T^*$ is initialized, TKCM iterates until set $T^*$ contains the $k$ time points $t$ that minimize the difference  $\delta(P_{t}, P_{\bar{t}})$. \\Using the sorted access mode, the algorithm loops through the cells $P_{\bar{t}}^{r,o}$, reading the next potential time point $t_s \notin T$. The time point $t_s \notin T$ is added to $T$. The time point $t_s$ has a corresponding patter $P_{t_s}$ which is at least for one pattern cell similar to the query pattern $P_{\bar{t}}$. \\
+The random access mode is used to look up the values that pattern $P_{t_s}$ is composed of. After each iteration a threshold $\tau$ is computed. The threshold $\tau$ is a lower-bound on the error $\delta (P_{t^{'}}, P_{\bar{t}})$ for any time point $t^{'}$ that is yet unseen. Therefore, during the execution of the algorithm
+$\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Informally this significances that the lower-bound is always smaller or equal to the error between pattern $P_{t^{'}}$ and query patter $P_{\bar{t}}$ for all time points $t^{'}$ that are elements of $T$. Once $\forall t \in T^* : \delta(P_{t}, P_{\bar{t}}) \leq \tau$ the algorithm terminates. At the end, $T^*=T_k$. 
+
+\subsection{Data Structures}
+
+
+\subsection{Random Access}
+
+\subsection{Sorted Access}
+
+\subsection{Threshold}
 
 
 \chapter{Preliminaries}

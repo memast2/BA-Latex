@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  24 MAY 2016 10:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  24 MAY 2016 14:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -702,81 +702,23 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip57
-
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks31
-\ex@=\dimen155
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen156
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count117
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count118
-\leftroot@=\count119
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count120
-\DOTSCASE@=\count121
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box40
-\strutbox@=\box41
-\big@size=\dimen157
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count122
-\c@MaxMatrixCols=\count123
-\dotsspace@=\muskip10
-\c@parentequation=\count124
-\dspbrk@lvl=\count125
-\tag@help=\toks32
-\row@=\count126
-\column@=\count127
-\maxfields@=\count128
-\andhelp@=\toks33
-\eqnshift@=\dimen158
-\alignsep@=\dimen159
-\tagshift@=\dimen160
-\tagwidth@=\dimen161
-\totwidth@=\dimen162
-\lineht@=\dimen163
-\@envbody=\toks34
-\multlinegap=\skip58
-\multlinetaggap=\skip59
-\mathdisplay@stack=\toks35
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
-)
 (/usr/local/texlive/2015/texmf-dist/tex/latex/algorithms/algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count129
-\float@exts=\toks36
-\float@box=\box42
-\@float@everytoks=\toks37
-\@floatcapt=\box43
+\c@float@type=\count117
+\float@exts=\toks31
+\float@box=\box40
+\@float@everytoks=\toks32
+\@floatcapt=\box41
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\@float@every@algorithm=\toks38
-\c@algorithm=\count130
+\@float@every@algorithm=\toks33
+\c@algorithm=\count118
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 Package: algpseudocode 
@@ -785,16 +727,16 @@ Package: algpseudocode
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
-\c@ALG@line=\count131
-\c@ALG@rem=\count132
-\c@ALG@nested=\count133
-\ALG@tlm=\skip60
-\ALG@thistlm=\skip61
-\c@ALG@Lnr=\count134
-\c@ALG@blocknr=\count135
-\c@ALG@storecount=\count136
-\c@ALG@tmpcounter=\count137
-\ALG@tmplength=\skip62
+\c@ALG@line=\count119
+\c@ALG@rem=\count120
+\c@ALG@nested=\count121
+\ALG@tlm=\skip57
+\ALG@thistlm=\skip58
+\c@ALG@Lnr=\count122
+\c@ALG@blocknr=\count123
+\c@ALG@storecount=\count124
+\c@ALG@tmpcounter=\count125
+\ALG@tmplength=\skip59
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 ) (/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mathtools.sty
@@ -802,19 +744,77 @@ Package: mathtools 2015/05/11 v1.16 mathematical typesetting tools
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count138
-\calc@Bcount=\count139
-\calc@Adimen=\dimen164
-\calc@Bdimen=\dimen165
-\calc@Askip=\skip63
-\calc@Bskip=\skip64
+\calc@Acount=\count126
+\calc@Bcount=\count127
+\calc@Adimen=\dimen155
+\calc@Bdimen=\dimen156
+\calc@Askip=\skip60
+\calc@Bskip=\skip61
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count140
-\calc@Cskip=\skip65
+\calc@Ccount=\count128
+\calc@Cskip=\skip62
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip63
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks34
+\ex@=\dimen157
+))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen158
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count129
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count130
+\leftroot@=\count131
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count132
+\DOTSCASE@=\count133
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box42
+\strutbox@=\box43
+\big@size=\dimen159
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count134
+\c@MaxMatrixCols=\count135
+\dotsspace@=\muskip10
+\c@parentequation=\count136
+\dspbrk@lvl=\count137
+\tag@help=\toks35
+\row@=\count138
+\column@=\count139
+\maxfields@=\count140
+\andhelp@=\toks36
+\eqnshift@=\dimen160
+\alignsep@=\dimen161
+\tagshift@=\dimen162
+\tagwidth@=\dimen163
+\totwidth@=\dimen164
+\lineht@=\dimen165
+\@envbody=\toks37
+\multlinegap=\skip64
+\multlinetaggap=\skip65
+\mathdisplay@stack=\toks38
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
 )
 LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
@@ -853,19 +853,19 @@ LaTeX Warning: Label `AuthentificationMethod' multiply defined.
 )
 \openout1 = `ifiThesisEx.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 61.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 60.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -932,41 +932,41 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count153
-LaTeX Info: Redefining \celsius on input line 61.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 61.
+LaTeX Info: Redefining \celsius on input line 60.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 60.
 
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 61.
-Package gensymb Info: Using \Omega for \ohm on input line 61.
+LaTeX Info: Redefining \ohm on input line 60.
+Package gensymb Info: Using \Omega for \ohm on input line 60.
 
 Package gensymb Warning: Not defining \micro.
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 64.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 63.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 64.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 64.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 63.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 63.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 64.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 63.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 64.
-LaTeX Font Info:    Try loading font information for U+msa on input line 64.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 63.
+LaTeX Font Info:    Try loading font information for U+msa on input line 63.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 64.
+LaTeX Font Info:    Try loading font information for U+msb on input line 63.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 64.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 63.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -974,13 +974,13 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 <IFIlogo.pdf, id=4, 597.23125pt x 845.1575pt>
 File: IFIlogo.pdf Graphic file (type pdf)
  <use IFIlogo.pdf>
-Package pdftex.def Info: IFIlogo.pdf used on input line 64.
+Package pdftex.def Info: IFIlogo.pdf used on input line 63.
 (pdftex.def)             Requested size: 110.57718pt x 156.49014pt.
 
 <dbtgBW.pdf, id=5, 597.23125pt x 845.1575pt>
 File: dbtgBW.pdf Graphic file (type pdf)
  <use dbtgBW.pdf>
-Package pdftex.def Info: dbtgBW.pdf used on input line 64.
+Package pdftex.def Info: dbtgBW.pdf used on input line 63.
 (pdftex.def)             Requested size: 40.20656pt x 56.9055pt.
  [1
 
@@ -1023,7 +1023,7 @@ Class scrreprt Warning: \float@listhead detected!
 (scrreprt)              Loading of package `scrhack' may help to
 (scrreprt)              avoid this warning, if you are using a
 (scrreprt)              a package that still implements the
-(scrreprt)              deprecated \float@listhead interface  on input line 78.
+(scrreprt)              deprecated \float@listhead interface  on input line 77.
 
 
 [7
@@ -1051,97 +1051,59 @@ Class scrreprt Warning: \float@addtolists detected!
 (scrreprt)              a package that still implements the
 (scrreprt)              deprecated \float@addtolist interface .
 
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 86.
 [9
 
 ]
 Chapter 2.
-
-Underfull \hbox (badness 10000) in paragraph at lines 88--89
-
- []
-
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 90.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 92.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 90.
-
-Underfull \hbox (badness 10000) in paragraph at lines 91--92
-
- []
-
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 96.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 92.
 \c@defn=\count154
-[10
+ [10
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 106--109
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 106--109
-
- []
-
 \c@exmp=\count155
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--126
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--126
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--126
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--126
-
- []
-
-[11]
+ [11]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 135.
- [12]
-Chapter 3.
-[13
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 151.
 
-] [14]
+[12] [13]
+Chapter 3.
+[14
+
+] [15]
 Chapter 4.
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--170
+Underfull \hbox (badness 10000) in paragraph at lines 209--210
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--170
+Underfull \hbox (badness 10000) in paragraph at lines 209--210
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 173--174
+Underfull \hbox (badness 10000) in paragraph at lines 213--214
 
  []
 
-[15
-
-]
-Chapter 5.
 [16
 
 ]
-Chapter 6.
+Chapter 5.
 [17
 
-] [18
+]
+Chapter 6.
+[18
+
+] [19
 
 ] (./ifiThesisEx.aux)
 
@@ -1151,11 +1113,11 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  17385 strings out of 493089
  321680 string characters out of 6134842
- 423778 words of memory out of 5000000
+ 423759 words of memory out of 5000000
  20497 multiletter control sequences out of 15000+600000
  45887 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,14n,60p,1769b,757s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,20n,60p,1769b,757s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
@@ -1172,10 +1134,10 @@ s/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1
 /urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times
 /utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.p
 fb>
-Output written on ifiThesisEx.pdf (18 pages, 229293 bytes).
+Output written on ifiThesisEx.pdf (19 pages, 238903 bytes).
 PDF statistics:
- 156 PDF objects out of 1000 (max. 8388607)
- 114 compressed objects within 2 object streams
+ 160 PDF objects out of 1000 (max. 8388607)
+ 117 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
