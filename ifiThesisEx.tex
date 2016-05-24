@@ -16,6 +16,9 @@
 \usepackage{url}
 \usepackage{chapterbib}
 \usepackage{gensymb}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{weiwBTree}
 
 
 
@@ -87,12 +90,12 @@ In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be sum
 ...First...
 
 \chapter{Background and Related Work}
-Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: 
+Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a two-dimensional query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: 
 \begin{itemize}  
 	\item The algorithm needs to be efficient enough to complete the data imputation before the new measurement arrives. 
 	\item The imputation must rely on past measurements.
 \end{itemize}
-The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. In the following, the data set of the \emph{SBM} is described in Section \ref{sec:DS}. After, the TKCM algorithm is introduced in Section \ref{sec:TKCM}. Finally, the connection to this paper is made in Section \ref{sec:ImpTKCM} and the implementation is introduced. 
+The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. In the following, the data set of the \emph{SBM} is described in Section \ref{sec:DS}. After, the TKCM algorithm presented in \cite{BScT} is introduced. Finally, the connection to the present thesis is made in Section \ref{sec:ImpTKCM} and the implementation is introduced. 
 
 
 \section{The Data Set}
@@ -166,13 +169,63 @@ The random access mode is used to look up the values that pattern $P_{t_s}$ is c
 $\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Informally this significances that the lower-bound is always smaller or equal to the error between pattern $P_{t^{'}}$ and query patter $P_{\bar{t}}$ for all time points $t^{'}$ that are elements of $T$. Once $\forall t \in T^* : \delta(P_{t}, P_{\bar{t}}) \leq \tau$ the algorithm terminates. At the end, $T^*=T_k$. 
 
 \subsection{Data Structures}
+The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}. 
+\begin{figure} 
+\begin{center}
+	\scalebox{.6}{
+		\begin{tikzpicture}
+		\btreeinodefour{root}{13}{17}{24}{30};
+		\xyshift{-50mm}{-20mm}{\btreelnodefour{n1}{2}{3}{5}{7}}
+		\xyshift{0mm}{-20mm}{\btreelnodefour{n2}{14}{16}{}{}}
+		\xyshift{50mm}{-20mm}{\btreelnodefour{n3}{19}{20}{22}{}}
+		\xyshift{100mm}{-20mm}{\btreelnodefour{n4}{24}{27}{29}{}}
+		\xyshift{150mm}{-20mm}{\btreelnodefour{n5}{33}{34}{38}{39}}
+		% 
+		\foreach \x in {1,2,...,5} { \btreelink{root-\x}{n\x} }
+		{\linkleavesOne{n1}{n2} }
+		{\linkleavesOne{n2}{n3} }
+		{\linkleavesOne{n3}{n4} }
+		{\linkleavesOne{n4}{n5} }
+		\end{tikzpicture}
+	}
+\end{center}
+	\caption{Traditional $B^+$ tree.}
+	\label{fig:tratree}
+\end{figure}
+\begin{figure} 
+\begin{center}
+	\scalebox{.6}{
+		\begin{tikzpicture}
+		% 
+		\btreeinodefour{root}{24}{}{}{};
+		\xyshift{-40mm}{-20mm}{\btreeinodefour{n1}{13}{17}{}{}}
+		\xyshift{70mm}{-20mm}{\btreeinodefour{n2}{30}{38}{}{}}
+		% 
+		\xyshift{-100mm}{-40mm}{\btreelnodefour{n11}{2}{3}{5}{7}}
+		\xyshift{-55mm}{-40mm}{\btreelnodefour{n12}{14}{16}{}{}}
+		\xyshift{-10mm}{-40mm}{\btreelnodefour{n13}{19}{20}{22}{}}
+		\xyshift{35mm}{-40mm}{\btreelnodefour{n21}{24}{27}{29}{}}
+		\xyshift{80mm}{-40mm}{\btreelnodefour{n22}{33}{34}{}{}}
+		\xyshift{125mm}{-40mm}{\btreelnodefour{n23}{38}{39}{40}{}}
+		% 
+		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+		\foreach \x in {1,2,3} { \btreelink{n1-\x}{n1\x} }
+		\foreach \x in {1,2,3} { \btreelink{n2-\x}{n2\x} }
+		{\linkleaves{n11}{n12} }
+		{\linkleaves{n12}{n13} }
+		{\linkleaves{n13}{n21} }
+		{\linkleaves{n21}{n22} }
+		{\linkleaves{n22}{n23} }
+		\end{tikzpicture}
+	}
+\end{center}
+	\caption{A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}
+	\label{fig:sptree}
+\end{figure}
+\newpage
+The usage and implementation of the data structures, as well as the implementation of sorted access and random access, is topic of the present thesis. The requirements are discussed in Chapter \ref{sec:P} in addition to that, the implementation is described in Chapter \ref{sec:Implementation}, and finally the implementation is analysed and experimental results are discussed.  
 
 
-\subsection{Random Access}
-
-\subsection{Sorted Access}
-
-\subsection{Threshold}
 
 
 \chapter{Preliminaries}
