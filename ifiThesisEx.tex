@@ -19,6 +19,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes}
 \usepackage{BTree}
+\usepackage{float}
 
 
 
@@ -90,10 +91,10 @@ In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be sum
 ...First...
 
 \chapter{Background and Related Work}
-Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a two-dimensional query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: 
+Time series data is not always gapless. E.g. due to sensor failures or transmission errors values can get missing. But since many applications need complete data before further data processing is possible, the missing values need to be recovered first. \\The paper \emph{Continuous Imputation of Missing Values in Highly Correlated Streams of Time Series Data} \cite{BScT} presents a two-dimensional query pattern over the most recent values of a set of time series. The algorithm was developed in the context of meteorology. The \emph{Südtiroler Beratungsring (SBR)} operates a network of weather stations where each station collects continuously (every five minutes) new temperature data. If a value is missing due to sensor failures or other problems, it will be continuously imputed. The imputation needs to fulfill two main requirements: \\
 \begin{itemize}  
 	\item The algorithm needs to be efficient enough to complete the data imputation before the new measurement arrives. 
-	\item The imputation must rely on past measurements.
+	\item The imputation must rely on past measurements.\\
 \end{itemize}
 The algorithm provided in the paper is called Top-\emph{k} Case Matching (TKCM) algorithm. It defines a two-dimensional query pattern that contains the measurements of the reference time series in a window of time. It seeks for the \emph{k} patterns that match the query pattern best. The missing value is derived from the \emph{k} past pattern. Therefore, it determines for each \emph{time series} a small set of highly correlated \emph{reference time series}. To scan the entire data set to identify the \emph{k} best is not practical. Hence, only a small portion of the data is scanned. In the following, the data set of the \emph{SBM} is described in Section \ref{sec:DS}. After, the TKCM algorithm presented in \cite{BScT} is introduced. Finally, the connection to the present thesis is made in Section \ref{sec:ImpTKCM} and the implementation is introduced. 
 
@@ -169,8 +170,8 @@ The random access mode is used to look up the values that pattern $P_{t_s}$ is c
 $\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Informally this significances that the lower-bound is always smaller or equal to the error between pattern $P_{t^{'}}$ and query patter $P_{\bar{t}}$ for all time points $t^{'}$ that are elements of $T$. Once $\forall t \in T^* : \delta(P_{t}, P_{\bar{t}}) \leq \tau$ the algorithm terminates. At the end, $T^*=T_k$. 
 
 \subsection{Data Structures}
-The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}. 
-\begin{figure} 
+The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
+\begin{figure}[H]
 \begin{center}
 	\scalebox{.6}{
 		\begin{tikzpicture}
@@ -192,7 +193,7 @@ The above described access modes can be efficiently performed by combining two d
 	\caption{Traditional $B^+$ tree.}
 	\label{fig:tratree}
 \end{figure}
-\begin{figure} 
+\begin{figure}[!t]
 \begin{center}
 	\scalebox{.6}{
 		\begin{tikzpicture}
@@ -222,15 +223,32 @@ The above described access modes can be efficiently performed by combining two d
 	\caption{A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}
 	\label{fig:sptree}
 \end{figure}
-\newpage
-The usage and implementation of the data structures, as well as the implementation of sorted access and random access, is topic of the present thesis. The requirements are discussed in Chapter \ref{sec:P} in addition to that, the implementation is described in Chapter \ref{sec:Implementation}, and finally the implementation is analysed and experimental results are discussed.  
+The implementation of the data structures, as well as the implementation of sorted access and random access, is topic of the present thesis. The requirements and the used data structures are discussed in Chapter \ref{sec:P}. In addition to that, the implementation is described in Chapter \ref{sec:Implementation}, and finally the implementation is evaluated and its experimental results are discussed in Chapter \ref{sec:Experimental}.  
 
 
-
-
-\chapter{Preliminaries}
+\chapter{Requirements}
 \label{sec:P}
+This chapter the requirements that the later described implementation of the index structure must meet are described, in order to be useful for the TKCM algorithm. The operations are introduced in Section \ref{sec:Op}. Further, the data structures are described in Section \ref{sec:das} and finally the ...
 
+\section{Operations}
+\label{sec:Op}
+A streaming time series $s$ is a sequence of data points that is extended continuously for example every 5 minutes and eventually forever. Since streaming time series are unbounded, a system can only keep a portion of a time series in main memory. \cite{BScT} proposes an index structure that meet the requirements for streaming time series data.\\
+Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the newest time point for which the stream produced a new value. \\\\
+The system presented in the present thesis that uses the proposed index structure in \cite{BScT}, namely a circular array and a $B+$ tree, needs to efficiently perform on the streaming time series $s$ in a sliding window $|W|$: \\
+\begin{itemize}  
+	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
+	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
+	\item neighbour$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
+\end{itemize}
+The lookup operation can be efficiently performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$ tree are sorted and, unlike in a traditional $B^+$ tree, interconnected in both directions. \\
+Since the system should be integrable in the TKCM algorithm, it needs to be able to handle the Data Set presented in Section \ref{sec:DS}. Therefore, the $B^+$ tree must be capable to deal with duplicate values, because the same temperature value in a streaming time series may occur several times. 
+
+\section{Data Structures}
+\label{sec:das}
+To efficiently implement the above mentioned operations the system combines two data structures:
+a circular array and a B+ tree, as explained in [2] and shown in Figure 1.
+\subsection{Circular Array}
+\subsection{$B^+$ Tree}
 
 \section{Handling Duplicate Values}
 
@@ -259,15 +277,8 @@ http://hackthology.com/lessons-learned-while-implementing-a-btree.html
 \label{sec:Implementation}
 
 
-Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the newest time point for which the stream produced a new value. \\\\The system uses two different data structures: a circular array and a $B+$ tree. needs to be efficiently perform the following operations on the streaming time series $s$ in a sliding window $|W|$: \\
-\begin{itemize}  
-	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
-	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
-	\item neighbour$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
-\end{itemize}
 
-
-\chapter{Experimental Evaluation}
+\chapter{Evaluation}
 \label{sec:Experimental}
 \section{Experimental Setup}
 \section{Results}
