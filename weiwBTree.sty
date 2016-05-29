@@ -1,0 +1,102 @@
+% modified from https://www.cse.unsw.edu.au/~weiw/tools/weiwBTree.sty
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{weiwBTree}
+\typeout{Document Style `weiw_BTree - Support drawing B+-Tree (ver 0.999)}
+
+\RequirePackage{tikz}
+\RequirePackage{ifthen}
+
+% use libraries
+\usetikzlibrary{arrows,shapes,snakes,matrix}
+
+
+%% global declaration
+\tikzstyle{btreeptr} = [draw, minimum height=2em]
+\tikzstyle{btreeptre} = [draw, minimum height=0.7em, minimum width=2em]
+\tikzstyle{btreeval} = [draw, minimum size=2em, inner sep=1pt]
+\tikzstyle{btreevale} = [draw,minimum size=2em, inner sep=1pt]
+\tikzstyle{btreevalee} = [draw,minimum width=2em,minimum height=1em, inner sep=1pt]
+\tikzstyle{btlink} = [draw, ->]
+\tikzstyle{btdlink} = [arrows=<->]
+\tikzstyle{circularptr} = [draw,minimum height=0.7em, minimum width=3em]
+\tikzstyle{circularval} = [draw,minimum height=2em, minimum width=3em]
+
+%% macro
+%% helper macros
+\newcommand{\suppressemptystr}[1]{% leave blank for entries in leaf nodes
+  \ifthenelse{\equal{#1}{}}%
+  {%
+    \relax%
+  }%
+  % Else
+  {%
+    #1%
+  }%
+}%
+
+\newcommand{\xyshift}[3]{% help to place the nodes
+  \begin{scope}[xshift=#1, yshift=#2]
+    #3
+  \end{scope}%
+}
+
+%% Common btree macros
+\newcommand{\btreelink}[2]{% #1: src node; #2: dest node;
+  \draw[btlink] (#1.south) -- (#2-b.north);
+}
+
+\newcommand{\btreelinknorth}[2]{% #1: src node; #2: dest node;
+  \draw[btlink] (#1.south) -- (#2.north);
+}
+
+\newcommand{\btreetriangle}[2]{% #1: node name; #2 text inside
+  \node[anchor=north, regular polygon, regular polygon sides=3, draw] (#1) {#2};
+}
+
+
+%%======================================================================
+%% btree with capacity = 3
+
+\newcommand{\btreeinodethree}[4]{%
+  \matrix [ampersand replacement=\&] (#1)
+  {
+    \node[btreeptr] (#1-1) {\vphantom{1}}; \& \node[btreeval] (#1-a) {#2}; \&
+    \node[btreeptr] (#1-2) {\vphantom{1}}; \& \node[btreeval] (#1-b) {#3}; \&
+    \node[btreeptr] (#1-3) {\vphantom{1}}; \& \node[btreeval] (#1-c) {#4}; \&
+    \node[btreeptr] (#1-4) {\vphantom{1}}; \\
+  };
+}
+
+\newcommand{\btreelnodethree}[4]{%
+  \matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (#1)
+  {
+    \node[btreevale] (#1-a) {\suppressemptystr{#2}}; \&
+    \node[btreevale] (#1-b) {\suppressemptystr{#3}}; \&
+    \node[btreevale] (#1-c) {\suppressemptystr{#4}}; \\
+    \node[btreeptre] (#1-1) {}; \&
+    \node[btreeptre] (#1-2) {}; \&
+    \node[btreeptre] (#1-3) {}; \\
+  };
+}
+
+\newcommand{\btreelnodethreev}[7]{%
+  \matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (#1)
+  {
+    \node[btreevale] (#1-a)  {\suppressemptystr{#2}}; \&
+    \node[btreevale] (#1-b)  {\suppressemptystr{#3}}; \&
+    \node[btreevale] (#1-c)  {\suppressemptystr{#4}}; \\
+    \node[btreevalee] (#1-a1) {\suppressemptystr{#5}}; \&
+    \node[btreevalee] (#1-b2) {\suppressemptystr{#6}}; \&
+    \node[btreevalee] (#1-c3) {\suppressemptystr{#7}}; \\
+  };
+}
+
+
+
+%%======================================================================
+
+
+
+
+

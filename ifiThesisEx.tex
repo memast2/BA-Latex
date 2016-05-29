@@ -17,9 +17,13 @@
 \usepackage{chapterbib}
 \usepackage{gensymb}
 \usepackage{tikz}
-\usetikzlibrary{shapes}
 \usepackage{BTree}
+\usepackage{weiwBTree}
 \usepackage{float}
+\usepackage{array}
+
+\usetikzlibrary{shapes, calc}
+
 
 
 
@@ -171,58 +175,68 @@ $\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Info
 
 \subsection{Data Structures}
 The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
+
 \begin{figure}[H]
-\begin{center}
-	\scalebox{.6}{
-		\begin{tikzpicture}
-		\btreeinodefour{root}{13}{17}{24}{30};
-		\xyshift{-50mm}{-20mm}{\btreelnodefour{n1}{2}{3}{5}{7}}
-		\xyshift{0mm}{-20mm}{\btreelnodefour{n2}{14}{16}{}{}}
-		\xyshift{50mm}{-20mm}{\btreelnodefour{n3}{19}{20}{22}{}}
-		\xyshift{100mm}{-20mm}{\btreelnodefour{n4}{24}{27}{29}{}}
-		\xyshift{150mm}{-20mm}{\btreelnodefour{n5}{33}{34}{38}{39}}
+		\centering
+		\begin{tikzpicture}[
+		scale=0.7,
+		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+		every matrix/.style={cells={scale=0.7}},
+		]
+
+		\btreeinodefourx{root}{13}{17}{24}{30};
+		\xyshiftx{-50mm}{-20mm}{\btreelnodefourx{n1}{2}{3}{5}{7}}
+		\xyshiftx{0mm}{-20mm}{\btreelnodefourx{n2}{14}{16}{}{}}
+		\xyshiftx{50mm}{-20mm}{\btreelnodefourx{n3}{19}{20}{22}{}}
+		\xyshiftx{100mm}{-20mm}{\btreelnodefourx{n4}{24}{27}{29}{}}
+		\xyshiftx{150mm}{-20mm}{\btreelnodefourx{n5}{33}{34}{38}{39}}
 		% 
-		\foreach \x in {1,2,...,5} { \btreelink{root-\x}{n\x} }
-		{\linkleavesOne{n1}{n2} }
-		{\linkleavesOne{n2}{n3} }
-		{\linkleavesOne{n3}{n4} }
-		{\linkleavesOne{n4}{n5} }
+		\foreach \x in {1,2,...,5} { \btreelinkx{root-\x}{n\x} }
+		{\linkleavesOnex{n1}{n2} }
+		{\linkleavesOnex{n2}{n3} }
+		{\linkleavesOnex{n3}{n4} }
+		{\linkleavesOnex{n4}{n5} }
 		\end{tikzpicture}
-	}
-\end{center}
+
 	\caption{Traditional $B^+$ tree.}
 	\label{fig:tratree}
 \end{figure}
-\begin{figure}[!t]
-\begin{center}
-	\scalebox{.6}{
-		\begin{tikzpicture}
+
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
 		% 
-		\btreeinodefour{root}{24}{}{}{};
-		\xyshift{-40mm}{-20mm}{\btreeinodefour{n1}{13}{17}{}{}}
-		\xyshift{70mm}{-20mm}{\btreeinodefour{n2}{30}{38}{}{}}
+		\btreeinodefourx{root}{24}{}{}{};
+		\xyshiftx{-40mm}{-20mm}{\btreeinodefourx{n1}{13}{17}{}{}}
+		\xyshiftx{70mm}{-20mm}{\btreeinodefourx{n2}{30}{38}{}{}}
 		% 
-		\xyshift{-100mm}{-40mm}{\btreelnodefour{n11}{2}{3}{5}{7}}
-		\xyshift{-55mm}{-40mm}{\btreelnodefour{n12}{14}{16}{}{}}
-		\xyshift{-10mm}{-40mm}{\btreelnodefour{n13}{19}{20}{22}{}}
-		\xyshift{35mm}{-40mm}{\btreelnodefour{n21}{24}{27}{29}{}}
-		\xyshift{80mm}{-40mm}{\btreelnodefour{n22}{33}{34}{}{}}
-		\xyshift{125mm}{-40mm}{\btreelnodefour{n23}{38}{39}{40}{}}
+		\xyshiftx{-100mm}{-40mm}{\btreelnodefourx{n11}{2}{3}{5}{7}}
+		\xyshiftx{-55mm}{-40mm}{\btreelnodefourx{n12}{14}{16}{}{}}
+		\xyshiftx{-10mm}{-40mm}{\btreelnodefourx{n13}{19}{20}{22}{}}
+		\xyshiftx{35mm}{-40mm}{\btreelnodefourx{n21}{24}{27}{29}{}}
+		\xyshiftx{80mm}{-40mm}{\btreelnodefourx{n22}{33}{34}{}{}}
+		\xyshiftx{125mm}{-40mm}{\btreelnodefourx{n23}{38}{39}{40}{}}
 		% 
-		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-		\foreach \x in {1,2,3} { \btreelink{n1-\x}{n1\x} }
-		\foreach \x in {1,2,3} { \btreelink{n2-\x}{n2\x} }
-		{\linkleaves{n11}{n12} }
-		{\linkleaves{n12}{n13} }
-		{\linkleaves{n13}{n21} }
-		{\linkleaves{n21}{n22} }
-		{\linkleaves{n22}{n23} }
+		\foreach \x in {1,2} { \btreelinkx{root-\x}{n\x} }
+		\foreach \x in {1,2,3} { \btreelinkx{n1-\x}{n1\x} }
+		\foreach \x in {1,2,3} { \btreelinkx{n2-\x}{n2\x} }
+		{\linkleavesx{n11}{n12} }
+		{\linkleavesx{n12}{n13} }
+		{\linkleavesx{n13}{n21} }
+		{\linkleavesx{n21}{n22} }
+		{\linkleavesx{n22}{n23} }
 		\end{tikzpicture}
-	}
-\end{center}
 	\caption{A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}
 	\label{fig:sptree}
 \end{figure}
+
+
+
 The implementation of the data structures, as well as the implementation of sorted access and random access, is topic of the present thesis. The requirements and the used data structures are discussed in Chapter \ref{sec:P}. In addition to that, the implementation is described in Chapter \ref{sec:Implementation}, and finally the implementation is evaluated and its experimental results are discussed in Chapter \ref{sec:Experimental}.  
 
 
@@ -246,8 +260,124 @@ Since the system should be integrable in the TKCM algorithm, it needs to be able
 \section{Data Structures}
 \label{sec:das}
 To efficiently implement the above mentioned operations the system combines two data structures:
-a circular array and a B+ tree, as explained in [2] and shown in Figure 1.
+a circular array and a $B^+$ tree. In Figure \ref{fig:B+tree planned} the originally proposed data structure in \cite{BScT} is shown. The $B^+$ tree is connected with pointers to the circular array and vice versa. Further, the temperature values are used as keys in the $B^+$ tree. The size of the circular array is defined as $|W| + 1$ since an empty field is used to identify the current update position. The size $|W|$ and the order of the $B^+$ tree, which defines the size of the nodes, are parameters. Hence they can be changed.\\The circular array and the $B^+$ tree are characterized in the following. 
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+scale=0.7,
+every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+every matrix/.style={cells={scale=0.7}},
+]
+% root node
+\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
+
+%
+% intermediate nodes
+\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
+\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
+%
+% connecting root to intermediate level nodes
+\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+%
+% leaf nodes
+\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+%
+% connecting intermediate level to leaf nodes
+\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+%
+% leaf pointers
+\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+%
+% circular array
+\xyshift{-15mm}{-70mm}{
+	\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+		\node[circularptr] (c1)  {}; \&
+		\node[circularptr] (c2)  {}; \&
+		\node[circularptr] (c3)  {}; \&
+		\node[circularptr] (c4)  {}; \&
+		\node[circularptr] (c5)  {}; \&
+		\node[circularptr] (c6)  {}; \&
+		\node[circularptr] (c7)  {}; \&
+		\node[circularptr] (c8)  {}; \&
+		\node[circularptr] (c9)  {}; \&
+		\node[circularptr] (c10) {}; \&
+		\node[circularptr] (c11) {}; \&
+		\node[circularptr] (c12) {}; \&
+		\node[circularptr] (c13) {}; \\
+		%
+		\node[circularval] (left) {14:15}; \&
+		\node[circularval] {14:20}; \&
+		\node[circularval] {14:25}; \&
+		\node[circularval] {\phantom{14:25}}; \&
+		\node[circularval] {13:30}; \&
+		\node[circularval] {13:35}; \&
+		\node[circularval] {13:40}; \&
+		\node[circularval] {13:45}; \&
+		\node[circularval] {13:50}; \&
+		\node[circularval] {13:55}; \&
+		\node[circularval] {14:00}; \&
+		\node[circularval] {14:05}; \&
+		\node[circularval] (right) {14:10}; \\
+	};
+}
+
+%
+% draw pointers between circular array and B+ tree
+\path[btdlink] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+\path[btdlink] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n22-1.center);
+\path[btdlink] ([yshift=-2pt] c11.center) edge[out=90,in=270] ([yshift=2pt] n23-1.center);
+\foreach \x in
+{1,3,6,7,8,9,10,12,13}
+{ \path[->] ([yshift=15pt] c\x.center) edge ([yshift=-2pt] c\x.center); }
+\foreach \x in
+{n11-1,n12-1,n12-2,n21-1,n21-2,n24-1,n24-2,n24-3}
+{ \path[->] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+%
+% draw borders
+\draw[densely dotted] (-11,1.5) rectangle (8,-5.5);
+\draw[densely dotted] (-11,-6) rectangle (8,-10);
+\node[anchor=south west] at (-11,1.5) {\Large $B^+$ tree};
+\node[anchor=north west] at (-11,-10)  {\Large Circular array};
+%
+% curly brace
+\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
+\end{tikzpicture}
+\vspace{2mm}
+\caption{Proposed data structures in \cite{BScT}}
+\label{fig:btree}
+\end{figure}
+
 \subsection{Circular Array}
+A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\The circular array presented in Figure \ref{fig:B+tree planned} has a size of $|W| + 1$. The empty field is used to identify the next update position. Hence, the position where the next arriving value is inserted. In addition to the time, the associated temperature value is stored in the $B^+$ tree and linked with a pointer.\\
+But the circular array presented in the present thesis is slightly different. The value must not be associated by a pointer, but can also be directly stored in the circular array. Besides, instead of an empty field to identify the next update position, the position is stored in a variable and updated with every insertion. 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1\textwidth]{ca.jpg}
+	\caption{$B^+$ tree presented in \cite{BScT}.}
+	\label{fig:B+tree planned}
+\end{figure}
+
+
+ 
+ 
 \subsection{$B^+$ Tree}
 
 \section{Handling Duplicate Values}

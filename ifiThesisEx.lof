@@ -1,8 +1,10 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Traditional $B^+$ tree.}}{13}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Traditional $B^+$ tree.}}{14}
 \contentsline {figure}{\numberline {2.2}{\ignorespaces A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}}{14}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Proposed data structures in \cite {BScT}}}{16}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces $B^+$ tree presented in \cite {BScT}.}}{17}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

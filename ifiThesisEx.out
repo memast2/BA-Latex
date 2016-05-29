@@ -1,0 +1,23 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Thesis Outline}{chapter.1}% 2
+\BOOKMARK [0][-]{chapter.2}{Background and Related Work}{}% 3
+\BOOKMARK [1][-]{section.2.1}{The Data Set}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.2}{TKCM}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.3}{Implementing TKCM}{chapter.2}% 6
+\BOOKMARK [2][-]{subsection.2.3.1}{Methods Definition}{section.2.3}% 7
+\BOOKMARK [2][-]{subsection.2.3.2}{Data Structures}{section.2.3}% 8
+\BOOKMARK [0][-]{chapter.3}{Requirements}{}% 9
+\BOOKMARK [1][-]{section.3.1}{Operations}{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.2}{Data Structures}{chapter.3}% 11
+\BOOKMARK [2][-]{subsection.3.2.1}{Circular Array}{section.3.2}% 12
+\BOOKMARK [2][-]{subsection.3.2.2}{B+ Tree}{section.3.2}% 13
+\BOOKMARK [1][-]{section.3.3}{Handling Duplicate Values}{chapter.3}% 14
+\BOOKMARK [2][-]{subsection.3.3.1}{Add the time to the key}{section.3.3}% 15
+\BOOKMARK [2][-]{subsection.3.3.2}{Add several times to the key}{section.3.3}% 16
+\BOOKMARK [2][-]{subsection.3.3.3}{Not change insertion but the search algorithm}{section.3.3}% 17
+\BOOKMARK [0][-]{chapter.4}{Implementation}{}% 18
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 19
+\BOOKMARK [1][-]{section.5.1}{Experimental Setup}{chapter.5}% 20
+\BOOKMARK [1][-]{section.5.2}{Results}{chapter.5}% 21
+\BOOKMARK [1][-]{section.5.3}{Discussion}{chapter.5}% 22
+\BOOKMARK [0][-]{chapter.6}{Summary and Conclusion}{}% 23

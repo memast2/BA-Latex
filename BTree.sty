@@ -17,49 +17,32 @@
 \tikzstyle{btreevale} = [draw,semithick, , minimum size=1.9em]
 \tikzstyle{btlink} = [draw, semithick, ->, >=triangle 45]
 
-%% macro
-%% helper macros
-\newcommand{\suppressemptystr}[1]{% leave blank for entries in leaf nodes
-  \ifthenelse{\equal{#1}{}}%
-  {%
-    \relax%
-  }%
-  % Else
-  {%
-    #1\textsuperscript{}%
-  }%
-}%
 
-\newcommand{\xyshift}[3]{% help to place the nodes
+
+\newcommand{\xyshiftx}[3]{% help to place the nodes
   \begin{scope}[xshift=#1, yshift=#2]
     #3
   \end{scope}%
 }
-
-%% Common btree macros
-\newcommand{\btreelink}[2]{% #1: src node; #2: dest node; 
-  \draw[btlink] ([yshift=3pt] #1.south) -- (#2-b.north);
+\newcommand{\btreelinkx}[2]{% #1: src node; #2: dest node;
+	\draw[btlink] (#1.south) -- (#2-b.north);
 }
 
-\newcommand{\btreelinknorth}[2]{% #1: src node; #2: dest node; 
-  \draw[btlink] ([yshift=6pt] #1.south) -- (#2.north);
-}
-\newcommand{\linkleavesOne}[2]{% #1: src node; #2: dest node; 
+
+\newcommand{\linkleavesOnex}[2]{% #1: src node; #2: dest node; 
 	\draw[btlink] ([xshift=40pt]#1) -- ([xshift=-30pt] #2);
 }
 
-\newcommand{\linkleaves}[2]{% #1: src node; #2: dest node; 
+\newcommand{\linkleavesx}[2]{% #1: src node; #2: dest node; 
 	\draw[btlink] ([xshift=40pt]#1) -- ([xshift=-30pt] #2);
 	\draw[btlink] ([xshift=40pt]#2) -- ([xshift=-30pt] #1);
 }
 
-\newcommand{\btreetriangle}[2]{% #1: node name; #2 text inside
-  \node[anchor=north, regular polygon, regular polygon sides=3, draw] (#1) {#2};
-}
+
 
 %%======================================================================
 %% btree with capacity = 4
-\newcommand{\btreeinodefour}[5]{%
+\newcommand{\btreeinodefourx}[5]{%
   \matrix [ampersand replacement=\&] (#1)
   {
     \node[btreeptr] (#1-1) {\vphantom{1}}; \& \node[btreeval] (#1-a) {#2}; \&
@@ -69,7 +52,7 @@
     \node[btreeptr] (#1-5) {\vphantom{1}}; \\
   };
 }
-\newcommand{\btreelnodefour}[5]{%
+\newcommand{\btreelnodefourx}[5]{%
   \matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (#1)
   {
     \node[btreevale] (#1-a) {\suppressemptystr{#2}}; \&
@@ -81,7 +64,7 @@
 
 %%======================================================================
 %% btree with capacity = 3
-\newcommand{\btreeinodethree}[4]{%
+\newcommand{\btreeinodethreex}[4]{%
   \matrix [ampersand replacement=\&] (#1)
   {
     \node[btreeptr] (#1-1) {\vphantom{1}}; \& \node[btreeval] (#1-a) {#2}; \&
@@ -90,7 +73,7 @@
     \node[btreeptr] (#1-4) {\vphantom{1}}; \\
   };
 }
-\newcommand{\btreelnodethree}[4]{%
+\newcommand{\btreelnodethreex}[4]{%
   \matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (#1)
   {
     \node[btreevale] (#1-a) {\suppressemptystr{#2}}; \&
