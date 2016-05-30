@@ -71,7 +71,7 @@
 
 \chapter*{Acknowledgements}
 
-I especially would like to thank my supervisor Kevin Wellenzohn, who has supported me with guidance and constructive feedback during my work. Besides, I would like to thank Prof. Dr. Michael Böhlen for the opportunity to write my bachelor thesis at the Database Technology Group of the University of Zurich. ...   
+
 
 \begin{abstract}
   ...
@@ -179,9 +179,9 @@ The above described access modes can be efficiently performed by combining two d
 \begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[
-		scale=0.7,
+		scale=0.6,
 		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-		every matrix/.style={cells={scale=0.7}},
+		every matrix/.style={cells={scale=0.6}},
 		]
 
 		\btreeinodefourx{root}{13}{17}{24}{30};
@@ -206,9 +206,9 @@ The above described access modes can be efficiently performed by combining two d
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[
-	scale=0.7,
+	scale=0.6,
 	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
+	every matrix/.style={cells={scale=0.6}},
 	]
 		% 
 		\btreeinodefourx{root}{24}{}{}{};
@@ -252,7 +252,7 @@ The system presented in the present thesis that uses the proposed index structur
 \begin{itemize}  
 	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
 	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
-	\item neighbour$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
+	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
 \end{itemize}
 The lookup operation can be efficiently performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$ tree are sorted and, unlike in a traditional $B^+$ tree, interconnected in both directions. \\
 Since the system should be integrable in the TKCM algorithm, it needs to be able to handle the Data Set presented in Section \ref{sec:DS}. Therefore, the $B^+$ tree must be capable to deal with duplicate values, because the same temperature value in a streaming time series may occur several times. 
@@ -362,39 +362,92 @@ node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
 \end{tikzpicture}
 \vspace{2mm}
 \caption{Proposed data structures in \cite{BScT}}
-\label{fig:btree}
+\label{fig:B+tree planned}
 \end{figure}
 
 \subsection{Circular Array}
 A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\The circular array presented in Figure \ref{fig:B+tree planned} has a size of $|W| + 1$. The empty field is used to identify the next update position. Hence, the position where the next arriving value is inserted. In addition to the time, the associated temperature value is stored in the $B^+$ tree and linked with a pointer.\\
-But the circular array presented in the present thesis is slightly different. The value must not be associated by a pointer, but can also be directly stored in the circular array. Besides, instead of an empty field to identify the next update position, the position is stored in a variable and updated with every insertion. 
-\begin{figure}[ht]
+But the circular array presented in the present thesis is slightly different. The value must not be associated by a pointer, but can also be directly stored in the circular array. Besides, instead of an empty field to identify the next update position, the position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}
+\begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{ca.jpg}
-	\caption{$B^+$ tree presented in \cite{BScT}.}
-	\label{fig:B+tree planned}
-\end{figure}
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
 
+	% circular array
+	\xyshift{-15mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \&
+			\node[circularptr] (c2)  {}; \&
+			\node[circularptr] (c3)  {}; \&
+			\node[circularptr] (c4)  {}; \&
+			\node[circularptr] (c5)  {}; \&
+			\node[circularptr] (c6)  {}; \&
+			\node[circularptr] (c7)  {}; \&
+			\node[circularptr] (c8)  {}; \&
+			\node[circularptr] (c9)  {}; \&
+			\node[circularptr] (c10) {}; \&
+			\node[circularptr] (c11) {}; \&
+			\node[circularptr] (c12) {};  \\
+			%
+			\node[circularval] (left) {14:10}; \&
+			\node[circularval] {14:15}; \&
+			\node[circularval] {14:20}; \&
+			\node[circularval] {14:25}; \&
+			\node[circularval] {13:30}; \&
+			\node[circularval] {13:35}; \&
+			\node[circularval] {13:40}; \&
+			\node[circularval] {13:45}; \&
+			\node[circularval] {13:50}; \&
+			\node[circularval] {13:55}; \&
+			\node[circularval] {14:00}; \&
+			\node[circularval] (right){14:05};\\
+		};
+	}
+	% curly brace
+	\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+	([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+	node [black,midway,yshift=-0.9cm] {\large size $|W|$};
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Proposed data structures in \cite{BScT}}
+	\label{fig:cat}
+\end{figure}
 
  
  
 \subsection{$B^+$ Tree}
+A $B^+$ tree is able to execute range queries very efficiently because the leaves are ordered and linked. Also the \emph{neighbor}$(v,T)$ operation described in Section \ref{sec:Op} can be efficiently performed by a $B^+$ tree. 
 
-\section{Handling Duplicate Values}
+\subsubsection{The Structure of $B^+$ trees}
+A $B^+$ tree is organized in bocks, as implied by its name. All paths from the root to a leaf have the same length. There are three types of nodes that may exist in a $B^+$ tree: the root, interior nodes and leaves as you can see in Figure \ref{fig:cat}. The parameter \emph{n} determines the size of the blocks in the $B^+$ tree. Hence, the blocks can have maximum \emph{n} search-keys and \emph{n} + 1 pointers, pointing to its child nodes. 
+\\The $B^+$ tree used for the implementation of the streaming time series data uses the temperature data as search-keys. Especially because the \emph{neighbor}$(v,T)$ operation needs the leaves to be sorted by the temperature. But since the temperature is not always unique in the time window $W$, the $B^+$ tree must be able to handle duplicate values. Other properties used, that are used in the traditional $B^+$ tree as well, are the following: \\
+\begin{itemize}  
+	\item 
+	\item 
+\end{itemize}
+%TODO: difference to B trees
+
+
+\section{Allowing Duplicate Values}
 
 B+ trees are often 
 
-\subsection{Add the time to the key}
+\subsection{Methods Discussion}
+
+\subsubsection{Add the time to the key}
 If you would add the timestamps to keys would be unique. So if the case occurs where you have the same keys but in different leaves because the leaves were full and had therefore be splitted you could include the timestamps which divides the two different values to the parent. --> every key with timestamp smaller than the parents timestamp is in the left leaf and every key with timestamp bigger or equal is in the right one --> 
 Problems: more memory needed. always check needed if there is a timestamps in the leaf
-+ neighbour method would still work because you have the value and the set of time stamps 
++ neighbor method would still work because you have the value and the set of time stamps 
 
-\subsection{Add several times to the key}
+\subsubsection{Add several times to the key}
 
 The second was to have just one entry for each key, but the 'payload' associated with each key points to a different block of data, which is a linked list pointing to all instances of items that are having the same key
 
 
-\subsection{Not change insertion but the search algorithm}
+\subsubsection{Not change insertion but the search algorithm}
 There are several different ways of handling duplicate keys. One way is use an unmodified insert algorithm which allows duplicate keys in blocks but is otherwise unchanged. The issue with a structure such as this is the search algorithm must be modified to take into account several corner cases which arise
 For instance one of the invariants of a B+Tree may be violated in this structure. Specifically if there are many duplicate keys, a copy of one of the keys may be in a non-leaf block. However, the key may appear in blocks that which appear logically before the block which is pointed at by the key in the internal block. Thus the search algorithm must be modified to look in the previous blocks to the one suggested by the unmodified search algorithm. This will slow down the common case for search.There is another issue with this straight forward implementation, if there are many duplicate keys in the index, the index size may be taller than necessary. Consider a situation were for each unique key there are perhaps hundreds of duplicates, the index size will be proportional to the total number of keys in the main file, however, you only need to index an index on the unique keys. One of the files indexed in our program will be indexing has such characteristics to its data. It indexes strings (as the keys) with associated instances where those strings show up in our documents. There can be hundreds to thousands of instances of each unique string.
 Therefore the approach I took was to store only the unique keys in the index, and have the duplicates captured in overflow blocks in the main file. An example of such a tree can be seen in figure 2. Consider key 6; there are 5 instances of this key in the tree. The tree is order 3, indicating the keys cannot all fit in one block. To handle this situation an overflow block is chained to the block which is indexed by the tree structure. The overflow block then points to the next relevant block in the tree.To create a structure such as this, the insert algorithm had to be modified. Like the previous version these modifications do not come without a cost, in particular the invariant which states all block must be at least half full has been relaxed. This is not true in this B+Tree, some blocks like the one containing key number 7, are not half full. This problem could be partially solved by using key rotations to balance the tree better. However, there are still corner cases where there would be a block which is under-full. One such corner case includes when a key falls between two keys which have overflow blocks. It must then be in a block by itself, since this B+Tree has the invariant which state that if a block is overflowing it can only contain one unique key. In the future we would like to implement key rotations to help partially alleviate the problem of under-full blocks.
@@ -402,6 +455,8 @@ Therefore the approach I took was to store only the unique keys in the index, an
 The advantage of this approach to B+Trees with duplicate keys is the index size is small no matter how the ratio of duplicate keys to the total number of keys in the file. This property allows our searches to be conducted quicker. Since the overflow blocks are chained into the B+Tree structure we still have the property of being able to fast sequential scans. One consequence is we have defined all queries on our B+Trees to be range queries. This is fine because all of our queries were already range queries. In conclusion we relax the condition that all blocks must be at least half full to gain higher performance during search.
 
 http://hackthology.com/lessons-learned-while-implementing-a-btree.html
+
+\subsection{Book }
 
 \chapter{Implementation}
 \label{sec:Implementation}
@@ -426,10 +481,8 @@ recommendations for the research community and for policy-makers (note: policy r
 	\bibitem{BScT} K. Wellenzohn, M. Böhlen, A. Dignos, J. Gamper, and H. Mitterer: \emph{Continuous imputation of missing values in highly correlated streams of time series data}; Unpublished, 2016.
 	
 	\bibitem{OnlineAmnesicAppr} Themistoklis Palapanas, Michail Vlachos, Eamonn Keogh, Dimitrios Gunopulos, Wagner Truppel: \emph{Online Amnesic Approximation of Streaming Time Series}; University of California, Riverside, USA, 2004. \url{http://www.cs.ucr.edu/~eamonn/ICDM_2004.pdf}
-	
-	\bibitem{AuthentificationMethod} Xiaomei Dong, Xiaohua Li: \emph{An Authentification Method for Self Nodes Based on Watermarking in Wireless Sensor Networks}; Northeastern University, Liaoning, China, 2009.
-	\bibitem{AuthentificationMethod} Xiaomei Dong, Xiaohua Li: \emph{An Authentification Method for Self Nodes Based on Watermarking in Wireless Sensor Networks}; Northeastern University, Liaoning, China, 2009.
-	\bibitem{SecInWSN:IssChall} All-Sakib Khan Pathan, Hyung-Woo Lee, Choong Seon Hong: \emph{Security in Wireless Sensor Networks: Issues and Challenges}; ISBN 89-5519-129-4, DOI: 10.1109/ICACT.2006.206151, Februar 2006. \url{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1625756&isnumber=34121}
+
+	\bibitem{BTreeBook} Hector Garcia-Molina, Jeffrey D. Ullman, Jennifer Widom: \emph{Database Systems - The Complete Book}; ISBN 0-13-031995-3, 2002 by Prentice Hall
 		
 	
 

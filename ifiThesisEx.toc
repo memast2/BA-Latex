@@ -11,10 +11,13 @@
 \contentsline {section}{\numberline {3.2}Data Structures}{16}
 \contentsline {subsection}{\numberline {3.2.1}Circular Array}{16}
 \contentsline {subsection}{\numberline {3.2.2}$B^+$ Tree}{17}
-\contentsline {section}{\numberline {3.3}Handling Duplicate Values}{17}
-\contentsline {subsection}{\numberline {3.3.1}Add the time to the key}{17}
-\contentsline {subsection}{\numberline {3.3.2}Add several times to the key}{18}
-\contentsline {subsection}{\numberline {3.3.3}Not change insertion but the search algorithm}{18}
+\contentsline {subsubsection}{\nonumberline The Structure of $B^+$ trees}{17}
+\contentsline {section}{\numberline {3.3}Allowing Duplicate Values}{17}
+\contentsline {subsection}{\numberline {3.3.1}Methods Discussion}{17}
+\contentsline {subsubsection}{\nonumberline Add the time to the key}{17}
+\contentsline {subsubsection}{\nonumberline Add several times to the key}{18}
+\contentsline {subsubsection}{\nonumberline Not change insertion but the search algorithm}{18}
+\contentsline {subsection}{\numberline {3.3.2}Book}{19}
 \contentsline {chapter}{\numberline {4}Implementation}{20}
 \contentsline {chapter}{\numberline {5}Evaluation}{21}
 \contentsline {section}{\numberline {5.1}Experimental Setup}{21}

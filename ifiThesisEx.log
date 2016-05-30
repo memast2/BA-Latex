@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  29 MAY 2016 14:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  30 MAY 2016 23:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -983,11 +983,7 @@ File: tikzlibrarycalc.code.tex 2013/07/15 v3.0.0 (rcs-revision 1.9)
 \c@example=\count145
 \c@theorem=\count146
 \c@lemma=\count147
- (./ifiThesisEx.aux
-
-LaTeX Warning: Label `AuthentificationMethod' multiply defined.
-
-)
+ (./ifiThesisEx.aux)
 \openout1 = `ifiThesisEx.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
@@ -1003,7 +999,8 @@ LaTeX Font Info:    ... okay on input line 68.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 68.
 LaTeX Font Info:    ... okay on input line 68.
 LaTeX Font Info:    Try loading font information for T1+ptm on input line 68.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
 (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -1221,19 +1218,13 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 159.
  [12]
 Missing character: There is no ; in font nullfont!
-
-Overfull \hbox (27.0047pt too wide) in paragraph at lines 199--200
- [][] 
- []
-
-[13]
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (76.7968pt too wide) in paragraph at lines 233--234
+Overfull \hbox (3.18484pt too wide) in paragraph at lines 233--234
  [][] 
  []
 
-[14]
+[13] [14]
 Chapter 3.
 
 Underfull \hbox (badness 10000) in paragraph at lines 249--252
@@ -1254,13 +1245,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 255--256
 
 ]
 Missing character: There is no ; in font nullfont!
- <ca.jpg, id=97, 722.7pt x 542.025pt>
-File: ca.jpg Graphic file (type jpg)
- <use ca.jpg>
-Package pdftex.def Info: ca.jpg used on input line 373.
-(pdftex.def)             Requested size: 448.13095pt x 336.10164pt.
- [16] [17 <./ca.jpg>]
-[18] [19]
+ [16]
+Underfull \hbox (badness 10000) in paragraph at lines 425--427
+
+ []
+
+[17] [18] [19]
 Chapter 4.
 [20
 
@@ -1274,40 +1264,36 @@ Chapter 6.
 
 ] [23
 
-] (./ifiThesisEx.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+] (./ifiThesisEx.aux) ) 
 Here is how much of TeX's memory you used:
- 21691 strings out of 493089
- 438721 string characters out of 6134842
- 586334 words of memory out of 5000000
- 24712 multiletter control sequences out of 15000+600000
+ 21687 strings out of 493089
+ 438695 string characters out of 6134842
+ 600135 words of memory out of 5000000
+ 24710 multiletter control sequences out of 15000+600000
  50800 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,20n,86p,1769b,1062s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive
-/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2
-015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2015/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2015/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf-dis
-t/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/
-type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/u
-rw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/u
-tmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb
->
-Output written on ifiThesisEx.pdf (23 pages, 289140 bytes).
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base
+/8r.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex
+10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
+2.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.
+pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pf
+b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></
+usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr
+/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2015/tex
+mf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fo
+nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
+urw/times/utmri8a.pfb>
+Output written on ifiThesisEx.pdf (23 pages, 255171 bytes).
 PDF statistics:
- 177 PDF objects out of 1000 (max. 8388607)
+ 176 PDF objects out of 1000 (max. 8388607)
  128 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 28 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
