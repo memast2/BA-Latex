@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 11:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 12:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1219,24 +1219,24 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (3.18484pt too wide) in paragraph at lines 232--233
+Overfull \hbox (3.18484pt too wide) in paragraph at lines 229--230
  [][] 
  []
 
 [13] [14]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 248--251
+Underfull \hbox (badness 10000) in paragraph at lines 242--245
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 248--251
+Underfull \hbox (badness 10000) in paragraph at lines 242--245
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--255
+Underfull \hbox (badness 10000) in paragraph at lines 248--249
 
  []
 
@@ -1245,41 +1245,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 254--255
 ]
 Missing character: There is no ; in font nullfont!
  [16]
-Underfull \hbox (badness 10000) in paragraph at lines 423--424
+Underfull \hbox (badness 10000) in paragraph at lines 417--418
 
  []
 
 Missing character: There is no ; in font nullfont!
+[17]
+Underfull \hbox (badness 10000) in paragraph at lines 450--451
+
+ []
+
 
 Underfull \hbox (badness 10000) in paragraph at lines 456--457
 
  []
 
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 460--461
-
- []
-
-[18] [19]
+Missing character: There is no ; in font nullfont!
+[18]
+Missing character: There is no ; in font nullfont!
+ [19] [20] [21]
 Chapter 4.
-[20
+[22
 
 ]
 Chapter 5.
-[21
+[23
 
 ]
 Chapter 6.
-[22
+[24
 
-] [23
+] [25
 
 ] (./ifiThesisEx.aux) ) 
 Here is how much of TeX's memory you used:
- 21690 strings out of 493089
- 438733 string characters out of 6134842
- 600172 words of memory out of 5000000
- 24713 multiletter control sequences out of 15000+600000
+ 21702 strings out of 493089
+ 438985 string characters out of 6134842
+ 600385 words of memory out of 5000000
+ 24725 multiletter control sequences out of 15000+600000
  50800 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,20n,86p,1769b,1097s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1300,10 +1303,10 @@ exlive/2015/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2
 mf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on ifiThesisEx.pdf (23 pages, 257811 bytes).
+Output written on ifiThesisEx.pdf (25 pages, 260435 bytes).
 PDF statistics:
- 176 PDF objects out of 1000 (max. 8388607)
- 128 compressed objects within 2 object streams
+ 183 PDF objects out of 1000 (max. 8388607)
+ 133 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

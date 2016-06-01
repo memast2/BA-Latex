@@ -174,7 +174,6 @@ $\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Info
 
 \subsection{Data Structures}
 The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
-
 \begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[
@@ -200,8 +199,6 @@ The above described access modes can be efficiently performed by combining two d
 	\caption{Traditional $B^+$ tree.}
 	\label{fig:tratree}
 \end{figure}
-
-
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[
@@ -233,17 +230,14 @@ The above described access modes can be efficiently performed by combining two d
 	\caption{A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}
 	\label{fig:sptree}
 \end{figure}
-
-
-
 The implementation of the data structures, as well as the implementation of sorted access and random access, is topic of the present thesis. The requirements and the used data structures are discussed in Chapter \ref{sec:P}. In addition to that, the implementation is described in Chapter \ref{sec:Implementation}, and finally the implementation is evaluated and its experimental results are discussed in Chapter \ref{sec:Experimental}.  
 
 
-\chapter{Requirements}
+\chapter{Requirements for Implementing an Index Structure for Streaming Time Series Data}
 \label{sec:P}
 This chapter the requirements that the later described implementation of the index structure must meet are described, in order to be useful for the TKCM algorithm. The operations are introduced in Section \ref{sec:Op}. Further, the data structures are described in Section \ref{sec:das} and finally the ...
 
-\section{Operations}
+\section{Required Operations}
 \label{sec:Op}
 A streaming time series $s$ is a sequence of data points that is extended continuously for example every 5 minutes and eventually forever. Since streaming time series are unbounded, a system can only keep a portion of a time series in main memory. \cite{BScT} proposes an index structure that meet the requirements for streaming time series data.\\
 Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the newest time point for which the stream produced a new value. \\\\
@@ -457,38 +451,182 @@ The $B^+$ tree used for the implementation of the streaming time series data is 
 \begin{itemize}  
 	\item The search-keys of the $B^+$ tree are the temperature values in the sliding window $W$.
 	\item The leaves are linked in both directions to efficiently perform the \emph{neighbor}$(v,T)$ operation.
-	\item The leaves are sorted by the temperature values.\\ 
+	\item The leaves are sorted by the temperature values.
+	\item The interior nodes have a temperature search-key.
+	\item The leaves store the record of the time series data. A record consists of the temperature value and the associated time value.\\ 
 \end{itemize}
-Due to the weather conditions the temperature in the time window $W$ can occur several times. Therefore, the keys are not unique. Since the temperature values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{allowDV} proposes different possibilities that allow to use duplicate values in a $B^+$ tree. 
+Due to weather conditions the temperature values in the time window $W$ can occur several times. Therefore, the keys are not unique. Since the temperature values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{allowDV} proposes different possibilities that allow to use duplicate values in a $B^+$ tree. 
 
-
-
-\section{Allowing Duplicate Values}
+\section{Handling Duplicate Values in $B^+$ trees}
 \label{allowDV}
-B+ trees are often 
+This Section informally presents different ideas to allow duplicate values in a $B^+$ tree. Further, it discusses their advantages and disadvantages and compares them to each other. 
 
-\subsection{Methods Discussion}
+\subsection{Create unique Keys}
+A record in the time series consists of a temperature value and a time value. For each time exists just one temperature value. Therefore the idea is to combine both values and hence always have a unique key. \\
+There are two different actions if the case occurs where you have to add a record with a key that already exists in the $B^+$ tree. If the leaf is not already full, the record can be added to the existing leaf. But the keys should be reordered according to their temperature. If the leaf has to split the records with equal keys can be separated due to the associated timestamp. If the equal keys are split to different leaves the parent node must new include the same key and the associated timestamp of the first key of the right child leaf. Hence, the two leaves can now still be separated due to the additional ordering with timetamps. The Figure \ref{fig:keyT} illustrates how the above described tree might look. 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.8; 10:40}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{16.3; 11:10}{18.8; 10:25}{18.8; 10:30}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{18.8; 10:40}{19.4; 12:10}{19.7; 13:30}}
+	
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Example $B^+$ tree using a new unique key}
+	\label{fig:keyT}
+	
+\end{figure}		
 
-\subsubsection{Add the time to the key}
-If you would add the timestamps to keys would be unique. So if the case occurs where you have the same keys but in different leaves because the leaves were full and had therefore be splitted you could include the timestamps which divides the two different values to the parent. --> every key with timestamp smaller than the parents timestamp is in the left leaf and every key with timestamp bigger or equal is in the right one --> 
-Problems: more memory needed. always check needed if there is a timestamps in the leaf
-+ neighbor method would still work because you have the value and the set of time stamps 
+\subsubsection{Advantages and Disadvantages}
+\paragraph{$(+)$}
+\begin{itemize}  
+	\item Implementation is similar to the $B^+$ tree with no duplicate search-keys. 
+	\item The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicates. 
+\end{itemize}
+\paragraph{$(-)$}
+\begin{itemize}  
+	\item The requirement to allow duplicate values is not meet, since duplicates are just avoided by creating a new unique key. 
+	\item More memory needed since the interior nodes must be able to include a timestamp. 
+	\item Searching a key is slower than in a $B^+$ tree with no duplicates, since the timestamp value and the temperature value of a interior node has to be checked. This slows down a record insertion and deletion in the tree. 
+\end{itemize}
 
-\subsubsection{Add several times to the key}
+\subsection{Associated List containing Timestamps with equal Temperature}
+The idea of this method is to associate a list to the each key that was inserted several times. So instead of inserting the key again to the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the modification to the originally presented $B^+$ tree in Figure {fig:B+tree} planned
+
 
 The second was to have just one entry for each key, but the 'payload' associated with each key points to a different block of data, which is a linked list pointing to all instances of items that are having the same key
 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% circular array
+	\xyshift{-15mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \&
+			\node[circularptr] (c2)  {}; \&
+			\node[circularptr] (c3)  {}; \&
+			\node[circularptr] (c13) {}; \\
+			%
+			\node[circularval] (left) {14:15}; \&
+			\node[circularval] {14:30}; \&
+			\node[circularval] {14:50}; \&
+			\node[circularval] (right) {14:10}; \\
+		};
+	}	
+	%
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
 
-\subsubsection{Not change insertion but the search algorithm}
-There are several different ways of handling duplicate keys. One way is use an unmodified insert algorithm which allows duplicate keys in blocks but is otherwise unchanged. The issue with a structure such as this is the search algorithm must be modified to take into account several corner cases which arise
-For instance one of the invariants of a B+Tree may be violated in this structure. Specifically if there are many duplicate keys, a copy of one of the keys may be in a non-leaf block. However, the key may appear in blocks that which appear logically before the block which is pointed at by the key in the internal block. Thus the search algorithm must be modified to look in the previous blocks to the one suggested by the unmodified search algorithm. This will slow down the common case for search.There is another issue with this straight forward implementation, if there are many duplicate keys in the index, the index size may be taller than necessary. Consider a situation were for each unique key there are perhaps hundreds of duplicates, the index size will be proportional to the total number of keys in the main file, however, you only need to index an index on the unique keys. One of the files indexed in our program will be indexing has such characteristics to its data. It indexes strings (as the keys) with associated instances where those strings show up in our documents. There can be hundreds to thousands of instances of each unique string.
-Therefore the approach I took was to store only the unique keys in the index, and have the duplicates captured in overflow blocks in the main file. An example of such a tree can be seen in figure 2. Consider key 6; there are 5 instances of this key in the tree. The tree is order 3, indicating the keys cannot all fit in one block. To handle this situation an overflow block is chained to the block which is indexed by the tree structure. The overflow block then points to the next relevant block in the tree.To create a structure such as this, the insert algorithm had to be modified. Like the previous version these modifications do not come without a cost, in particular the invariant which states all block must be at least half full has been relaxed. This is not true in this B+Tree, some blocks like the one containing key number 7, are not half full. This problem could be partially solved by using key rotations to balance the tree better. However, there are still corner cases where there would be a block which is under-full. One such corner case includes when a key falls between two keys which have overflow blocks. It must then be in a block by itself, since this B+Tree has the invariant which state that if a block is overflowing it can only contain one unique key. In the future we would like to implement key rotations to help partially alleviate the problem of under-full blocks.
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Proposed data structures in \cite{BScT}.}
+	\label{fig:ListApp}
+\end{figure}
 
-The advantage of this approach to B+Trees with duplicate keys is the index size is small no matter how the ratio of duplicate keys to the total number of keys in the file. This property allows our searches to be conducted quicker. Since the overflow blocks are chained into the B+Tree structure we still have the property of being able to fast sequential scans. One consequence is we have defined all queries on our B+Trees to be range queries. This is fine because all of our queries were already range queries. In conclusion we relax the condition that all blocks must be at least half full to gain higher performance during search.
 
-http://hackthology.com/lessons-learned-while-implementing-a-btree.html
+\subsubsection{Advantages and Disadvantages}
+\paragraph{$(+)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+\paragraph{$(-)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
 
-\subsection{Book }
+
+
+\subsection{Additional Leaves without a Parent Node}
+\paragraph{$(+)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+\paragraph{$(-)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+
+
+\subsection{Associated List with all Timestamps with the same Temperature}
+\subsubsection{Advantages and Disadvantages}
+\paragraph{$(+)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+\paragraph{$(-)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+
+\subsection{Use Null Values in Interior Nodes}
+\subsubsection{Advantages and Disadvantages}
+\paragraph{$(+)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+\paragraph{$(-)$}
+\begin{itemize}  
+	\item  
+\end{itemize}
+
+
+\subsection{Comparison of Methods for Handling Duplicate Values}
+
+
 
 \chapter{Implementation}
 \label{sec:Implementation}
