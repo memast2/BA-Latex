@@ -5,7 +5,7 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Proposed data structures in \cite {BScT}.}}{16}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Circular array without pointers to the $B^+$ tree.}}{17}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Left children keys < 18.8 and right children keys $\leq 18.8$ .}}{18}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Left children keys < 18.8 and right children keys $\leq 18.8$ .}}{17}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 10:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 11:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1249,22 +1249,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 423--424
 
  []
 
+Missing character: There is no ; in font nullfont!
 
-Underfull \hbox (badness 10000) in paragraph at lines 428--429
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 430--431
+Underfull \hbox (badness 10000) in paragraph at lines 456--457
 
  []
 
 [17]
-Underfull \hbox (badness 10000) in paragraph at lines 434--435
+Underfull \hbox (badness 10000) in paragraph at lines 460--461
 
  []
 
-Missing character: There is no ; in font nullfont!
 [18] [19]
 Chapter 4.
 [20
@@ -1287,7 +1282,7 @@ Here is how much of TeX's memory you used:
  24713 multiletter control sequences out of 15000+600000
  50800 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,20n,86p,1769b,1062s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,20n,86p,1769b,1097s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base
 /8r.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex
 10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
@@ -1305,7 +1300,7 @@ exlive/2015/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2
 mf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on ifiThesisEx.pdf (23 pages, 257943 bytes).
+Output written on ifiThesisEx.pdf (23 pages, 257811 bytes).
 PDF statistics:
  176 PDF objects out of 1000 (max. 8388607)
  128 compressed objects within 2 object streams

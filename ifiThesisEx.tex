@@ -425,7 +425,33 @@ A $B^+$ tree is organized in bocks, as implied by its name. All paths from the r
 	\item The keys in the leaves are sorted from left to right. 
 	\item All pointers in a node point to the level below.
 	\item The interior nodes use at least $[\frac{n+1}{2}]$ of its \emph{n} + 1 pointers. In the root at least 2 pointers must be used. 
-	\item The first pointer in a node where the first key is \emph{K} points to a node and hence a part of the tree where the keys are less than \emph{K}. The second pointer points to a node where the keys are greater than or equal to \emph{K}, as shown in Figure \ref{lessOrEqual}. \\
+	\item The first pointer in a node where the first key is \emph{K} points to a node and hence a part of the tree where the keys are less than \emph{K}. The second pointer points to a node where the keys are greater than or equal to \emph{K}, as shown in Figure \ref{lessOrEqual}. 
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[
+		scale=0.7,
+		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+		every matrix/.style={cells={scale=0.7}},
+		]
+		% root node
+		
+		\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.8}{}{}};
+		
+		%
+		% intermediate nodes
+		\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
+		\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{18.8}{19.4}{19.7}}
+		
+		%
+		% connecting root to intermediate level nodes
+		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+		%
+		
+		\end{tikzpicture}
+		\vspace{2mm}
+		\caption{Left children keys < 18.8 and right children keys $\leq 18.8$ .}
+		\label{lessOrEqual}
+	\end{figure}
 \end{itemize}
 The $B^+$ tree used for the implementation of the streaming time series data is slightly different to the  $B^+$ tree in \cite{BTreeBook}. The required properties are the following: \\
 \begin{itemize}  
@@ -434,32 +460,7 @@ The $B^+$ tree used for the implementation of the streaming time series data is 
 	\item The leaves are sorted by the temperature values.\\ 
 \end{itemize}
 Due to the weather conditions the temperature in the time window $W$ can occur several times. Therefore, the keys are not unique. Since the temperature values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{allowDV} proposes different possibilities that allow to use duplicate values in a $B^+$ tree. 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	% root node
-	
-	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.8}{}{}};
-	
-	%
-	% intermediate nodes
-	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
-	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{18.8}{19.4}{19.7}}
-	
-	%
-	% connecting root to intermediate level nodes
-	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-	%
-	
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Left children keys < 18.8 and right children keys $\leq 18.8$ .}
-	\label{lessOrEqual}
-\end{figure}
+
 
 
 \section{Allowing Duplicate Values}
