@@ -21,21 +21,17 @@
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}
 \contentsline {paragraph}{\nonumberline $(+)$}{20}
 \contentsline {paragraph}{\nonumberline $(-)$}{20}
-\contentsline {subsection}{\numberline {3.3.3}Additional Leaves without a Parent Node}{20}
-\contentsline {paragraph}{\nonumberline $(+)$}{20}
-\contentsline {paragraph}{\nonumberline $(-)$}{20}
-\contentsline {subsection}{\numberline {3.3.4}Associated List with all Timestamps with the same Temperature}{20}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}
-\contentsline {paragraph}{\nonumberline $(+)$}{20}
-\contentsline {paragraph}{\nonumberline $(-)$}{21}
-\contentsline {subsection}{\numberline {3.3.5}Use Null Values in Interior Nodes}{21}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{21}
-\contentsline {paragraph}{\nonumberline $(+)$}{21}
-\contentsline {paragraph}{\nonumberline $(-)$}{21}
-\contentsline {subsection}{\numberline {3.3.6}Comparison of Methods for Handling Duplicate Values}{21}
-\contentsline {chapter}{\numberline {4}Implementation}{22}
-\contentsline {chapter}{\numberline {5}Evaluation}{23}
-\contentsline {section}{\numberline {5.1}Experimental Setup}{23}
-\contentsline {section}{\numberline {5.2}Results}{23}
-\contentsline {section}{\numberline {5.3}Discussion}{23}
-\contentsline {chapter}{\numberline {6}Summary and Conclusion}{24}
+\contentsline {subsection}{\numberline {3.3.3}Additional Leaves without a Parent Node}{22}
+\contentsline {paragraph}{\nonumberline $(+)$}{22}
+\contentsline {paragraph}{\nonumberline $(-)$}{22}
+\contentsline {subsection}{\numberline {3.3.4}Use Null Values in Interior Nodes (book)}{22}
+\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{22}
+\contentsline {paragraph}{\nonumberline $(+)$}{22}
+\contentsline {paragraph}{\nonumberline $(-)$}{22}
+\contentsline {subsection}{\numberline {3.3.5}Comparison of Methods for Handling Duplicate Values}{22}
+\contentsline {chapter}{\numberline {4}Implementation}{23}
+\contentsline {chapter}{\numberline {5}Evaluation}{24}
+\contentsline {section}{\numberline {5.1}Experimental Setup}{24}
+\contentsline {section}{\numberline {5.2}Results}{24}
+\contentsline {section}{\numberline {5.3}Discussion}{24}
+\contentsline {chapter}{\numberline {6}Summary and Conclusion}{25}

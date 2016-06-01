@@ -1,6 +1,8 @@
+\def \figurename {Algorithm}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {algorithm}{\numberline {1}{\ignorespaces Possible structure for a record}}{21}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

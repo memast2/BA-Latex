@@ -20,7 +20,6 @@
 \usepackage{weiwBTree}
 \usepackage{float}
 \usepackage{array}
-
 \usetikzlibrary{shapes, calc}
 
 
@@ -81,8 +80,10 @@
 \tableofcontents
 \listoffigures
 \listoftables
-\listofalgorithms
+\renewcommand{\lstlistingname}{Algorithm}% Listing -> Algorithm
 
+\listofalgorithms
+\addtocontents{loa}{\def\string\figurename{Algorithm}}
 
 \chapter{Introduction}
 A streaming time series \(s\) is a unbounded sequence of data points that is continuously extended, potentially forever. They are relevant to applications in diverse domains like in finance, meteorology or sensor networks to name a few. All these applications need to be fed continuously with the latest data. But the processing of large volumes of time series data is impractical because a system can only keep a limited size of data in main memory.\\
@@ -245,7 +246,7 @@ The system presented in the present thesis that uses the proposed index structur
 \begin{itemize}  
 	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
 	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
-	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t e T$ such that $|v-s(t)|$ is minimal.\\
+	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t \in T$ such that $|v-s(t)|$ is minimal.\\
 \end{itemize}
 The lookup operation can be efficiently performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$ tree are sorted and, unlike in a traditional $B^+$ tree, interconnected in both directions. \\
 Since the system should be integrable in the TKCM algorithm, it needs to be able to handle the Data Set presented in Section \ref{sec:DS}. Therefore, the $B^+$ tree must be capable to deal with duplicate values, because the same temperature value in a streaming time series may occur several times. 
@@ -459,7 +460,7 @@ Due to weather conditions the temperature values in the time window $W$ can occu
 
 \section{Handling Duplicate Values in $B^+$ trees}
 \label{allowDV}
-This Section informally presents different ideas to allow duplicate values in a $B^+$ tree. Further, it discusses their advantages and disadvantages and compares them to each other. 
+This Section informally presents different ideas to allow duplicate values in a $B^+$ tree. Further, it discusses their advantages and disadvantages and compares them to each other. The advantages and disadvantages are valid for the implementation with the programming language C. 
 
 \subsection{Create unique Keys}
 A record in the time series consists of a temperature value and a time value. For each time exists just one temperature value. Therefore the idea is to combine both values and hence always have a unique key. \\
@@ -506,10 +507,7 @@ There are two different actions if the case occurs where you have to add a recor
 \end{itemize}
 
 \subsection{Associated List containing Timestamps with equal Temperature}
-The idea of this method is to associate a list to the each key that was inserted several times. So instead of inserting the key again to the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the modification to the originally presented $B^+$ tree in Figure {fig:B+tree} planned
-
-
-The second was to have just one entry for each key, but the 'payload' associated with each key points to a different block of data, which is a linked list pointing to all instances of items that are having the same key
+The idea of this method is to associate a list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the needed modification to the originally presented $B^+$ tree in Figure {fig:B+tree}.
 
 \begin{figure}[H]
 	\centering
@@ -518,17 +516,7 @@ The second was to have just one entry for each key, but the 'payload' associated
 	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
 	every matrix/.style={cells={scale=0.7}},
 	]
-	% root node
-	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
 	
-	%
-	% intermediate nodes
-	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
-	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
-	%
-	% connecting root to intermediate level nodes
-	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-	%
 	% leaf pointers
 	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
 	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
@@ -549,10 +537,7 @@ The second was to have just one entry for each key, but the 'payload' associated
 	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
 	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
 	%
-	% connecting intermediate level to leaf nodes
-	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
-	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
-	%
+	
 	% circular array
 	\xyshift{-15mm}{-70mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
@@ -564,30 +549,193 @@ The second was to have just one entry for each key, but the 'payload' associated
 			\node[circularval] (left) {14:15}; \&
 			\node[circularval] {14:30}; \&
 			\node[circularval] {14:50}; \&
-			\node[circularval] (right) {14:10}; \\
+			\node[circularval] (right) {15:10}; \\
 		};
 	}	
 	%
 	% draw pointers between circular array and B+ tree
-	\path[btlink2] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-
+	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Proposed data structures in \cite{BScT}.}
+	\caption{Temperature value 19.3 occurs four times in time window $W$.}
 	\label{fig:ListApp}
 \end{figure}
-
-
 \subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  
-	\item  
+	\item  The \emph{neighbor}$(v,T)$ operation is very fast if multiple temperatures associated to the same key must be added to $T$. Because the entire list can be added. 
+	\item Searching a key is equally fast as in a $B^+$ tree with no duplicate values. (Not valid for searching  the associated record timestamp)
+	\item A new timestamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well. 
 \end{itemize}
 \paragraph{$(-)$}
 \begin{itemize}  
-	\item  
+	\item The size and capacity of the list has to be stored, which uses more memory. 
+	\item Implementation difficulties because the size of an array cannot be dynamically allocated in the programming language C.
+	\item If the array grows because a new timestamps needs to be added memory needs to be reallocated. But reallocating memory and copying the original array is expensive. https://en.wikipedia.org/wiki/Linkedlist\\
 \end{itemize}
+The implementation in the programming language C has the challenge that memory cannot be dynamically allocated for a growing array. But since we need a sort of array we can add a size and capacity variable to the referring record. The structure is shown in Listing \ref{alg:test}.
+\lstset{
+	language=C,                % choose the language of the code
+	numbers=right,                   % where to put the line-numbers
+	stepnumber=1,                   % the step between two line-numbers.        
+	numbersep=6pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	tabsize=2,                      % sets default tabsize to 2 spaces
+	captionpos=b,                   % sets the caption-position to bottom
+	breaklines=true,                % sets automatic line breaking
+	breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+	title=\lstname,                 % show the filename of files included with \lstinputlisting;
+}
+\begin{algorithm}[H]
+\lstinputlisting[label=alg:test, caption=Record structure ]{test.c}
+\caption{Possible structure for a record}
+\end{algorithm}
 
+But it is still possible that the capacity of the array is reached and therefore memory needs to be reallocated. Besides, if a value is deleted from the array, the other values either have to be moved backwards to fill the empty place or the array has to stay just fragmentary filled. Either way is not ideal for a good performance. \\
+Another way to meet the requirements is to use a linked list that contains the timestamps. The advantage against using an array is to add a new element to the linked list without an expensive reallocation of memory. A deletion can be done in $O(1)$ since the first element of the linked list would be the oldest element. But the insertion would cost $O(n)$ because one has to go through the entire list to find the last element. \\
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+	%
+
+	% circular array
+	\xyshift{-40mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:15}; \\
+		};
+	}
+		% circular array
+		\xyshift{-10mm}{-70mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c2)  {}; \\	
+				%
+				\node[circularval] (left)(right) {14:30}; \\
+			};
+		}	
+		
+	% circular array
+		\xyshift{20mm}{-70mm}{
+				\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+					\node[circularptr] (c3)  {}; \\	
+					%
+					\node[circularval] (left)(right) {14:50}; \\
+				};
+		}	
+			
+	
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+	% draw pointers for linked list
+	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
+	\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c3.west);	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Singly linked list}
+	\label{fig:SinglyLinked}
+\end{figure}
+
+Another idea would be using a circular linked linked list that is linked in both directions as you can see in Figure \ref{fig:DoublyLinked}. The insertion and deletion would then just cost $O(1)$. But the additional pointers use more memory than a singly linked list. Hence, there is a trade-off between speed and memory allocation when using a linked list.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+	%
+	
+	% circular array
+	\xyshift{-40mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:15}; \\
+		};
+	}
+	% circular array
+	\xyshift{-10mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c2)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:30}; \\
+		};
+	}	
+	
+	% circular array
+	\xyshift{20mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c3)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:50}; \\
+		};
+	}	
+
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+	% draw pointers for linked list
+	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
+	\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c3.west);
+	\draw[btlink] ([yshift=-20pt] c2.west) -- ([yshift=-20pt] c1.east);
+	\draw[btlink] ([yshift=-20pt] c3.west) -- ([yshift=-20pt] c2.east);
+	%circular links
+	\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=200,in=270] ([yshift=-10pt] c3.east);
+	\path[btlink] ([yshift=-10pt] c1.west)  edge[out=210,in=270] ([yshift=-20pt] c3.east);
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Doubly, circular linked list}
+	\label{fig:DoublyLinked}
+\end{figure}
 
 
 \subsection{Additional Leaves without a Parent Node}
@@ -601,18 +749,7 @@ The second was to have just one entry for each key, but the 'payload' associated
 \end{itemize}
 
 
-\subsection{Associated List with all Timestamps with the same Temperature}
-\subsubsection{Advantages and Disadvantages}
-\paragraph{$(+)$}
-\begin{itemize}  
-	\item  
-\end{itemize}
-\paragraph{$(-)$}
-\begin{itemize}  
-	\item  
-\end{itemize}
-
-\subsection{Use Null Values in Interior Nodes}
+\subsection{Use Null Values in Interior Nodes (book)}
 \subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  

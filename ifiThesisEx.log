@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 12:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  1 JUN 2016 16:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -986,19 +986,19 @@ File: tikzlibrarycalc.code.tex 2013/07/15 v3.0.0 (rcs-revision 1.9)
  (./ifiThesisEx.aux)
 \openout1 = `ifiThesisEx.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 67.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 66.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
@@ -1066,41 +1066,41 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count154
-LaTeX Info: Redefining \celsius on input line 67.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 67.
+LaTeX Info: Redefining \celsius on input line 66.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 66.
 
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 67.
-Package gensymb Info: Using \Omega for \ohm on input line 67.
+LaTeX Info: Redefining \ohm on input line 66.
+Package gensymb Info: Using \Omega for \ohm on input line 66.
 
 Package gensymb Warning: Not defining \micro.
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 70.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 69.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 70.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 70.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 69.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 69.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 70.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 69.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 70.
-LaTeX Font Info:    Try loading font information for U+msa on input line 70.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 69.
+LaTeX Font Info:    Try loading font information for U+msa on input line 69.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 70.
+LaTeX Font Info:    Try loading font information for U+msb on input line 69.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 70.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 69.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -1108,13 +1108,13 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 <IFIlogo.pdf, id=4, 597.23125pt x 845.1575pt>
 File: IFIlogo.pdf Graphic file (type pdf)
  <use IFIlogo.pdf>
-Package pdftex.def Info: IFIlogo.pdf used on input line 70.
+Package pdftex.def Info: IFIlogo.pdf used on input line 69.
 (pdftex.def)             Requested size: 110.57718pt x 156.49014pt.
 
 <dbtgBW.pdf, id=5, 597.23125pt x 845.1575pt>
 File: dbtgBW.pdf Graphic file (type pdf)
  <use dbtgBW.pdf>
-Package pdftex.def Info: dbtgBW.pdf used on input line 70.
+Package pdftex.def Info: dbtgBW.pdf used on input line 69.
 (pdftex.def)             Requested size: 40.20656pt x 56.9055pt.
  [1
 
@@ -1157,7 +1157,7 @@ Class scrreprt Warning: \float@listhead detected!
 (scrreprt)              Loading of package `scrhack' may help to
 (scrreprt)              avoid this warning, if you are using a
 (scrreprt)              a package that still implements the
-(scrreprt)              deprecated \float@listhead interface  on input line 84.
+(scrreprt)              deprecated \float@listhead interface  on input line 85.
 
 
 [7
@@ -1186,24 +1186,25 @@ Class scrreprt Warning: \float@addtolists detected!
 (scrreprt)              deprecated \float@addtolist interface .
 
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 93.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 94.
 [9
 
 ]
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--98
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 99.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 100.
+
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 99.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 100.
 
-Underfull \hbox (badness 10000) in paragraph at lines 100--101
+Underfull \hbox (badness 10000) in paragraph at lines 101--102
 
  []
 
@@ -1214,29 +1215,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 100--101
 \c@exmp=\count156
  [11]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 158.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 159.
  [12]
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (3.18484pt too wide) in paragraph at lines 229--230
+Overfull \hbox (3.18484pt too wide) in paragraph at lines 230--231
  [][] 
  []
 
 [13] [14]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 242--245
+Underfull \hbox (badness 10000) in paragraph at lines 243--246
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 242--245
+Underfull \hbox (badness 10000) in paragraph at lines 243--246
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 248--249
+Underfull \hbox (badness 10000) in paragraph at lines 249--250
 
  []
 
@@ -1245,47 +1246,61 @@ Underfull \hbox (badness 10000) in paragraph at lines 248--249
 ]
 Missing character: There is no ; in font nullfont!
  [16]
-Underfull \hbox (badness 10000) in paragraph at lines 417--418
+Underfull \hbox (badness 10000) in paragraph at lines 418--419
 
  []
 
 Missing character: There is no ; in font nullfont!
 [17]
-Underfull \hbox (badness 10000) in paragraph at lines 450--451
+Underfull \hbox (badness 10000) in paragraph at lines 451--452
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 456--457
+Underfull \hbox (badness 10000) in paragraph at lines 457--458
 
  []
 
 Missing character: There is no ; in font nullfont!
-[18]
-Missing character: There is no ; in font nullfont!
- [19] [20] [21]
+[18] [19]
+Underfull \hbox (badness 10000) in paragraph at lines 575--576
+
+ []
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2014/09/06 1.5e listings language file
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/09/06 1.5e (Carsten Heinz)
+) (./test.c)
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 598--665
+
+ []
+
+[21] [22]
 Chapter 4.
-[22
-
-]
-Chapter 5.
 [23
 
 ]
-Chapter 6.
+Chapter 5.
 [24
 
-] [25
+]
+Chapter 6.
+[25
+
+] [26
 
 ] (./ifiThesisEx.aux) ) 
 Here is how much of TeX's memory you used:
- 21702 strings out of 493089
- 438985 string characters out of 6134842
- 600385 words of memory out of 5000000
- 24725 multiletter control sequences out of 15000+600000
+ 22118 strings out of 493089
+ 443292 string characters out of 6134842
+ 613413 words of memory out of 5000000
+ 25131 multiletter control sequences out of 15000+600000
  50800 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,20n,86p,1769b,1097s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,20n,86p,1769b,1222s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base
 /8r.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex
 10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
@@ -1303,10 +1318,10 @@ exlive/2015/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2
 mf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on ifiThesisEx.pdf (25 pages, 260435 bytes).
+Output written on ifiThesisEx.pdf (26 pages, 268312 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 133 compressed objects within 2 object streams
+ 186 PDF objects out of 1000 (max. 8388607)
+ 135 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
