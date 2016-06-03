@@ -26,6 +26,24 @@
 
 
 % --------- 
+\lstset{
+	language=C,                % choose the language of the code
+	numbers=right,                   % where to put the line-numbers
+	stepnumber=1,                   % the step between two line-numbers.        
+	numbersep=6pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	tabsize=2,                      % sets default tabsize to 2 spaces
+	captionpos=b,                   % sets the caption-position to bottom
+	breaklines=true,                % sets automatic line breaking
+	breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+	title=\lstname,                 % show the filename of files included with \lstinputlisting;
+}
+
+\setlength{\parindent}{0pt} 
+
 
 \titlehead{Department of Informatics, University of Zürich}
 \subject{\vspace*{2cm}BSc Thesis}
@@ -575,26 +593,10 @@ The idea of this method is to associate a list to the each key that occurs multi
 	\item If the array grows because a new timestamps needs to be added memory needs to be reallocated. But reallocating memory and copying the original array is expensive. https://en.wikipedia.org/wiki/Linkedlist\\
 \end{itemize}
 The implementation in the programming language C has the challenge that memory cannot be dynamically allocated for a growing array. But since we need a sort of array we can add a size and capacity variable to the referring record. The structure is shown in Listing \ref{alg:test}.
-\lstset{
-	language=C,                % choose the language of the code
-	numbers=right,                   % where to put the line-numbers
-	stepnumber=1,                   % the step between two line-numbers.        
-	numbersep=6pt,                  % how far the line-numbers are from the code
-	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
-	showspaces=false,               % show spaces adding particular underscores
-	showstringspaces=false,         % underline spaces within strings
-	showtabs=false,                 % show tabs within strings adding particular underscores
-	tabsize=2,                      % sets default tabsize to 2 spaces
-	captionpos=b,                   % sets the caption-position to bottom
-	breaklines=true,                % sets automatic line breaking
-	breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
-	title=\lstname,                 % show the filename of files included with \lstinputlisting;
-}
 \begin{algorithm}[H]
 \lstinputlisting[label=alg:test, caption=Record structure ]{test.c}
 \caption{Possible structure for a record}
 \end{algorithm}
-
 But it is still possible that the capacity of the array is reached and therefore memory needs to be reallocated. Besides, if a value is deleted from the array, the other values either have to be moved backwards to fill the empty place or the array has to stay just fragmentary filled. Either way is not ideal for a good performance. \\
 Another way to meet the requirements is to use a linked list that contains the timestamps. The advantage against using an array is to add a new element to the linked list without an expensive reallocation of memory. A deletion can be done in $O(1)$ since the first element of the linked list would be the oldest element. But the insertion would cost $O(n)$ because one has to go through the entire list to find the last element. \\
 \begin{figure}[H]
@@ -664,7 +666,7 @@ Another way to meet the requirements is to use a linked list that contains the t
 	\label{fig:SinglyLinked}
 \end{figure}
 
-Another idea would be using a circular linked linked list that is linked in both directions as you can see in Figure \ref{fig:DoublyLinked}. The insertion and deletion would then just cost $O(1)$. But the additional pointers use more memory than a singly linked list. Hence, there is a trade-off between speed and memory allocation when using a linked list.
+Another idea is to use a circular linked list that is interconnected in both directions as you can see in Figure \ref{fig:DoublyLinked}. The insertion and deletion would then just cost $O(1)$. But the additional pointers use more memory than a singly linked list. Hence, there is a trade-off between speed and memory allocation when using a linked list.
 
 \begin{figure}[H]
 	\centering
@@ -739,6 +741,62 @@ Another idea would be using a circular linked linked list that is linked in both
 
 
 \subsection{Additional Leaves without a Parent Node}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-110mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+	\xyshift{-80mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+	\xyshift{-45mm}{-30mm}{\btreelnodethree{n13}{18.3}{18.3}{18.4}}
+	\xyshift{-10mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+	\xyshift{ 20mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+	\xyshift{ 50mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+	\xyshift{ 80mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n13-a.west);
+	\draw[btlink] ([yshift=+3pt] n13-c.east) -- ([yshift=+3pt] n21-a.west);
+	
+	\draw[btlink] ([yshift=-3pt] n13-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n13-c.east);
+
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{$B^+$ tree with an additional leaf without a parent. }
+	\label{fig:noparents}
+\end{figure}
+
+
+
 \paragraph{$(+)$}
 \begin{itemize}  
 	\item  
