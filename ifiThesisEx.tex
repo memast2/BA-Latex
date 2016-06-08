@@ -104,7 +104,7 @@
 \addtocontents{loa}{\def\string\figurename{Algorithm}}
 
 \chapter{Introduction}
-A streaming time series \(s\) is a unbounded sequence of data points that is continuously extended, potentially forever. They are relevant to applications in diverse domains like in finance, meteorology or sensor networks to name a few. All these applications need to be fed continuously with the latest data. But the processing of large volumes of time series data is impractical because a system can only keep a limited size of data in main memory.\\
+A streaming time series \(s\) is a unbounded sequence of data points that is continuously extended, potentially forever. Streaming time series are relevant to applications in diverse domains for example in finance, meteorology or sensor networks. All domains have applications that need to be fed continuously with the latest data e.g. the financial stock market or the weather information. But the processing of large volumes of time series data is impractical. A system can only keep a limited size of data in main memory.\\
 Since streaming time series are unbounded, a system cannot hold the constantly generated data in his main memory endlessly. Therefore, the data that is kept in main memory needs to be limited to just a portion of the streaming time series. Besides, in order to be practical for a application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises.\\
 The thesis presents a way to implement the described data structures after discussing the requirements. Furthermore, it documents the out coming experimental results.
 In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be summarized and concluded.
@@ -524,7 +524,8 @@ There are two different actions if the case occurs where you have to add a recor
 	\item Searching a key is slower than in a $B^+$ tree with no duplicates, since the timestamp value and the temperature value of a interior node has to be checked. This slows down a record insertion and deletion in the tree. 
 \end{itemize}
 
-\subsection{Associated List containing Timestamps with equal Temperature Values}
+\subsection{Associated List}
+\label{Associated List}
 The idea of this method is to associate a list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the needed modification to the originally presented $B^+$ tree in Figure {fig:B+tree}.
 
 \begin{figure}[H]
@@ -582,7 +583,7 @@ The idea of this method is to associate a list to the each key that occurs multi
 \subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  
-	\item  The \emph{neighbor}$(v,T)$ operation is very fast if multiple temperatures associated to the same key must be added to $T$. Because the entire list can be added. 
+	\item  The \emph{neighbor}$(v,T)$ operation, after $v$ has been found, is very fast if multiple temperatures associated to the same key must be added to $T$. Because the entire list can be added. 
 	\item Searching a key is equally fast as in a $B^+$ tree with no duplicate values. (Not valid for searching  the associated record timestamp)
 	\item A new timestamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well. 
 \end{itemize}
@@ -590,7 +591,8 @@ The idea of this method is to associate a list to the each key that occurs multi
 \begin{itemize}  
 	\item The size and capacity of the list has to be stored, which uses more memory. 
 	\item Implementation difficulties because the size of an array cannot be dynamically allocated in the programming language C.
-	\item If the array grows because a new timestamps needs to be added memory needs to be reallocated. But reallocating memory and copying the original array is expensive. https://en.wikipedia.org/wiki/Linkedlist\\
+	\item If the array grows because a new timestamps needs to be added memory needs to be reallocated. But reallocating memory and copying the original array is expensive. \\
+	TODO find better souce than https://en.wikipedia.org/wiki/Linkedlist\\
 \end{itemize}
 The implementation in the programming language C has the challenge that memory cannot be dynamically allocated for a growing array. But since we need a sort of array we can add a size and capacity variable to the referring record. The structure is shown in Listing \ref{alg:test}.
 \begin{algorithm}[H]
@@ -741,6 +743,7 @@ Another idea is to use a circular linked list that is interconnected in both dir
 
 
 \subsection{Additional Leaves without a Parent Node}
+\label{Additional Leaves}
 Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. \\
 \begin{figure}[htbp]
 	\centering
@@ -797,7 +800,7 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 \subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  
-	\item  The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicate values. 
+	\item  The \emph{neighbor}$(v,T)$ operation is equally fast, after $v$ has been found, as with no duplicate values. 
 	\item The memory usage is even better if the tree contains leaves with no parent, since the pointer from parent to its child is not needed. 
 	\item The memory usage is equal or less than with no duplicate values. 
 	\item The deletion of a duplicate value should be equally fast as with no duplicate values in the tree, since the oldest value should be the leftmost duplicate value in a leaf. 
@@ -807,20 +810,89 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 	\item  Searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record. 
 \end{itemize}
 
-\subsection{Use Null Values in Interior Nodes (book)}
+\subsection{Null Values in Interior Nodes}
+\label{Null Values}
+The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents an additional approach to handle duplicate values. The definition of a key is slightly different when allowing duplicate search-keys. The keys the interior node $K_1, K_2, K_3, ... , K_n$ can be separated to \emph{new} and old keys. $K_i$ is the smallest new key that is part of the sub-tree linked with the $(i+1)$st pointer. If there is no new key associated with the $(i+1)$st pointer, $K_i$ is set to null. 
+
+\begin{exmp}
+	The example illustrated in Figure \ref{fig:BTreeBook} illustrates the case, in which the interior node in the right sub-tree $K_1$ is set to null. The leaf node that pointer $(1+1)$ is associated with contains only duplicate key values which is indicated by setting the interior node $K_1$ to null. The search-key in the root node is set to $17$ because it is the lowest $new$ key in the right sub-tree. Since $13.2$ is already in the left sub-tree, the duplicate search-key in the right sub-tree cannot be the key in the root. \\
+	If e.g. $14.2$ would have been added to the tree, the leaves must be reordered, since the $B^+$ tree property that all leaves are ordered from left to right would be hurt.  
+\end{exmp}
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{-}{37}{43}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3}{6.1}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{13.2}{17}{23}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23}{23}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{23}{38.9}{40}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Duplicate handling proposed in \cite{BTreeBook}.}
+	\label{fig:BTreeBook}
+\end{figure}
+
+
 \subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  
-	\item  
+	\item  The deletion of the oldest duplicate search-key in the tree would be equally fast as with no duplicate search-keys, since the oldest key is the leftmost of all its duplicates. 
+	\item  The \emph{neighbor}$(v,T)$ operation is equally fast, after $v$ has been found, as with no duplicate values. 
 \end{itemize}
 \paragraph{$(-)$}
 \begin{itemize}  
-	\item  
+	\item  The right sub-tree may also contain keys that are lower than the root key. Therefore the neighbour leaves must be checked as well when searching for a particular key. 
+	\item In some cases the leaves have to be reordered.
+	\item In case of duplicate values the neighbour leaves has to be checked as well to find the insertion point for a new key.
 \end{itemize}
 
 
-\subsection{Comparison of Methods for Handling Duplicate Values}
+\subsection{Comparison of the Methods for Duplicate Handling}
 
+The comparison of the four above described methods especially focuses on how they meet the requirements for the operations described in Section \ref{sec:Op}.\\
+First of all, the \emph{Create unique Key} approach can not be used for the implementation. It does not provide a solution for handling duplicate search-keys, it just avoids to handle duplicates by creating a new unique key.\\
+The \emph{Associated List} method described in Section \ref{Associated List} can be implemented differently, either using an array, a linked list or a doubly linked list. If it is implemented using an associated array the \emph{neighbor}$(v,T)$ operation is faster the more duplicate values are added to the associated lists. Further, the deletion and the insertion of a value to or from an existing list can be done in $O(1)$. But since the size of the array cannot be dynamically allocated, the memory needs to be reallocated if the array capacity has been achieved. This is very expensive. Using a linked list uses more memory since every temperature stored in the linked list needs more pointer and the insertion method is slower than if a array is used. The doubly linked list can provide a efficient insertion and deletion to the linked list but it uses even more pointer. Therefore, the \emph{Associated List} method is not useful if memory is short. In this case, memory is an important issue, the more memory the $B^+$ tree needs the smaller the time window $W$ can be to still be kept in main memory. \\
+The other two methods: the \emph{Additional Leaves without a Parent} described in \ref{Additional Leaves} and the \emph{Null Values in Interior Nodes} described in Section \ref{Null Values} are more space efficient. Both methods need more or less the same amount of memory if they allow duplicates in the $B^+$ tree than if they would not. The \emph{neighbor}$(v,T)$ operation is in both methods equally fast, since the leaves contain all records ordered from left to right, no matter if they have a duplicate search-key or not.\emph{neighbor}$(v,T)$ operation. The deletion of a duplicate search-key, which must be done when the shift$(\bar{t}, v)$ method is called and the time window $W$ is full, is more or less equally fast, except for some special cases discussed in the following. In both methods the oldest duplicate search-key is always the leftmost of all equal search-keys. But if a key $k$ must be deleted that does not have a duplicate search-key but is still part of a node that contains duplicate search-keys, the deletion takes longer in both methods. Since all the duplicates in the left neighbour leaves that occur in the same leaf as $k$ have to be checked before. Another special case is when the leaves need to be reordered after a deletion. This may just be necessary if the method \emph{Null Values in Interior Nodes} is used. For example if $14$ is added to the tree illustrated in Figure \ref{fig:BTreeBook} the keys in the leaves would not be ordered from left to right any more. Since another $13.2$ search key is part of the right sub-tree. Therefore, the records in the leaves must be reordered to get a right order again.\\
+The main difference between the last both methods is the insertion and search of a record. A new record is inserted when the shift$(\bar{t}, v)$ method is called. In both methods the insertion of a record that has a key that already occurs in the tree, in this case it is a temperature value $v$ that already exists in time window $W$, is depended on the number of duplicates that are already in the tree. The first potential leaf $L_p$ is found by searching the insertion point for a new record, assuming that the tree can be searched using the $B^+$ properties listed in Section \ref{structureBtree}. After identifying $L_p$ the \emph{Null Values in Interior Nodes} method must check all the right neighbour leaves of $L_p$, until the last duplicate is found or until a bigger search-key is found. If a bigger search-key is found, it is clear that no other duplicate search-key can occur on the further right part of the tree. After the insertion point is identified the new record can be inserted. The same principle is used in the \emph{Additional Leaves without a Parent} method, but if the right neighbour leaf is not parent-less it is directly clear that the insertion point must be before. \\Both methods are at least equally space efficient as a $B^+$ tree with no duplicate values. In the case a new parent-less leaf has to be inserted, using the \emph{Additional Leaves without a Parent} method, the tree uses even less space than it would with no duplicates, since the pointer from the parent to its child node does not exist. \\\\
+To conclude, the first method \emph{Create unique Key} is impractical, since it does not handle duplicate search-keys. The second method \emph{Associated List} can have an efficient \emph{neighbor}$(v,T)$ operation but is altogether impractical in terms of space complexity. 
+The last both methods have a equally fast \emph{neighbor}$(v,T)$ operation, after the value $v$ has already been found, as with no duplicate values. But with both methods a deletion, a search or an insertion can take longer than with no duplicate values in some special cases. Any common and special case must be handled before a new value arrives in time window $W$. Therefore, the time window $W$ can be just as large as the $B^+$ tree is able to handle a special case in time. \\
+Since special cases e.g. a reordering of leaves is not necessary with the method \emph{Additional Leaves without a Parent Node} this approach is implemented because it meets the requirements the best. 
 
 
 \chapter{Implementation}

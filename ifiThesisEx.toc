@@ -17,7 +17,7 @@
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{19}
 \contentsline {paragraph}{\nonumberline $(+)$}{19}
 \contentsline {paragraph}{\nonumberline $(-)$}{19}
-\contentsline {subsection}{\numberline {3.3.2}Associated List containing Timestamps with equal Temperature Values}{19}
+\contentsline {subsection}{\numberline {3.3.2}Associated List}{19}
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}
 \contentsline {paragraph}{\nonumberline $(+)$}{20}
 \contentsline {paragraph}{\nonumberline $(-)$}{20}
@@ -25,14 +25,14 @@
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{22}
 \contentsline {paragraph}{\nonumberline $(+)$}{22}
 \contentsline {paragraph}{\nonumberline $(-)$}{23}
-\contentsline {subsection}{\numberline {3.3.4}Use Null Values in Interior Nodes (book)}{23}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{23}
-\contentsline {paragraph}{\nonumberline $(+)$}{23}
-\contentsline {paragraph}{\nonumberline $(-)$}{23}
-\contentsline {subsection}{\numberline {3.3.5}Comparison of Methods for Handling Duplicate Values}{23}
-\contentsline {chapter}{\numberline {4}Implementation}{24}
-\contentsline {chapter}{\numberline {5}Evaluation}{25}
-\contentsline {section}{\numberline {5.1}Experimental Setup}{25}
-\contentsline {section}{\numberline {5.2}Results}{25}
-\contentsline {section}{\numberline {5.3}Discussion}{25}
-\contentsline {chapter}{\numberline {6}Summary and Conclusion}{26}
+\contentsline {subsection}{\numberline {3.3.4}Null Values in Interior Nodes}{23}
+\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{24}
+\contentsline {paragraph}{\nonumberline $(+)$}{24}
+\contentsline {paragraph}{\nonumberline $(-)$}{24}
+\contentsline {subsection}{\numberline {3.3.5}Comparison of the Methods for Duplicate Handling}{24}
+\contentsline {chapter}{\numberline {4}Implementation}{26}
+\contentsline {chapter}{\numberline {5}Evaluation}{27}
+\contentsline {section}{\numberline {5.1}Experimental Setup}{27}
+\contentsline {section}{\numberline {5.2}Results}{27}
+\contentsline {section}{\numberline {5.3}Discussion}{27}
+\contentsline {chapter}{\numberline {6}Summary and Conclusion}{28}
