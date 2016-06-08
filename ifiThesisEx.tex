@@ -192,7 +192,7 @@ The random access mode is used to look up the values that pattern $P_{t_s}$ is c
 $\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Informally this significances that the lower-bound is always smaller or equal to the error between pattern $P_{t^{'}}$ and query patter $P_{\bar{t}}$ for all time points $t^{'}$ that are elements of $T$. Once $\forall t \in T^* : \delta(P_{t}, P_{\bar{t}}) \leq \tau$ the algorithm terminates. At the end, $T^*=T_k$. 
 
 \subsection{Data Structures}
-The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
+The above described access modes can be efficiently performed by combining two data structures. Namely, a $B^+$ tree and a circular array. Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, TKCM maintains for each time series $s$ a $B^+$ tree that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Unlike the well known $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.\\
 \begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[
@@ -515,7 +515,7 @@ There are two different actions if the case occurs where you have to add a recor
 \paragraph{$(+)$}
 \begin{itemize}  
 	\item Implementation is similar to the $B^+$ tree with no duplicate search-keys. 
-	\item The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicates. 
+	\item The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicate values. 
 \end{itemize}
 \paragraph{$(-)$}
 \begin{itemize}  
@@ -524,7 +524,7 @@ There are two different actions if the case occurs where you have to add a recor
 	\item Searching a key is slower than in a $B^+$ tree with no duplicates, since the timestamp value and the temperature value of a interior node has to be checked. This slows down a record insertion and deletion in the tree. 
 \end{itemize}
 
-\subsection{Associated List containing Timestamps with equal Temperature}
+\subsection{Associated List containing Timestamps with equal Temperature Values}
 The idea of this method is to associate a list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the needed modification to the originally presented $B^+$ tree in Figure {fig:B+tree}.
 
 \begin{figure}[H]
@@ -741,7 +741,7 @@ Another idea is to use a circular linked list that is interconnected in both dir
 
 
 \subsection{Additional Leaves without a Parent Node}
-
+Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. \\
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -794,18 +794,18 @@ Another idea is to use a circular linked list that is interconnected in both dir
 	\caption{$B^+$ tree with an additional leaf without a parent. }
 	\label{fig:noparents}
 \end{figure}
-
-
-
+\subsubsection{Advantages and Disadvantages}
 \paragraph{$(+)$}
 \begin{itemize}  
-	\item  
+	\item  The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicate values. 
+	\item The memory usage is even better if the tree contains leaves with no parent, since the pointer from parent to its child is not needed. 
+	\item The memory usage is equal or less than with no duplicate values. 
+	\item The deletion of a duplicate value should be equally fast as with no duplicate values in the tree, since the oldest value should be the leftmost duplicate value in a leaf. 
 \end{itemize}
 \paragraph{$(-)$}
 \begin{itemize}  
-	\item  
+	\item  Searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record. 
 \end{itemize}
-
 
 \subsection{Use Null Values in Interior Nodes (book)}
 \subsubsection{Advantages and Disadvantages}

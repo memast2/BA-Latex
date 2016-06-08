@@ -17,16 +17,17 @@
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{19}
 \contentsline {paragraph}{\nonumberline $(+)$}{19}
 \contentsline {paragraph}{\nonumberline $(-)$}{19}
-\contentsline {subsection}{\numberline {3.3.2}Associated List containing Timestamps with equal Temperature}{19}
+\contentsline {subsection}{\numberline {3.3.2}Associated List containing Timestamps with equal Temperature Values}{19}
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}
 \contentsline {paragraph}{\nonumberline $(+)$}{20}
 \contentsline {paragraph}{\nonumberline $(-)$}{20}
 \contentsline {subsection}{\numberline {3.3.3}Additional Leaves without a Parent Node}{22}
-\contentsline {paragraph}{\nonumberline $(+)$}{22}
-\contentsline {paragraph}{\nonumberline $(-)$}{22}
-\contentsline {subsection}{\numberline {3.3.4}Use Null Values in Interior Nodes (book)}{22}
 \contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{22}
 \contentsline {paragraph}{\nonumberline $(+)$}{22}
+\contentsline {paragraph}{\nonumberline $(-)$}{23}
+\contentsline {subsection}{\numberline {3.3.4}Use Null Values in Interior Nodes (book)}{23}
+\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{23}
+\contentsline {paragraph}{\nonumberline $(+)$}{23}
 \contentsline {paragraph}{\nonumberline $(-)$}{23}
 \contentsline {subsection}{\numberline {3.3.5}Comparison of Methods for Handling Duplicate Values}{23}
 \contentsline {chapter}{\numberline {4}Implementation}{24}
