@@ -1,0 +1,18 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Circular array of size $|W|$.}}{13}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Left children keys < 18.8 and 18.8 $\leq $ right children keys.}}{16}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}}{17}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Proposed data structures in \cite {BScT}.}}{18}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Singly linked list}}{18}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Doubly, circular linked list}}{19}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Example $B^+$ tree using a new unique key}}{19}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Temperature value 19.3 occurs four times in time window $W$.}}{20}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces $B^+$ tree with an additional leaf without a parent. }}{22}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Duplicate handling proposed in \cite {BTreeBook}.}}{23}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
