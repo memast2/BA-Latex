@@ -6,39 +6,22 @@
 \contentsline {chapter}{\numberline {3}Problem Definition}{12}
 \contentsline {section}{\numberline {3.1}Operations}{12}
 \contentsline {chapter}{\numberline {4}Approach}{13}
-\contentsline {section}{\numberline {4.1}Data Structures}{13}
-\contentsline {subsection}{\numberline {4.1.1}Circular Array}{13}
-\contentsline {paragraph}{\nonumberline Add a new Value to the Circular Array}{14}
-\contentsline {paragraph}{\nonumberline Lookup a Value}{15}
-\contentsline {subsection}{\numberline {4.1.2}$B^+$ Tree}{15}
-\contentsline {subsubsection}{\nonumberline The Structure of $B^+$ trees}{15}
-\contentsline {section}{\numberline {4.2}Combination of the Data Structures}{17}
-\contentsline {section}{\numberline {4.3}Duplicate Values in $B^+$ trees}{17}
-\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{17}
-\contentsline {subsection}{\numberline {4.3.2}Alternative Approaches}{19}
-\contentsline {subsubsection}{\nonumberline Create unique Keys}{19}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{19}
-\contentsline {paragraph}{\nonumberline $(+)$}{19}
-\contentsline {paragraph}{\nonumberline $(-)$}{20}
-\contentsline {subsubsection}{\nonumberline Associated List}{20}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}
-\contentsline {paragraph}{\nonumberline $(+)$}{20}
-\contentsline {paragraph}{\nonumberline $(-)$}{21}
-\contentsline {subsubsection}{\nonumberline Additional Leaves without a Parent Node}{21}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{21}
-\contentsline {paragraph}{\nonumberline $(+)$}{21}
-\contentsline {paragraph}{\nonumberline $(-)$}{22}
-\contentsline {subsubsection}{\nonumberline Null Values in Interior Nodes}{22}
-\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{22}
-\contentsline {paragraph}{\nonumberline $(+)$}{22}
-\contentsline {paragraph}{\nonumberline $(-)$}{23}
-\contentsline {subsection}{\numberline {4.3.3}Comparison of the Methods for Duplicate Handling}{23}
-\contentsline {chapter}{\numberline {5}Complexity Analysis}{25}
-\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{25}
-\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{25}
-\contentsline {chapter}{\numberline {6}Evaluation}{26}
-\contentsline {section}{\numberline {6.1}Experimental Setup}{26}
-\contentsline {section}{\numberline {6.2}Results}{26}
-\contentsline {section}{\numberline {6.3}Discussion}{26}
-\contentsline {chapter}{\numberline {7}Related Works}{27}
-\contentsline {chapter}{\numberline {8}Summary and Conclusion}{28}
+\contentsline {section}{\numberline {4.1}Circular Array}{13}
+\contentsline {subsection}{\numberline {4.1.1}Add a new Value to the Circular Array}{14}
+\contentsline {subsection}{\numberline {4.1.2}Random Access: Lookup a Value}{15}
+\contentsline {section}{\numberline {4.2}$B^+$ Tree}{16}
+\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$ tree}{16}
+\contentsline {section}{\numberline {4.3}Combination of the Data Structures}{18}
+\contentsline {section}{\numberline {4.4}Sorted Access: Next Pattern Search}{18}
+\contentsline {section}{\numberline {4.5}Handling Duplicate Values in $B^+$ trees}{18}
+\contentsline {subsection}{\numberline {4.5.1}Associated doubly, circular Linked List}{19}
+\contentsline {subsection}{\numberline {4.5.2}Alternative Approaches}{19}
+\contentsline {chapter}{\numberline {5}Complexity Analysis}{22}
+\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{22}
+\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{22}
+\contentsline {chapter}{\numberline {6}Evaluation}{23}
+\contentsline {section}{\numberline {6.1}Experimental Setup}{23}
+\contentsline {section}{\numberline {6.2}Results}{23}
+\contentsline {section}{\numberline {6.3}Discussion}{23}
+\contentsline {chapter}{\numberline {7}Related Works}{24}
+\contentsline {chapter}{\numberline {8}Summary and Conclusion}{25}

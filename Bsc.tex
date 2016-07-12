@@ -170,14 +170,10 @@ The approach presented in in Chapter \ref{sec:Approach} the implementation of th
 \chapter{Approach}
 \label{sec:Approach}
 The lookup operation can be efficiently performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$ tree are sorted. \\
-Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, for each time series $s$ a $B^+$ tree is maintained that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. The data structures are described in detail in Section \ref{dataStructures}
+Each time series $s \in S$ can be implemented as a circular array. The circular array is kept in main memory. It uses random access to look up value $s(t)$ for a given time $t$. Further, for each time series $s$ a $B^+$ tree is maintained that is also kept in main memory. The $B^+$ tree is ideal for sorted access by value and therefore for range queries. Both data structures are described in detail in Section \ref{sec:circularArray} and Section \ref{sec:BplusTree}.
 
-\section{Data Structures}
-\label{dataStructures}
 
-In the following the circular array and its methods is described. Further, the $B^+$ tree and the referring methods like the addition and deletion of a measurement is shown.  
-
-\subsection{Circular Array}
+\section{Circular Array}
 \label{sec:circularArray}
 A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.
 \begin{figure}[htbp]
@@ -227,9 +223,9 @@ A circular array is used to store the time series data. The data is assorted by 
 	\caption{Circular array of size $|W|$.}
 	\label{fig:cat}
 \end{figure}\\
-The circular array stores the data, containing all measurement time stamps and values, the size, the last update Position and a counter, which counts the number of measurements added to the array. The addition of a new measurement is presented in Algorithm \ref{alg:Update Circular Array}.
+The circular array stores the data, containing all measurement time stamps and values, the size, the last update Position and a counter, which counts the number of measurements added to the array. The addition of a new measurement to the array is presented in Algorithm \ref{alg:Update Circular Array}.
 \newpage
-\paragraph{Add a new Value to the Circular Array}
+\subsection{Add a new Value to the Circular Array}
 If the counter of the array is equal or bigger than the size of the array, there is a measurement at the update position in the array that needs to be deleted. If not, there is no need to delete a value from the $B^+$ tree, since no value is overwritten in the circular array. 
 
 \begin{algorithm}[ht!]
@@ -239,7 +235,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 
 \newpage
 
-\paragraph{Lookup a Value}
+\subsection{Random Access: Lookup a Value}
 Due to the properties of a circular array the lookup of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array by using the $TIMESTAMP\_DIFF$ representing the interval between two consecutive measurements. The last update point can be used as reference time point for the calculation. 
 
 \begin{algorithm}[ht!]
@@ -247,44 +243,104 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 	\caption{Lookup}
 \end{algorithm}
 
+\newpage
+\section{$B^+$ Tree}
+\label{sec:BplusTree}
+A $B^+$ tree is able to execute range queries very efficiently, since the leaves of a $B^+$ tree are ordered and linked. To perform the \emph{neighbor}$(v,T)$ operation described in Section \ref{sec:Op}, the $B^+$ tree for our requirements has leaves linked in both directions. The Section \ref{structureBtree} presents the structure of the $B^+$ tree we used for the implementation.
 
-\subsection{$B^+$ Tree}
-A $B^+$ tree is able to execute range queries very efficiently because the leaves of a $B^+$ tree are ordered and linked. To perform the \emph{neighbor}$(v,T)$ operation described in Section \ref{sec:Op} even better, the $B^+$ tree we use has its leaves linked in both directions. The Section \ref{structureBtree} describes the genaral structure of a $B^+$ tree. Further, the differences between the $B^+$ tree used in the present thesis and the $B^+$ tree presented in \cite{BTreeBook} are discussed. 
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23}{37}{43}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3}{6.1}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37}{38.9}{40}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
 
-\subsubsection{The Structure of $B^+$ trees}
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Example of a $B^+$ tree}
+	\label{fig:BTreeBook}
+\end{figure}
+
+
+\subsection{The Structure of the used $B^+$ tree}
 \label{structureBtree}
-A $B^+$ tree is organized in bocks, as implied by its name. All paths from the root to a leaf have the same length, hence it is \emph{balanced}. There are three types of nodes that may exist in a $B^+$ tree: the root, interior nodes and leaves as you can see in Figure \ref{fig:cat}. The parameter \emph{n} determines the size of the blocks in the $B^+$ tree. Hence, the blocks can have maximum \emph{n} search-keys and \emph{n} + 1 pointers, pointing to its child nodes. Every block is between half full and completely full. What can appear in blocks is listed in the following: \\
+The structure of the used $B^+$ tree is based on the book from Silberschatz et al. \cite{DatabaseSystemC}. \\
+A $B^+$ tree is organized in blocks, as implied by its name. All paths from the root to a leaf have the same length which significances that the tree is always \emph{balanced}. \\There are three types of nodes that may exist in a $B^+$ tree: the root, interior nodes and leave nodes.
+The parameter \emph{n} determines the number of search-keys and pointers in a node. The interior nodes can have maximum \emph{n-1} search-keys and \emph{n} pointers, pointing to its child nodes. Each interior node must have a minimum of $[n/2]$ pointers and can have maximum $n$ pointers. The root node is the only node that can contain less than $[n/2]$ pointers. The root node must have minimum one searchkey and two pointers to child nodes, unless the root node has no children and therefore is a leaf node.  \\ 
+A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. 
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17.2}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreelnodethree{n1}{7.5}{16.4}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreelnodethree{n2}{17.2}{33.1}{43.5}}
+	%
+	% connecting root to leaf level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
+	\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
+
+	%
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Left children keys < 17.2 and right children keys $\geq$ 17.2}
+	\label{fig:BTreeBook}
+\end{figure} 
+What can appear in blocks is listed in the following: \\
 \begin{itemize}  
 	\item The keys in the leaves are sorted from left to right. 
 	\item All pointers in a node point to the level below.
 	\item The interior nodes use at least $[\frac{n+1}{2}]$ of its \emph{n} + 1 pointers. In the root at least 2 pointers must be used. 
 	\item The first pointer in a node where the first key is \emph{K} points to a node and hence a part of the tree where the keys are less than \emph{K}. The second pointer points to a node where the keys are greater than or equal to \emph{K}, as shown in Figure \ref{lessOrEqual}. 
-	\begin{figure}[H]
-		\centering
-		\begin{tikzpicture}[
-		scale=0.7,
-		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-		every matrix/.style={cells={scale=0.7}},
-		]
-		% root node
-		
-		\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.8}{}{}};
-		
-		%
-		% intermediate nodes
-		\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
-		\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{18.8}{19.4}{19.7}}
-		
-		%
-		% connecting root to intermediate level nodes
-		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-		%
-		
-		\end{tikzpicture}
-		\vspace{2mm}
-		\caption{Left children keys < 18.8 and 18.8 $\leq$ right children keys.}
-		\label{lessOrEqual}
-	\end{figure}
+
 \end{itemize}
 The $B^+$ tree used for the implementation of the streaming time series data is slightly different to the  $B^+$ tree in \cite{BTreeBook}. The required properties are the following: \\
 \begin{itemize}  
@@ -297,51 +353,16 @@ The $B^+$ tree used for the implementation of the streaming time series data is 
 Due to weather conditions the temperature values in the time window $W$ can occur several times. Therefore, the keys are not unique. Since the temperature values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{allowDV} proposes different possibilities that allow to use duplicate values in a $B^+$ tree. 
 
 
-Unlike the traditional $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.\\
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.6,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.6}},
-	]
-	% 
-	\btreeinodefourx{root}{24}{}{}{};
-	\xyshiftx{-40mm}{-20mm}{\btreeinodefourx{n1}{13}{17}{}{}}
-	\xyshiftx{70mm}{-20mm}{\btreeinodefourx{n2}{30}{38}{}{}}
-	% 
-	\xyshiftx{-100mm}{-40mm}{\btreelnodefourx{n11}{2}{3}{5}{7}}
-	\xyshiftx{-55mm}{-40mm}{\btreelnodefourx{n12}{14}{16}{}{}}
-	\xyshiftx{-10mm}{-40mm}{\btreelnodefourx{n13}{19}{20}{22}{}}
-	\xyshiftx{35mm}{-40mm}{\btreelnodefourx{n21}{24}{27}{29}{}}
-	\xyshiftx{80mm}{-40mm}{\btreelnodefourx{n22}{33}{34}{}{}}
-	\xyshiftx{125mm}{-40mm}{\btreelnodefourx{n23}{38}{39}{40}{}}
-	% 
-	\foreach \x in {1,2} { \btreelinkx{root-\x}{n\x} }
-	\foreach \x in {1,2,3} { \btreelinkx{n1-\x}{n1\x} }
-	\foreach \x in {1,2,3} { \btreelinkx{n2-\x}{n2\x} }
-	{\linkleavesx{n11}{n12} }
-	{\linkleavesx{n12}{n13} }
-	{\linkleavesx{n13}{n21} }
-	{\linkleavesx{n21}{n22} }
-	{\linkleavesx{n22}{n23} }
-	\end{tikzpicture}
-	\caption{A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}
-	\label{fig:sptree}
-\end{figure}
+Unlike the traditional $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
 
 
-
-
-
-
+\newpage
 \section{Combination of the Data Structures}
 \label{sec:das}
 To efficiently implement the above mentioned operations the system combines two data structures:
 a circular array and a $B^+$ tree. In Figure \ref{fig:B+tree planned} the originally proposed data structure in \cite{BScT} is shown. The $B^+$ tree is connected with pointers to the circular array and vice versa. Further, the temperature values are used as keys in the $B^+$ tree. The size of the circular array is defined as $|W| + 1$ since an empty field is used to identify the current update position. The size $|W|$ and the order of the $B^+$ tree, which defines the size of the nodes, are parameters. Hence they can be changed.\\The circular array and the $B^+$ tree are characterized in the following. 
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
 scale=0.7,
@@ -444,87 +465,20 @@ node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
 \label{fig:B+tree planned}
 \end{figure}
 
+\section{Sorted Access: Next Pattern Search}
 
-\section{Duplicate Values in $B^+$ trees}
+
+
+
+\section{Handling Duplicate Values in $B^+$ trees}
 \label{allowDV}
-This Section presents a solution to allow duplicate values in a $B^+$ tree. Further, the advantages and disadvantages are discussed and compared to other approaches. 
-
+This Section presents a solution to allow duplicate values in a $B^+$ tree. Further, the advantages and disadvantages are discussed and some advantages over other approaches are illustrated. 
 
 \subsection{Associated doubly, circular Linked List}
 \label{doublyLinked}
-The idea of this method is to associate a list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the needed modification to the originally presented $B^+$ tree in Figure {fig:B+tree}.
-
-But it is still possible that the capacity of the array is reached and therefore memory needs to be reallocated. Besides, if a value is deleted from the array, the other values either have to be moved backwards to fill the empty place or the array has to stay just fragmentary filled. Either way is not ideal for a good performance. \\
-Another way to meet the requirements is to use a linked list that contains the timestamps. The advantage against using an array is to add a new element to the linked list without an expensive reallocation of memory. A deletion can be done in $O(1)$ since the first element of the linked list would be the oldest element. But the insertion would cost $O(n)$ because one has to go through the entire list to find the last element. \\
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	
-	% leaf pointers
-	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
-	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
-	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
-	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
-	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
-	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
-	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
-	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
-	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
-	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-	%
-	% leaf nodes
-	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
-	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
-	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
-	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
-	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
-	%
-	
-	% circular array
-	\xyshift{-40mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c1)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:15}; \\
-		};
-	}
-	% circular array
-	\xyshift{-10mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c2)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:30}; \\
-		};
-	}	
-	
-	% circular array
-	\xyshift{20mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c3)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:50}; \\
-		};
-	}	
-	
-	
-	% draw pointers between circular array and B+ tree
-	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-	% draw pointers for linked list
-	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
-	\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c3.west);	
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Singly linked list}
-	\label{fig:SinglyLinked}
-\end{figure}
-
-Another idea is to use a circular linked list that is interconnected in both directions as you can see in Figure \ref{fig:DoublyLinked}. The insertion and deletion would then just cost $O(1)$. But the additional pointers use more memory than a singly linked list. Hence, there is a trade-off between speed and memory allocation when using a linked list.
-
+The idea of this method is to associate a doubly, circular linked list to the each key. If a value key occurs multiple times, the new time point is added to the linked list.  I  So instead of inserting the key again and using another block in the leaf, the new time point is inserted as a linked list value.\\ 
+Associating a doubly, circular linked list that is interconnected in both directions is ideal for our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Hence, since a shift operation on the circular array leads to a deletion of the oldest measurement, is is always the  time point connected to the leaf key that must be deleted. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position.\\
+The \emph{neighborhood grow} operation searches a specific time point in the doubly, linked list. Therefore, it cannot just take the oldest or newest time point position like with an insertion or deletion. Hence, In the worst case the entire list would be searched for the specific time point. But since the \emph{neighborhood grow} operation always is executed at the newest measurements in the circular array, we can give an upper bound, namely the pattern length. Therefore the worst case depends on the pattern length and on the distribution of the measurements which are  starting points of the $neighbor$ method.  
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[
@@ -598,54 +552,7 @@ Another idea is to use a circular linked list that is interconnected in both dir
 
 \subsection{Alternative Approaches}
 
-
-\subsubsection{Create unique Keys}
-A record in the time series consists of a temperature value and a time value. For each time exists just one temperature value. Therefore the idea is to combine both values and hence always have a unique key. \\
-There are two different actions if the case occurs where you have to add a record with a key that already exists in the $B^+$ tree. If the leaf is not already full, the record can be added to the existing leaf. But the keys should be reordered according to their temperature. If the leaf has to split the records with equal keys can be separated due to the associated timestamp. If the equal keys are split to different leaves the parent node must new include the same key and the associated timestamp of the first key of the right child leaf. Hence, the two leaves can now still be separated due to the additional ordering with timetamps. The Figure \ref{fig:keyT} illustrates how the above described tree might look. 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	% root node
-	
-	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.8; 10:40}{}{}};
-	
-	%
-	% intermediate nodes
-	\xyshift{-50mm}{-15mm}{\btreelnodethree{n1}{16.3; 11:10}{18.8; 10:25}{18.8; 10:30}}
-	\xyshift{ 10mm}{-15mm}{\btreelnodethree{n2}{18.8; 10:40}{19.4; 12:10}{19.7; 13:30}}
-
-	%
-	% connecting root to intermediate level nodes
-	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-	%
-	
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Example $B^+$ tree using a new unique key}
-	\label{fig:keyT}
-	
-\end{figure}		
-
-\subsubsection{Advantages and Disadvantages}
-\paragraph{$(+)$}
-\begin{itemize}  
-	\item Implementation is similar to the $B^+$ tree with no duplicate search-keys. 
-	\item The \emph{neighbor}$(v,T)$ operation is equally fast as with no duplicate values. 
-\end{itemize}
-\paragraph{$(-)$}
-\begin{itemize}  
-	\item The requirement to allow duplicate values is not meet, since duplicates are just avoided by creating a new unique key. 
-	\item More memory needed since the interior nodes must be able to include a timestamp. 
-	\item Searching a key is slower than in a $B^+$ tree with no duplicates, since the timestamp value and the temperature value of a interior node has to be checked. This slows down a record insertion and deletion in the tree. 
-\end{itemize}
-
-\subsubsection{Associated List}
-\label{Associated List}
-The idea of this method is to associate a list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new timestamp is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the needed modification to the originally presented $B^+$ tree in Figure {fig:B+tree}.
+A similar idea as in our approach is to add a associate list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new time point is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the associated list.
 
 \begin{figure}[H]
 	\centering
@@ -696,34 +603,80 @@ The idea of this method is to associate a list to the each key that occurs multi
 	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Temperature value 19.3 occurs four times in time window $W$.}
+	\caption{Associated List Approach.}
 	\label{fig:ListApp}
 \end{figure}
-\subsubsection{Advantages and Disadvantages}
-\paragraph{$(+)$}
-\begin{itemize}  
-	\item  The \emph{neighbor}$(v,T)$ operation, after $v$ has been found, is very fast if multiple temperatures associated to the same key must be added to $T$. Because the entire list can be added. 
-	\item Searching a key is equally fast as in a $B^+$ tree with no duplicate values. (Not valid for searching  the associated record timestamp)
-	\item A new timestamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well. 
-\end{itemize}
-\paragraph{$(-)$}
-\begin{itemize}  
-	\item The size and capacity of the list has to be stored, which uses more memory. 
-	\item Implementation difficulties because the size of an array cannot be dynamically allocated in the programming language C.
-	\item If the array grows because a new timestamps needs to be added memory needs to be reallocated. But reallocating memory and copying the original array is expensive. \\
-	TODO find better souce than https://en.wikipedia.org/wiki/Linkedlist\\
-\end{itemize}
-The implementation in the programming language C has the challenge that memory cannot be dynamically allocated for a growing array. But since we need a sort of array we can add a size and capacity variable to the referring record. The structure is shown in Listing \ref{alg:test}.
-\begin{algorithm}[H]
-\lstinputlisting[label=alg:test]{test.c}
-\caption{Possible structure for a record}
-\end{algorithm}
 
 
-
-\subsubsection{Additional Leaves without a Parent Node}
-\label{Additional Leaves}
-Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. \\
+A new time stamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well as with a doubly, circular linked list. But here the array cannot dynamically be extende since the array size must be reallocated with every additional time stamp. \\
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+	%
+	
+	% circular array
+	\xyshift{-40mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:15}; \\
+		};
+	}
+	% circular array
+	\xyshift{-10mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c2)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:30}; \\
+		};
+	}	
+	
+	% circular array
+	\xyshift{20mm}{-70mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c3)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:50}; \\
+		};
+	}	
+	
+	
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+	% draw pointers for linked list
+	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
+	\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c3.west);	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Singly linked list}
+	\label{fig:SinglyLinked}
+\end{figure}
+A singly linked list uses less pointer than a doubly, circular list but since a insertion would cost $O(n)$ because a new value is always inserted to the end of the singly linked list and hence all older time points in the list need to be checked. Therefore, a circular, linked list is more suitable for our requirements than a singly, linked list. \\
+Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. But unlike the doubly, circluar linked list approach searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record.
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -776,22 +729,7 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 	\caption{$B^+$ tree with an additional leaf without a parent. }
 	\label{fig:noparents}
 \end{figure}
-\subsubsection{Advantages and Disadvantages}
-\paragraph{$(+)$}
-\begin{itemize}  
-	\item  The \emph{neighbor}$(v,T)$ operation is equally fast, after $v$ has been found, as with no duplicate values. 
-	\item The memory usage is even better if the tree contains leaves with no parent, since the pointer from parent to its child is not needed. 
-	\item The memory usage is equal or less than with no duplicate values. 
-	\item The deletion of a duplicate value should be equally fast as with no duplicate values in the tree, since the oldest value should be the leftmost duplicate value in a leaf. 
-\end{itemize}
-\paragraph{$(-)$}
-\begin{itemize}  
-	\item  Searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record. 
-\end{itemize}
-
-\subsubsection{Null Values in Interior Nodes}
-\label{Null Values}
-The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents an additional approach to handle duplicate values. The definition of a key is slightly different when allowing duplicate search-keys. The keys the interior node $K_1, K_2, K_3, ... , K_n$ can be separated to \emph{new} and old keys. $K_i$ is the smallest new key that is part of the sub-tree linked with the $(i+1)$st pointer. If there is no new key associated with the $(i+1)$st pointer, $K_i$ is set to null. 
+\\The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents an additional approach to handle duplicate values. The definition of a key is slightly different when allowing duplicate search-keys. The keys the interior node $K_1, K_2, K_3, ... , K_n$ can be separated to \emph{new} and old keys. $K_i$ is the smallest new key that is part of the sub-tree linked with the $(i+1)$st pointer. If there is no new key associated with the $(i+1)$st pointer, $K_i$ is set to null. 
 
 \begin{exmp}
 	The example illustrated in Figure \ref{fig:BTreeBook} illustrates the case, in which the interior node in the right sub-tree $K_1$ is set to null. The leaf node that pointer $(1+1)$ is associated with contains only duplicate key values which is indicated by setting the interior node $K_1$ to null. The search-key in the root node is set to $17$ because it is the lowest $new$ key in the right sub-tree. Since $13.2$ is already in the left sub-tree, the duplicate search-key in the right sub-tree cannot be the key in the root. \\
@@ -846,32 +784,8 @@ The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents a
 	\caption{Duplicate handling proposed in \cite{BTreeBook}.}
 	\label{fig:BTreeBook}
 \end{figure}
+Unlike our chosen approach the right sub-tree may also contain keys that are lower than the root key. Therefore the neighbour leaves must be checked as well when searching for a particular key. Besides, in some cases the leaves have to be reordered and in case of duplicate values the neighbour leaves has to be checked as well to find the insertion point for a new key.
 
-
-\subsubsection{Advantages and Disadvantages}
-\paragraph{$(+)$}
-\begin{itemize}  
-	\item  The deletion of the oldest duplicate search-key in the tree would be equally fast as with no duplicate search-keys, since the oldest key is the leftmost of all its duplicates. 
-	\item  The \emph{neighbor}$(v,T)$ operation is equally fast, after $v$ has been found, as with no duplicate values. 
-\end{itemize}
-\paragraph{$(-)$}
-\begin{itemize}  
-	\item  The right sub-tree may also contain keys that are lower than the root key. Therefore the neighbour leaves must be checked as well when searching for a particular key. 
-	\item In some cases the leaves have to be reordered.
-	\item In case of duplicate values the neighbour leaves has to be checked as well to find the insertion point for a new key.
-\end{itemize}
-
-
-\subsection{Comparison of the Methods for Duplicate Handling}
-
-The comparison of the four above described methods especially focuses on how they meet the requirements for the operations described in Section \ref{sec:Op}.\\
-First of all, the \emph{Create unique Key} approach can not be used for the implementation. It does not provide a solution for handling duplicate search-keys, it just avoids to handle duplicates by creating a new unique key.\\
-The \emph{Associated List} method described in Section \ref{Associated List} can be implemented differently, either using an array, a linked list or a doubly linked list. If it is implemented using an associated array the \emph{neighbor}$(v,T)$ operation is faster the more duplicate values are added to the associated lists. Further, the deletion and the insertion of a value to or from an existing list can be done in $O(1)$. But since the size of the array cannot be dynamically allocated, the memory needs to be reallocated if the array capacity has been achieved. This is very expensive. Using a linked list uses more memory since every temperature stored in the linked list needs more pointer and the insertion method is slower than if a array is used. The doubly linked list can provide a efficient insertion and deletion to the linked list but it uses even more pointer. Therefore, the \emph{Associated List} method is not useful if memory is short. In this case, memory is an important issue, the more memory the $B^+$ tree needs the smaller the time window $W$ can be to still be kept in main memory. \\
-The other two methods: the \emph{Additional Leaves without a Parent} described in \ref{Additional Leaves} and the \emph{Null Values in Interior Nodes} described in Section \ref{Null Values} are more space efficient. Both methods need more or less the same amount of memory if they allow duplicates in the $B^+$ tree than if they would not. The \emph{neighbor}$(v,T)$ operation is in both methods equally fast, since the leaves contain all records ordered from left to right, no matter if they have a duplicate search-key or not.\emph{neighbor}$(v,T)$ operation. The deletion of a duplicate search-key, which must be done when the shift$(\bar{t}, v)$ method is called and the time window $W$ is full, is more or less equally fast, except for some special cases discussed in the following. In both methods the oldest duplicate search-key is always the leftmost of all equal search-keys. But if a key $k$ must be deleted that does not have a duplicate search-key but is still part of a node that contains duplicate search-keys, the deletion takes longer in both methods. Since all the duplicates in the left neighbour leaves that occur in the same leaf as $k$ have to be checked before. Another special case is when the leaves need to be reordered after a deletion. This may just be necessary if the method \emph{Null Values in Interior Nodes} is used. For example if $14$ is added to the tree illustrated in Figure \ref{fig:BTreeBook} the keys in the leaves would not be ordered from left to right any more. Since another $13.2$ search key is part of the right sub-tree. Therefore, the records in the leaves must be reordered to get a right order again.\\
-The main difference between the last both methods is the insertion and search of a record. A new record is inserted when the shift$(\bar{t}, v)$ method is called. In both methods the insertion of a record that has a key that already occurs in the tree, in this case it is a temperature value $v$ that already exists in time window $W$, is depended on the number of duplicates that are already in the tree. The first potential leaf $L_p$ is found by searching the insertion point for a new record, assuming that the tree can be searched using the $B^+$ properties listed in Section \ref{structureBtree}. After identifying $L_p$ the \emph{Null Values in Interior Nodes} method must check all the right neighbour leaves of $L_p$, until the last duplicate is found or until a bigger search-key is found. If a bigger search-key is found, it is clear that no other duplicate search-key can occur on the further right part of the tree. After the insertion point is identified the new record can be inserted. The same principle is used in the \emph{Additional Leaves without a Parent} method, but if the right neighbour leaf is not parent-less it is directly clear that the insertion point must be before. \\Both methods are at least equally space efficient as a $B^+$ tree with no duplicate values. In the case a new parent-less leaf has to be inserted, using the \emph{Additional Leaves without a Parent} method, the tree uses even less space than it would with no duplicates, since the pointer from the parent to its child node does not exist. \\\\
-To conclude, the first method \emph{Create unique Key} is impractical, since it does not handle duplicate search-keys. The second method \emph{Associated List} can have an efficient \emph{neighbor}$(v,T)$ operation but is altogether impractical in terms of space complexity. 
-The last both methods have a equally fast \emph{neighbor}$(v,T)$ operation, after the value $v$ has already been found, as with no duplicate values. But with both methods a deletion, a search or an insertion can take longer than with no duplicate values in some special cases. Any common and special case must be handled before a new value arrives in time window $W$. Therefore, the time window $W$ can be just as large as the $B^+$ tree is able to handle a special case in time. \\
-Since special cases e.g. a reordering of leaves is not necessary with the method \emph{Additional Leaves without a Parent Node} this approach is implemented because it meets the requirements the best. 
 
 
 
@@ -910,7 +824,7 @@ recommendations for the research community and for policy-makers (note: policy r
 
 	\bibitem{BTreeBook} Hector Garcia-Molina, Jeffrey D. Ullman, Jennifer Widom: \emph{Database Systems - The Complete Book}; ISBN 0-13-031995-3, 2002 by Prentice Hall
 		
-	
+	\bibitem{DatabaseSystemC} Abraham Silberschatz, Henry F. Korth, S. Sudarshan: \emph{Database System Concepts}; ISBN 978-0-07-352332-3, 2011 by The McGraw-Hill Companies, Inc. p. 496-
 
 
 

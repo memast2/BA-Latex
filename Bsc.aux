@@ -32,107 +32,83 @@
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \newlabel{sec:Approach}{{4}{13}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Data Structures}{13}}
-\newlabel{dataStructures}{{4.1}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Circular Array}{13}}
-\newlabel{sec:circularArray}{{4.1.1}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Circular Array}{13}}
+\newlabel{sec:circularArray}{{4.1}{13}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Circular array of size $|W|$.}}{13}}
 \newlabel{fig:cat}{{4.1}{13}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Add a new Value to the Circular Array}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Add a new Value to the Circular Array}{14}}
 \newlabel{alg:Update Circular Array}{{4.1.1}{14}}
 \@writefile{lol}{\contentsline {lstlisting}{serieUpdate.c}{14}}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Update Circular Array}}{14}}
-\citation{BTreeBook}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Lookup a Value}{15}}
-\newlabel{alg:Lookup}{{4.1.1}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Random Access: Lookup a Value}{15}}
+\newlabel{alg:Lookup}{{4.1.2}{15}}
 \@writefile{lol}{\contentsline {lstlisting}{lookup.c}{15}}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Lookup}}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}$B^+$ Tree}{15}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline The Structure of $B^+$ trees}{15}}
-\newlabel{structureBtree}{{4.1.2}{15}}
+\citation{DatabaseSystemC}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}$B^+$ Tree}{16}}
+\newlabel{sec:BplusTree}{{4.2}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Example of a $B^+$ tree}}{16}}
+\newlabel{fig:BTreeBook}{{4.2}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$ tree}{16}}
+\newlabel{structureBtree}{{4.2.1}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Left children keys < 17.2 and right children keys $\geq $ 17.2}}{16}}
+\newlabel{fig:BTreeBook}{{4.3}{16}}
 \citation{BTreeBook}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Left children keys < 18.8 and 18.8 $\leq $ right children keys.}}{16}}
-\newlabel{lessOrEqual}{{4.2}{16}}
 \citation{BScT}
 \citation{BScT}
 \citation{BScT}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces A $B^+$ tree with its leaves linked to the preceding and succeeding leaf.}}{17}}
-\newlabel{fig:sptree}{{4.3}{17}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Combination of the Data Structures}{17}}
-\newlabel{sec:das}{{4.2}{17}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Duplicate Values in $B^+$ trees}{17}}
-\newlabel{allowDV}{{4.3}{17}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{17}}
-\newlabel{doublyLinked}{{4.3.1}{17}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Combination of the Data Structures}{18}}
+\newlabel{sec:das}{{4.3}{18}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Proposed data structures in \cite  {BScT}.}}{18}}
 \newlabel{fig:B+tree planned}{{4.4}{18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Singly linked list}}{18}}
-\newlabel{fig:SinglyLinked}{{4.5}{18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Doubly, circular linked list}}{19}}
-\newlabel{fig:DoublyLinked}{{4.6}{19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Alternative Approaches}{19}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Create unique Keys}{19}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Example $B^+$ tree using a new unique key}}{19}}
-\newlabel{fig:keyT}{{4.7}{19}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{19}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(+)$}{19}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(-)$}{20}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Associated List}{20}}
-\newlabel{Associated List}{{4.3.2}{20}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Temperature value 19.3 occurs four times in time window $W$.}}{20}}
-\newlabel{fig:ListApp}{{4.8}{20}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{20}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(+)$}{20}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(-)$}{21}}
-\newlabel{alg:test}{{4.3.2}{21}}
-\@writefile{lol}{\contentsline {lstlisting}{test.c}{21}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Possible structure for a record}}{21}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Additional Leaves without a Parent Node}{21}}
-\newlabel{Additional Leaves}{{4.3.2}{21}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{21}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(+)$}{21}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Sorted Access: Next Pattern Search}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Handling Duplicate Values in $B^+$ trees}{18}}
+\newlabel{allowDV}{{4.5}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Associated doubly, circular Linked List}{19}}
+\newlabel{doublyLinked}{{4.5.1}{19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Doubly, circular linked list}}{19}}
+\newlabel{fig:DoublyLinked}{{4.5}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}Alternative Approaches}{19}}
+\citation{BTreeBook}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Associated List Approach.}}{20}}
+\newlabel{fig:ListApp}{{4.6}{20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Singly linked list}}{20}}
+\newlabel{fig:SinglyLinked}{{4.7}{20}}
 \citation{BTreeBook}
 \citation{BTreeBook}
-\citation{BTreeBook}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces $B^+$ tree with an additional leaf without a parent. }}{22}}
-\newlabel{fig:noparents}{{4.9}{22}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(-)$}{22}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Null Values in Interior Nodes}{22}}
-\newlabel{Null Values}{{4.3.2}{22}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Advantages and Disadvantages}{22}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(+)$}{22}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces Duplicate handling proposed in \cite  {BTreeBook}.}}{23}}
-\newlabel{fig:BTreeBook}{{4.10}{23}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline $(-)$}{23}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Comparison of the Methods for Duplicate Handling}{23}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Complexity Analysis}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces $B^+$ tree with an additional leaf without a parent. }}{21}}
+\newlabel{fig:noparents}{{4.8}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces Duplicate handling proposed in \cite  {BTreeBook}.}}{21}}
+\newlabel{fig:BTreeBook}{{4.9}{21}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Complexity Analysis}{22}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{25}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{25}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Evaluation}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{22}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Evaluation}{23}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{sec:Experimental}{{6}{26}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Experimental Setup}{26}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Results}{26}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Discussion}{26}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Related Works}{27}}
+\newlabel{sec:Experimental}{{6}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Experimental Setup}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Results}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Discussion}{23}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Related Works}{24}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Summary and Conclusion}{28}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Summary and Conclusion}{25}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{sec:Summary}{{8}{28}}
+\newlabel{sec:Summary}{{8}{25}}
 \bibstyle{alpha}
 \bibcite{BScT}{1}
 \bibcite{OnlineAmnesicAppr}{2}
 \bibcite{BTreeBook}{3}
+\bibcite{DatabaseSystemC}{4}
