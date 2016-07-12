@@ -3,8 +3,14 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {algorithm}{\numberline {1}{\ignorespaces Update Circular Array}}{14}
-\contentsline {algorithm}{\numberline {2}{\ignorespaces Lookup}}{15}
+\contentsline {algorithm}{\numberline {1}{\ignorespaces Add a Value to the List}}{16}
+\contentsline {algorithm}{\numberline {2}{\ignorespaces Delete a Value from the List}}{17}
+\contentsline {algorithm}{\numberline {3}{\ignorespaces Update Circular Array}}{21}
+\contentsline {algorithm}{\numberline {4}{\ignorespaces Add Measurement To Tree}}{22}
+\contentsline {algorithm}{\numberline {5}{\ignorespaces Find Leaf}}{23}
+\contentsline {algorithm}{\numberline {6}{\ignorespaces Split Leaf}}{24}
+\contentsline {algorithm}{\numberline {7}{\ignorespaces Insert into Parent}}{25}
+\contentsline {algorithm}{\numberline {8}{\ignorespaces Lookup}}{26}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

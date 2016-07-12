@@ -46,7 +46,7 @@
 \lstset{escapechar=@,style=customc}
 
 
-\setlength{\parindent}{0pt} 
+%\setlength{\parindent}{0pt} 
 
 
 \titlehead{Department of Informatics, University of Zürich}
@@ -175,7 +175,7 @@ Each time series $s \in S$ can be implemented as a circular array. The circular 
 
 \section{Circular Array}
 \label{sec:circularArray}
-A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.
+A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.\\
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -187,18 +187,18 @@ A circular array is used to store the time series data. The data is assorted by 
 	% circular array
 	\xyshift{-15mm}{-70mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c1)  {}; \&
-			\node[circularptr] (c2)  {}; \&
-			\node[circularptr] (c3)  {}; \&
-			\node[circularptr] (c4)  {}; \&
-			\node[circularptr] (c5)  {}; \&
-			\node[circularptr] (c6)  {}; \&
-			\node[circularptr] (c7)  {}; \&
-			\node[circularptr] (c8)  {}; \&
-			\node[circularptr] (c9)  {}; \&
-			\node[circularptr] (c10) {}; \&
-			\node[circularptr] (c11) {}; \&
-			\node[circularptr] (c12) {};  \\
+			\node[circularptr] (c1)  {3.2}; \&
+			\node[circularptr] (c2)  {1.3}; \&
+			\node[circularptr] (c3)  {4.5}; \&
+			\node[circularptr] (c4)  {4.6}; \&
+			\node[circularptr] (c5)  {6.2}; \&
+			\node[circularptr] (c6)  {3.2}; \&
+			\node[circularptr] (c7)  {11.2}; \&
+			\node[circularptr] (c8)  {55.3}; \&
+			\node[circularptr] (c9)  {9.1}; \&
+			\node[circularptr] (c10) {3.9}; \&
+			\node[circularptr] (c11) {5.0}; \&
+			\node[circularptr] (c12) {1.4};  \\
 			%
 			\node[circularval] (left) {14:10}; \&
 			\node[circularval] {14:15}; \&
@@ -224,30 +224,12 @@ A circular array is used to store the time series data. The data is assorted by 
 	\label{fig:cat}
 \end{figure}\\
 The circular array stores the data, containing all measurement time stamps and values, the size, the last update Position and a counter, which counts the number of measurements added to the array. The addition of a new measurement to the array is presented in Algorithm \ref{alg:Update Circular Array}.
-\newpage
-\subsection{Add a new Value to the Circular Array}
-If the counter of the array is equal or bigger than the size of the array, there is a measurement at the update position in the array that needs to be deleted. If not, there is no need to delete a value from the $B^+$ tree, since no value is overwritten in the circular array. 
 
-\begin{algorithm}[ht!]
-	\lstinputlisting[label=alg:Update Circular Array]{serieUpdate.c}
-	\caption{Update Circular Array}
-\end{algorithm}
-
-\newpage
-
-\subsection{Random Access: Lookup a Value}
-Due to the properties of a circular array the lookup of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array by using the $TIMESTAMP\_DIFF$ representing the interval between two consecutive measurements. The last update point can be used as reference time point for the calculation. 
-
-\begin{algorithm}[ht!]
-	\lstinputlisting[label=alg:Lookup]{lookup.c}
-	\caption{Lookup}
-\end{algorithm}
 
 \newpage
 \section{$B^+$ Tree}
 \label{sec:BplusTree}
 A $B^+$ tree is able to execute range queries very efficiently, since the leaves of a $B^+$ tree are ordered and linked. To perform the \emph{neighbor}$(v,T)$ operation described in Section \ref{sec:Op}, the $B^+$ tree for our requirements has leaves linked in both directions. The Section \ref{structureBtree} presents the structure of the $B^+$ tree we used for the implementation.
-
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -290,6 +272,12 @@ A $B^+$ tree is able to execute range queries very efficiently, since the leaves
 	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
 	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
 	%
+	
+	\foreach \x in
+	{n11-1, n11-2, n11-3,n12-1, n12-2,n21-1,n21-2,n22-1, n22-2, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+		
 
 	\end{tikzpicture}
 	\vspace{2mm}
@@ -300,12 +288,11 @@ A $B^+$ tree is able to execute range queries very efficiently, since the leaves
 
 \subsection{The Structure of the used $B^+$ tree}
 \label{structureBtree}
-The structure of the used $B^+$ tree is based on the book from Silberschatz et al. \cite{DatabaseSystemC}. \\
-A $B^+$ tree is organized in blocks, as implied by its name. All paths from the root to a leaf have the same length which significances that the tree is always \emph{balanced}. \\There are three types of nodes that may exist in a $B^+$ tree: the root, interior nodes and leave nodes.
-The parameter \emph{n} determines the number of search-keys and pointers in a node. The interior nodes can have maximum \emph{n-1} search-keys and \emph{n} pointers, pointing to its child nodes. Each interior node must have a minimum of $[n/2]$ pointers and can have maximum $n$ pointers. The root node is the only node that can contain less than $[n/2]$ pointers. The root node must have minimum one searchkey and two pointers to child nodes, unless the root node has no children and therefore is a leaf node.  \\ 
-A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. 
-
-\begin{figure}[htbp]
+The structure of the used $B^+$ tree is based on the book from Silberschatz et al.\cite{DatabaseSystemC}. \\
+The difference to the traditional $B^+$ tree and our used $B^+$ tree is on the one hand, that the leaves are linked to the succeeding as well as the preceding leaf to efficiently perform the \emph{neighbor}$(v,T)$ operation and on the other hand, that the $B^+$ tree is constructed to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties of our $B^+$ tree are presented in the following paragraph.\\ \\
+A $B^+$ tree is organized in blocks. All paths from the root to a leaf in a $B^+$ tree have the same length. This significances that the tree is always \emph{balanced}. The balanced property ensures good performance for lookup, insertion and deletion that is why we use a $B^+$ tree. The $shift$ and the $neighbor$ operation are operations on the $B^+$ tree.\\There are three types of nodes that may exist in a $B^+$ tree: the root, interior nodes and leave nodes. The parameter \emph{n} determines the number of search-keys and pointers in a node. The interior nodes can have maximum \emph{n-1} search-keys and \emph{n} pointers, pointing to its child nodes. Each interior node must have a minimum of $[n/2]$ pointers and can have maximum $n$ pointers. A leaf node must have at least $[n/2]$ keys. And in our case at least $[n/2]$ pointers to doubly, circular linked lists containing the measurement time points. The root node is the only node that can contain less than $[n/2]$ pointers. The root node must have minimum one searchkey and two pointers to child nodes, unless the root node has no children and hence is a leaf node.\\ 
+A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. The searchkeys in the leaves are sorted from left to right. 
+\begin{figure}[ht!]
 	\centering
 	\begin{tikzpicture}[
 	scale=0.7,
@@ -326,158 +313,23 @@ A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 2, 3, . . . ,m-
 	% leaf pointers
 	\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
 	\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
-
 	%
-	
 	\end{tikzpicture}
 	\vspace{2mm}
 	\caption{Left children keys < 17.2 and right children keys $\geq$ 17.2}
 	\label{fig:BTreeBook}
 \end{figure} 
-What can appear in blocks is listed in the following: \\
-\begin{itemize}  
-	\item The keys in the leaves are sorted from left to right. 
-	\item All pointers in a node point to the level below.
-	\item The interior nodes use at least $[\frac{n+1}{2}]$ of its \emph{n} + 1 pointers. In the root at least 2 pointers must be used. 
-	\item The first pointer in a node where the first key is \emph{K} points to a node and hence a part of the tree where the keys are less than \emph{K}. The second pointer points to a node where the keys are greater than or equal to \emph{K}, as shown in Figure \ref{lessOrEqual}. 
+\\A value in the time window $W$ can occur multiple times. Hence, the values are not unique. Since the values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{sec:allowDV} proposes our approach that allow to use duplicate values in a $B^+$ tree. 
 
-\end{itemize}
-The $B^+$ tree used for the implementation of the streaming time series data is slightly different to the  $B^+$ tree in \cite{BTreeBook}. The required properties are the following: \\
-\begin{itemize}  
-	\item The search-keys of the $B^+$ tree are the temperature values in the sliding window $W$.
-	\item The leaves are linked in both directions to efficiently perform the \emph{neighbor}$(v,T)$ operation.
-	\item The leaves are sorted by the temperature values.
-	\item The interior nodes have a temperature search-key.
-	\item The leaves store the record of the time series data. A record consists of the temperature value and the associated time value.\\ 
-\end{itemize}
-Due to weather conditions the temperature values in the time window $W$ can occur several times. Therefore, the keys are not unique. Since the temperature values are used as search-keys, the $B^+$ tree must be able to handle duplicate values. Section \ref{allowDV} proposes different possibilities that allow to use duplicate values in a $B^+$ tree. 
-
-
-Unlike the traditional $B^+$tree, where the leaves are just linked to their succeeding leaf, like shown in Figure \ref{fig:tratree}, the leaves are linked to the succeeding as well as the preceding leaf as shown in Figure \ref{fig:sptree}.
-
-
-\newpage
-\section{Combination of the Data Structures}
-\label{sec:das}
-To efficiently implement the above mentioned operations the system combines two data structures:
-a circular array and a $B^+$ tree. In Figure \ref{fig:B+tree planned} the originally proposed data structure in \cite{BScT} is shown. The $B^+$ tree is connected with pointers to the circular array and vice versa. Further, the temperature values are used as keys in the $B^+$ tree. The size of the circular array is defined as $|W| + 1$ since an empty field is used to identify the current update position. The size $|W|$ and the order of the $B^+$ tree, which defines the size of the nodes, are parameters. Hence they can be changed.\\The circular array and the $B^+$ tree are characterized in the following. 
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-scale=0.7,
-every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-every matrix/.style={cells={scale=0.7}},
-]
-% root node
-\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
-
-%
-% intermediate nodes
-\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
-\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
-%
-% connecting root to intermediate level nodes
-\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-%
-% leaf nodes
-\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
-\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
-\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
-\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
-\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
-\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
-%
-% connecting intermediate level to leaf nodes
-\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
-\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
-%
-% leaf pointers
-\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
-\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
-\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
-\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
-\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
-\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
-\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
-\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
-\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
-\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-%
-% circular array
-\xyshift{-15mm}{-70mm}{
-	\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-		\node[circularptr] (c1)  {}; \&
-		\node[circularptr] (c2)  {}; \&
-		\node[circularptr] (c3)  {}; \&
-		\node[circularptr] (c4)  {}; \&
-		\node[circularptr] (c5)  {}; \&
-		\node[circularptr] (c6)  {}; \&
-		\node[circularptr] (c7)  {}; \&
-		\node[circularptr] (c8)  {}; \&
-		\node[circularptr] (c9)  {}; \&
-		\node[circularptr] (c10) {}; \&
-		\node[circularptr] (c11) {}; \&
-		\node[circularptr] (c12) {}; \&
-		\node[circularptr] (c13) {}; \\
-		%
-		\node[circularval] (left) {14:15}; \&
-		\node[circularval] {14:20}; \&
-		\node[circularval] {14:25}; \&
-		\node[circularval] {\phantom{14:25}}; \&
-		\node[circularval] {13:30}; \&
-		\node[circularval] {13:35}; \&
-		\node[circularval] {13:40}; \&
-		\node[circularval] {13:45}; \&
-		\node[circularval] {13:50}; \&
-		\node[circularval] {13:55}; \&
-		\node[circularval] {14:00}; \&
-		\node[circularval] {14:05}; \&
-		\node[circularval] (right) {14:10}; \\
-	};
-}
-
-%
-% draw pointers between circular array and B+ tree
-\path[btdlink] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-\path[btdlink] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n22-1.center);
-\path[btdlink] ([yshift=-2pt] c11.center) edge[out=90,in=270] ([yshift=2pt] n23-1.center);
-\foreach \x in
-{1,3,6,7,8,9,10,12,13}
-{ \path[->] ([yshift=15pt] c\x.center) edge ([yshift=-2pt] c\x.center); }
-\foreach \x in
-{n11-1,n12-1,n12-2,n21-1,n21-2,n24-1,n24-2,n24-3}
-{ \path[->] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
-%
-% draw borders
-\draw[densely dotted] (-11,1.5) rectangle (8,-5.5);
-\draw[densely dotted] (-11,-6) rectangle (8,-10);
-\node[anchor=south west] at (-11,1.5) {\Large $B^+$ tree};
-\node[anchor=north west] at (-11,-10)  {\Large Circular array};
-%
-% curly brace
-\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
-([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
-node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
-\end{tikzpicture}
-\vspace{2mm}
-\caption{Proposed data structures in \cite{BScT}.}
-\label{fig:B+tree planned}
-\end{figure}
-
-\section{Sorted Access: Next Pattern Search}
-
-
-
-
-\section{Handling Duplicate Values in $B^+$ trees}
-\label{allowDV}
-This Section presents a solution to allow duplicate values in a $B^+$ tree. Further, the advantages and disadvantages are discussed and some advantages over other approaches are illustrated. 
+\section{Handling Duplicate Values}
+\label{sec:allowDV}
+This Section presents a solution to allow duplicate values in a $B^+$ tree. Further, the advantages are discussed and  differences to other approaches are illustrated. 
 
 \subsection{Associated doubly, circular Linked List}
 \label{doublyLinked}
 The idea of this method is to associate a doubly, circular linked list to the each key. If a value key occurs multiple times, the new time point is added to the linked list.  I  So instead of inserting the key again and using another block in the leaf, the new time point is inserted as a linked list value.\\ 
-Associating a doubly, circular linked list that is interconnected in both directions is ideal for our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Hence, since a shift operation on the circular array leads to a deletion of the oldest measurement, is is always the  time point connected to the leaf key that must be deleted. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position.\\
+Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $first list value$. Hence, since a shift operation on the circular array leads to a deletion of the oldest measurement, is is always the $first list value$. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. We call this position the $last list value$. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position. The addition and the deletion of a list value form a linked list containing multiple values is illustrated in Algorithm \ref{alg:Add a Value to the List} and Algorithm \ref{alg:Delete a Value from the List}.\\
+The leaf nodes in our $B^+$tree also have pointer. But the number of pointer is leaf nodes is always equal to the number of search-keys in the leaf. A pointer at position $i$ points to the doubly, linked list associated with the key at position $i$.\\
 The \emph{neighborhood grow} operation searches a specific time point in the doubly, linked list. Therefore, it cannot just take the oldest or newest time point position like with an insertion or deletion. Hence, In the worst case the entire list would be searched for the specific time point. But since the \emph{neighborhood grow} operation always is executed at the newest measurements in the circular array, we can give an upper bound, namely the pattern length. Therefore the worst case depends on the pattern length and on the distribution of the measurements which are  starting points of the $neighbor$ method.  
 \begin{figure}[H]
 	\centering
@@ -549,6 +401,16 @@ The \emph{neighborhood grow} operation searches a specific time point in the dou
 	\caption{Doubly, circular linked list}
 	\label{fig:DoublyLinked}
 \end{figure}
+
+\begin{algorithm}[ht!]
+	\lstinputlisting[label=alg:Add a Value to the List]{addValueToList.c}
+	\caption{Add a Value to the List}
+\end{algorithm}
+
+\begin{algorithm}[ht!]
+	\lstinputlisting[label=alg:Delete a Value from the List]{deleteValueFromList.c}
+	\caption{Delete a Value from the List}
+\end{algorithm}
 
 \subsection{Alternative Approaches}
 
@@ -716,7 +578,7 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 	
 	\draw[btlink] ([yshift=-3pt] n13-a.west) -- ([yshift=-3pt] n12-c.east);
 	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n13-c.east);
-
+	
 	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
 	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
 	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
@@ -776,15 +638,454 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
 	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
 	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-	%
-
-	
+	%	
 	\end{tikzpicture}
 	\vspace{2mm}
 	\caption{Duplicate handling proposed in \cite{BTreeBook}.}
 	\label{fig:BTreeBook}
 \end{figure}
-Unlike our chosen approach the right sub-tree may also contain keys that are lower than the root key. Therefore the neighbour leaves must be checked as well when searching for a particular key. Besides, in some cases the leaves have to be reordered and in case of duplicate values the neighbour leaves has to be checked as well to find the insertion point for a new key.
+Unlike in our approach the right sub-tree may also contain keys that are lower than the root key. Therefore the neighbour leaves must be checked as well when searching for a particular key. Besides, in some cases the leaves have to be reordered and in case of duplicate values the neighbour leaves has to be checked as well to find the insertion point for a new key.
+
+
+
+\newpage
+\section{Operations}
+\label{sec:OperationsOnBTree}
+The data in the circular array is updated with every new arriving measurement. Therefore, with every $shift$ execution the array is updated. The update method is illustrated in Algrithm \ref{alg:Update Circular Array}. The $shift$ operation not only influences the array data but also the data in the $B^+$ tree. Therefore, the deletion and insertion of a measurement in the tree is executed within the update of the circular array. The implementation of an insertion and deletion within a $B^+$tree is described in Section \ref{sec:OperationsOnBTree}. The $lookup$ of a value is presented in Algorithm \ref{alg:Lookup}.
+\\Further, the neighbor$(v,T)$ method uses the $B^+$ tree returning the time point $t \in T$ such that $|v-s(t)|$ is minimal, given a value \emph{v}.
+
+\subsection{Shift$(\bar{t}, v)$}
+
+We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 25.4 occurs two times, therefore two list values are part of the circular linked list associated to the key 25.4. Further, all keys in the leaves have an associated time point. Some associated linked lists are not illustrated to improve clarity. The size of the circular array is 14 and it is already full. This significates that for every new arriving measurement a value has to be added to and another one has to be deleted from the $B^+$ tree. \\ \\
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17.1}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7.2}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23.0}{37.6}{43.1}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7.2}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{40.3}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43.1}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	
+		% circular array
+		\xyshift{-40mm}{-60mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c1)  {}; \\	
+				%
+				\node[circularval] (left)(right) {13:45}; \\
+			};
+		}
+		% circular array
+		\xyshift{-10mm}{-60mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c2)  {}; \\	
+				%
+				\node[circularval] (left)(right) {14:15}; \\
+			};
+		}	
+	
+		% draw pointers between circular array and B+ tree
+		\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+		% draw pointers for linked list
+		\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
+		%\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c1.east);
+		\draw[btlink] ([yshift=-20pt] c2.west) -- ([yshift=-20pt] c1.east);
+
+		%circular links
+		\path[btlink] ([yshift=-10pt] c1.west)  edge[out=220,in=250] ([yshift=-10pt] c2.east);
+		\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=220,in=250] ([yshift=-20pt] c2.east);
+	
+	
+	% list  value
+	\xyshift{-90mm}{-50mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c3)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:10}; \\
+		};
+	}
+	
+	% draw pointers between list value and B+ tree
+	\path[btlink2] ([yshift=-2pt] c3.center)  edge[out=90,in=270] ([yshift=2pt] n11-1.center);
+	
+	%circular links
+	\path[btlink] ([yshift=-16pt] c3.west)  edge[out=-1500,in=-60] ([yshift=-16pt] c3.east);
+	\path[btlink2] ([yshift=-24pt] c3.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c3.east);
+	
+	
+	% list  value
+	\xyshift{-70mm}{-50mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c4)  {}; \\	
+				%
+				\node[circularval] (left)(right) {14:20}; \\
+			};
+		}
+		
+		% draw pointers between list value and B+ tree
+		\path[btlink2] ([yshift=-2pt] c4.center)  edge[out=90,in=270] ([yshift=2pt] n11-2.center);
+		
+		%circular links
+		\path[btlink] ([yshift=-16pt] c4.west)  edge[out=-1500,in=-60] ([yshift=-16pt] c4.east);
+		\path[btlink2] ([yshift=-24pt] c4.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c4.east);
+	
+	\foreach \x in
+	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+	
+	
+		% circular array
+		\xyshift{-15mm}{-100mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c1)  {2.5}; \&
+				\node[circularptr] (c2)  {25.4}; \&
+				\node[circularptr] (c3)  {3.0}; \&
+				\node[circularptr] (c4)  {13.2}; \&
+				\node[circularptr] (c5)  {23.0}; \&
+				\node[circularptr] (c6)  {17.1}; \&
+				\node[circularptr] (c7)  {37.6}; \&
+				\node[circularptr] (c8)  {18.1}; \&
+				\node[circularptr] (c9)  {7.2}; \&
+				\node[circularptr] (c10) {25.4}; \&
+				\node[circularptr] (c11) {38.9}; \&
+				\node[circularptr] (c12) {47.1}; \&
+				\node[circularptr] (c13) {43.1}; \&
+				\node[circularptr] (c14) {40.3};  \\
+				%
+				\node[circularval] (left) {14:10}; \&
+				\node[circularval] {14:15}; \&
+				\node[circularval] {14:20}; \&
+				\node[circularval] {13:15}; \&
+				\node[circularval] {13:20}; \&
+				\node[circularval] {13:25}; \&
+				\node[circularval] {13:30}; \&
+				\node[circularval] {13:35}; \&
+				\node[circularval] {13:40}; \&
+				\node[circularval] {13:45}; \&
+				\node[circularval] {13:50}; \&
+				\node[circularval] {13:55}; \&
+				\node[circularval] {14:00}; \&
+				\node[circularval] (right){14:05};\\
+			};
+		}
+		% curly brace
+		\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+		([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+		node [black,midway,yshift=-0.9cm] {\large size $|W|$};
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Start situation}
+	\label{fig:startSituation}
+\end{figure}
+
+\newpage
+\subsubsection{Add a Value to the Circular Array}
+If the counter of the array is equal or bigger than the size of the array, there is a measurement at the update position in the array that needs to be deleted. If not, there is no need to delete a value from the $B^+$ tree, since no value is overwritten in the circular array. 
+\begin{algorithm}[ht!]
+	\lstinputlisting[label=alg:Update Circular Array]{serieUpdate.c}
+	\caption{Update Circular Array}
+\end{algorithm}
+\begin{exmp}
+	We assume that a new measurement arrives with time point $14:25$ and the key $41.5$. 
+	The value $13.2$ at time point $13:15$ is overwritten by the new measurement. Hence, the new circular array looks as follows: 
+\end{exmp}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	
+	\definecolor{mycolor}{RGB}{224,224,224}
+	
+		% circular array
+		\xyshift{-15mm}{-100mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c1)  {2.5}; \&
+				\node[circularptr] (c2)  {25.4}; \&
+				\node[circularptr] (c3)  {3.0}; \&
+				\node[circularptr,fill=mycolor](c4) {\textcolor{white}  {41.5}}; \&
+				\node[circularptr] (c5)  {23.0}; \&
+				\node[circularptr] (c6)  {17.1}; \&
+				\node[circularptr] (c7)  {37.6}; \&
+				\node[circularptr] (c8)  {18.1}; \&
+				\node[circularptr] (c9)  {7.2}; \&
+				\node[circularptr] (c10) {25.4}; \&
+				\node[circularptr] (c11) {38.9}; \&
+				\node[circularptr] (c12) {47.1}; \&
+				\node[circularptr] (c13) {43.1}; \&
+				\node[circularptr] (c14) {40.3};  \\
+				%
+				\node[circularval] (left) {14:10}; \&
+				\node[circularval] {14:15}; \&
+				\node[circularval] {14:20}; \&
+				\node[circularval,fill=mycolor]{\textcolor{white}{13:15}}; \&
+				\node[circularval] {13:20}; \&
+				\node[circularval] {13:25}; \&
+				\node[circularval] {13:30}; \&
+				\node[circularval] {13:35}; \&
+				\node[circularval] {13:40}; \&
+				\node[circularval] {13:45}; \&
+				\node[circularval] {13:50}; \&
+				\node[circularval] {13:55}; \&
+				\node[circularval] {14:00}; \&
+				\node[circularval] (right){14:05};\\
+			};
+		}
+
+	\end{tikzpicture}
+		\vspace{2mm}
+		\caption{Circular Array after the insertion of 41.5}
+		\label{fig:circAfter}
+\end{figure}
+	
+
+\subsubsection{Insert a Value to the $B^+$tree}
+With every circular array update a new measurement is added to the $B^+$ tree as shown in the Algorithm \ref{alg:Update Circular Array} at line 27.\\
+We first find the leaf node in which the search-key value would
+appear by using the Algorithm \ref{alg:Find Leaf}. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
+The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Add Record to Tree, escapechar=+]{addRecordToTree.c}
+	\caption{Add Measurement To Tree}
+\end{algorithm}
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Find Leaf]{findLeaf.c}
+	\caption{Find Leaf}
+\end{algorithm}
+
+If there is no space for another key, the leaf splits. The split of the leaf node is illustrated in Algorithm \ref{alg:Split Leaf}.\\
+We now consider an example of insertion in which a node must be split. 
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23}{37}{43}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3}{6.1}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37}{38.9}{40}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Example of a $B^+$ tree}
+	\label{fig:BTreeBook}
+\end{figure}
+
+
+
+
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Split Leaf]{splitLeaf.c}
+	\caption{Split Leaf}
+\end{algorithm}
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Insert into Parent]{insertIntoParent.c}
+	\caption{Insert into Parent}
+\end{algorithm}
+
+
+
+
+\subsubsection{Delete Value from the $B^+$tree}
+
+
+
+
+\subsection{Random Access: Lookup a Value}
+Due to the properties of a circular array the lookup of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array by using the $TIMESTAMP\_DIFF$ representing the interval between two consecutive measurements. The last update point can be used as reference time point for the calculation. 
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Lookup]{lookup.c}
+	\caption{Lookup}
+\end{algorithm}
+
+\subsection{Sorted Access: Neighbor}
+
+\subsubsection{Initialize Neighborhood}
+
+\subsubsection{Grow Neighborhood}
+
+
+
+\newpage
+\section{Combination of the Data Structures}
+\label{sec:das}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+scale=0.7,
+every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+every matrix/.style={cells={scale=0.7}},
+]
+% root node
+\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
+
+%
+% intermediate nodes
+\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
+\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
+%
+% connecting root to intermediate level nodes
+\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+%
+% leaf nodes
+\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
+\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
+\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
+\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
+\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
+\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
+%
+% connecting intermediate level to leaf nodes
+\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+%
+% leaf pointers
+\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+%
+% circular array
+\xyshift{-15mm}{-70mm}{
+	\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+		\node[circularptr] (c1)  {}; \&
+		\node[circularptr] (c2)  {}; \&
+		\node[circularptr] (c3)  {}; \&
+		\node[circularptr] (c4)  {}; \&
+		\node[circularptr] (c5)  {}; \&
+		\node[circularptr] (c6)  {}; \&
+		\node[circularptr] (c7)  {}; \&
+		\node[circularptr] (c8)  {}; \&
+		\node[circularptr] (c9)  {}; \&
+		\node[circularptr] (c10) {}; \&
+		\node[circularptr] (c11) {}; \&
+		\node[circularptr] (c12) {}; \&
+		\node[circularptr] (c13) {}; \\
+		%
+		\node[circularval] (left) {14:15}; \&
+		\node[circularval] {14:20}; \&
+		\node[circularval] {14:25}; \&
+		\node[circularval] {\phantom{14:25}}; \&
+		\node[circularval] {13:30}; \&
+		\node[circularval] {13:35}; \&
+		\node[circularval] {13:40}; \&
+		\node[circularval] {13:45}; \&
+		\node[circularval] {13:50}; \&
+		\node[circularval] {13:55}; \&
+		\node[circularval] {14:00}; \&
+		\node[circularval] {14:05}; \&
+		\node[circularval] (right) {14:10}; \\
+	};
+}
+
+%
+% draw pointers between circular array and B+ tree
+\path[btdlink] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+\path[btdlink] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n22-1.center);
+\path[btdlink] ([yshift=-2pt] c11.center) edge[out=90,in=270] ([yshift=2pt] n23-1.center);
+\foreach \x in
+{1,3,6,7,8,9,10,12,13}
+{ \path[->] ([yshift=15pt] c\x.center) edge ([yshift=-2pt] c\x.center); }
+\foreach \x in
+{n11-1,n12-1,n12-2,n21-1,n21-2,n24-1,n24-2,n24-3}
+{ \path[->] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+%
+% draw borders
+\draw[densely dotted] (-11,1.5) rectangle (8,-5.5);
+\draw[densely dotted] (-11,-6) rectangle (8,-10);
+\node[anchor=south west] at (-11,1.5) {\Large $B^+$ tree};
+\node[anchor=north west] at (-11,-10)  {\Large Circular array};
+%
+% curly brace
+\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
+\end{tikzpicture}
+\vspace{2mm}
+\caption{Proposed data structures in \cite{BScT}.}
+\label{fig:B+tree planned}
+\end{figure}
+
+
 
 
 
@@ -811,6 +1112,11 @@ Datenset erstellen
 
 \chapter{Summary and Conclusion}
 \label{sec:Summary}
+
++ wie macht man es effizient: bound erwähnen (neighborhood), leaves sortiert, neighborhood teuer-> leaves sortiert ist gut, 
+welche tree->nodesize
+
+
 "The conclusion (10 to 12 per cent of the whole research thesis) does not only summarize the whole research thesis, but it also evaluates the results of the scientific inquiry. Do the results confirm or reject previously formulated hypotheses? The conclusion draws both theoretical and practical lessons that could be used in future analyses. These lessons are to be embedded as
 2
 recommendations for the research community and for policy-makers (note: policy relevance instead of policy prescriptive). In addition, the conclusion gives insights for further research."

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  12 JUL 2016 11:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  12 JUL 2016 18:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -996,6 +996,9 @@ LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 
 LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 
+
+LaTeX Warning: Label `fig:BTreeBook' multiply defined.
+
 )
 \openout1 = `Bsc.aux'.
 
@@ -1234,85 +1237,80 @@ Chapter 4.
 [13
 
 ]
+Missing character: There is no ; in font nullfont!
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 228.
- (./serieUpdate.c
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 289.
+Missing character: There is no ; in font nullfont!
+
+Underfull \hbox (badness 10000) in paragraph at lines 291--323
+
+ []
+
+[14] [15] (./addValueToList.c
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 6.
-) [14] (./lookup.c) [15]
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-
-Underfull \hbox (badness 10000) in paragraph at lines 337--338
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 4.
+) (./deleteValueFromList.c) [16]
+Underfull \hbox (badness 10000) in paragraph at lines 473--539
 
  []
-
-[16]
-
-LaTeX Warning: Reference `lessOrEqual' on page 17 undefined on input line 342.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 345--346
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 351--352
-
- []
-
-
-LaTeX Warning: Reference `fig:tratree' on page 17 undefined on input line 356.
-
-
-LaTeX Warning: Reference `fig:sptree' on page 17 undefined on input line 356.
 
 [17]
 Missing character: There is no ; in font nullfont!
- [18] [19]
-Underfull \hbox (badness 10000) in paragraph at lines 611--677
+ [18]
+Missing character: There is no ; in font nullfont!
+ [19]
+Missing character: There is no ; in font nullfont!
+
+Underfull \hbox (badness 10000) in paragraph at lines 659--815
 
  []
 
+[20] (./serieUpdate.c) (./addRecordToTree.c)
+Underfull \hbox (badness 10000) in paragraph at lines 881--888
+
+ []
+
+[21] (./findLeaf.c) [22]
 Missing character: There is no ; in font nullfont!
-[20]
+ (./splitLeaf.c) (./insertIntoParent.c) [23]
+Overfull \vbox (32.96584pt too high) has occurred while \output is active []
+
+
+[24] (./lookup.c) [25] [26]
 Missing character: There is no ; in font nullfont!
- [21]
+ [27]
 Chapter 5.
-[22
+[28
 
 ]
 Chapter 6.
-[23
+[29
 
 ]
 Chapter 7.
-[24
+[30
 
 ]
 Chapter 8.
-[25
+[31
 
-] [26
+] [32
 
 ] (./Bsc.aux)
-
-LaTeX Warning: There were undefined references.
-
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 21985 strings out of 493089
- 440540 string characters out of 6134842
- 626638 words of memory out of 5000000
- 24989 multiletter control sequences out of 15000+600000
+ 22181 strings out of 493089
+ 444139 string characters out of 6134842
+ 769829 words of memory out of 5000000
+ 25167 multiletter control sequences out of 15000+600000
  55501 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,17n,86p,973b,1285s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,17n,86p,1158b,1287s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texl
@@ -1329,10 +1327,10 @@ nts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type
 elvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Bsc.pdf (26 pages, 267059 bytes).
+Output written on Bsc.pdf (32 pages, 288605 bytes).
 PDF statistics:
- 186 PDF objects out of 1000 (max. 8388607)
- 135 compressed objects within 2 object streams
+ 205 PDF objects out of 1000 (max. 8388607)
+ 148 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
