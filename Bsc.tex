@@ -821,7 +821,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 	\caption{Update Circular Array}
 \end{algorithm}
 \begin{exmp}
-	We assume that a new measurement arrives with time point $14:25$ and the key $41.5$. 
+	We assume that a new measurement arrives with time point $14:25$ and key $41.5$. 
 	The value $13.2$ at time point $13:15$ is overwritten by the new measurement. Hence, the new circular array looks as follows: 
 \end{exmp}
 
@@ -841,7 +841,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 				\node[circularptr] (c1)  {2.5}; \&
 				\node[circularptr] (c2)  {25.4}; \&
 				\node[circularptr] (c3)  {3.0}; \&
-				\node[circularptr,fill=mycolor](c4) {\textcolor{white}  {41.5}}; \&
+				\node[circularptr,fill=mycolor](c4) {41.5}; \&
 				\node[circularptr] (c5)  {23.0}; \&
 				\node[circularptr] (c6)  {17.1}; \&
 				\node[circularptr] (c7)  {37.6}; \&
@@ -856,7 +856,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 				\node[circularval] (left) {14:10}; \&
 				\node[circularval] {14:15}; \&
 				\node[circularval] {14:20}; \&
-				\node[circularval,fill=mycolor]{\textcolor{white}{13:15}}; \&
+				\node[circularval,fill=mycolor]{14:25}; \&
 				\node[circularval] {13:20}; \&
 				\node[circularval] {13:25}; \&
 				\node[circularval] {13:30}; \&
@@ -875,25 +875,13 @@ If the counter of the array is equal or bigger than the size of the array, there
 		\caption{Circular Array after the insertion of 41.5}
 		\label{fig:circAfter}
 \end{figure}
-	
 
-\subsubsection{Insert a Value to the $B^+$tree}
-With every circular array update a new measurement is added to the $B^+$ tree as shown in the Algorithm \ref{alg:Update Circular Array} at line 27.\\
-We first find the leaf node in which the search-key value would
-appear by using the Algorithm \ref{alg:Find Leaf}. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
-The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Add Record to Tree, escapechar=+]{addRecordToTree.c}
-	\caption{Add Measurement To Tree}
-\end{algorithm}
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Find Leaf]{findLeaf.c}
-	\caption{Find Leaf}
-\end{algorithm}
 
-If there is no space for another key, the leaf splits. The split of the leaf node is illustrated in Algorithm \ref{alg:Split Leaf}.\\
-We now consider an example of insertion in which a node must be split. 
+\subsubsection{Delete Value from the $B^+$tree}
 
+\begin{exmp}
+Since the measurement with time point $13:15$ is overwritten by the new value. Therefore, it needs to be deleted from the $B^+$ tree before the new value can be added. The circular array update Algorithm first deletes a value if necessary and then adds the new value to the tree. Hence, the tree after deleting $13.2$ looks as follows: 
+\end{exmp}
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -902,23 +890,23 @@ We now consider an example of insertion in which a node must be split.
 	every matrix/.style={cells={scale=0.7}},
 	]
 	% root node
-	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17}{}{}};
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17.1}{}{}};
 	
 	%
 	% intermediate nodes
-	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7}{}{}{}}
-	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23}{37}{43}}
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7.2}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23.0}{37.6}{43.1}}
 	%
 	% connecting root to intermediate level nodes
 	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
 	%
 	% leaf nodes
-	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3}{6.1}}
-	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7}{13.2}{}}
-	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17}{18.1}{}}
-	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23}{25.4}{}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37}{38.9}{40}}
-	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43}{47.1}{}}
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7.2}{}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{40.3}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43.1}{47.1}{}}
 	%
 	% connecting intermediate level to leaf nodes
 	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
@@ -937,15 +925,32 @@ We now consider an example of insertion in which a node must be split.
 	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
 	%
 	
+	\foreach \x in
+	{n11-1,n11-2,n12-1,n21-1,n21-2,n22-1,n22-2, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+		
+	
+	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Example of a $B^+$ tree}
-	\label{fig:BTreeBook}
+	\caption{Start situation}
+	\label{fig:startSituation}
 \end{figure}
 
-
-
-
+\subsubsection{Insert a Value to the $B^+$tree}
+With every circular array update a new measurement is added to the $B^+$ tree as shown in the Algorithm \ref{alg:Update Circular Array} at line 27.\\
+We first find the leaf node in which the search-key value would
+appear by using $findLeaf()$. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
+The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Add Record to Tree, escapechar=+]{addRecordToTree.c}
+	\caption{Add Measurement To Tree}
+\end{algorithm}
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Find Leaf]{findLeaf.c}
+	\caption{Find Leaf}
+\end{algorithm}
 \begin{algorithm}[H]
 	\lstinputlisting[label=alg:Split Leaf]{splitLeaf.c}
 	\caption{Split Leaf}
@@ -956,9 +961,68 @@ We now consider an example of insertion in which a node must be split.
 \end{algorithm}
 
 
+\begin{exmp}
+We now consider an example of insertion in which a node must be split. The measurement which already has been inserted to the circular array belongs ot a leaf node which is already full. Hence, the $InsertIntoParent()$ method is executed and we find out that the parent is full as well. Therefore, the parent is split to a new node and the old node using the same principle as in the $split Leaf$ method. Therefore, the algorithm is not shown again. After, we see that the parent of the inner node is not full yet. Also, the parent is at the same time the root node. The new new nodes leftmost key is used to insert into the root. We see that the insertion is recursive from the leaves till the root until a node with enough space is found. If the root node is already full the root node would be split as well and a new root node would be allocated. But in our case the root node just gets a new key. Its child nodes are split but the key is not inserted. The new key is just inserted to the root node. Therefore, the new tree after inserting the new measurement looks as follows:  
+\end{exmp}
 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{10mm}{0mm}{\btreeinodethree{root}{17.1}{40.3}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7.2}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23.0}{37.6}{}}
+	\xyshift{ 70mm}{-15mm}{\btreeinodethree{n3}{43.1}{}{}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2,3} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7.2}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n31}{40.3}{41.5}{}}
+	\xyshift{ 90mm}{-30mm}{\btreelnodethree{n32}{43.1}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2,3} { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3} { \btreelink{n2-\x}{n2\x} }
+	\foreach \x in {1,2} { \btreelink{n3-\x}{n3\x} }
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n31-a.west);
+	\draw[btlink] ([yshift=-3pt] n31-a.west) -- ([yshift=-3pt] n23-c.east);
+	\draw[btlink] ([yshift=+3pt] n31-c.east) -- ([yshift=+3pt] n32-a.west);
+	\draw[btlink] ([yshift=-3pt] n32-a.west) -- ([yshift=-3pt] n31-c.east);
+	%
+	
+	\foreach \x in
+	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Start situation}
+	\label{fig:startSituation}
+\end{figure}
 
-\subsubsection{Delete Value from the $B^+$tree}
 
 
 

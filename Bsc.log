@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  12 JUL 2016 18:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  12 JUL 2016 19:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -997,7 +997,10 @@ LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 
 
-LaTeX Warning: Label `fig:BTreeBook' multiply defined.
+LaTeX Warning: Label `fig:startSituation' multiply defined.
+
+
+LaTeX Warning: Label `fig:startSituation' multiply defined.
 
 )
 \openout1 = `Bsc.aux'.
@@ -1267,36 +1270,38 @@ Underfull \hbox (badness 10000) in paragraph at lines 659--815
 
  []
 
-[20] (./serieUpdate.c) (./addRecordToTree.c)
-Underfull \hbox (badness 10000) in paragraph at lines 881--888
+[20] (./serieUpdate.c) [21]
+Missing character: There is no ; in font nullfont!
+ (./addRecordToTree.c)
+Underfull \hbox (badness 10000) in paragraph at lines 942--949
 
  []
 
-[21] (./findLeaf.c) [22]
-Missing character: There is no ; in font nullfont!
- (./splitLeaf.c) (./insertIntoParent.c) [23]
+(./findLeaf.c) [22] (./splitLeaf.c) (./insertIntoParent.c) [23]
 Overfull \vbox (32.96584pt too high) has occurred while \output is active []
 
 
-[24] (./lookup.c) [25] [26]
+[24]
 Missing character: There is no ; in font nullfont!
- [27]
+ [25] (./lookup.c) [26] [27]
+Missing character: There is no ; in font nullfont!
+ [28]
 Chapter 5.
-[28
-
-]
-Chapter 6.
 [29
 
 ]
-Chapter 7.
+Chapter 6.
 [30
 
 ]
-Chapter 8.
+Chapter 7.
 [31
 
-] [32
+]
+Chapter 8.
+[32
+
+] [33
 
 ] (./Bsc.aux)
 
@@ -1304,10 +1309,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 22181 strings out of 493089
- 444139 string characters out of 6134842
- 769829 words of memory out of 5000000
- 25167 multiletter control sequences out of 15000+600000
+ 22365 strings out of 493089
+ 447452 string characters out of 6134842
+ 801830 words of memory out of 5000000
+ 25351 multiletter control sequences out of 15000+600000
  55501 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,17n,86p,1158b,1287s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1327,10 +1332,10 @@ nts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type
 elvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Bsc.pdf (32 pages, 288605 bytes).
+Output written on Bsc.pdf (33 pages, 291906 bytes).
 PDF statistics:
- 205 PDF objects out of 1000 (max. 8388607)
- 148 compressed objects within 2 object streams
+ 208 PDF objects out of 1000 (max. 8388607)
+ 150 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
