@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  13 JUL 2016 10:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  13 JUL 2016 13:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1000,12 +1000,6 @@ LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 LaTeX Warning: Label `alg:Re' multiply defined.
 
 
-LaTeX Warning: Label `fig:startSituation' multiply defined.
-
-
-LaTeX Warning: Label `fig:startSituation' multiply defined.
-
-
 LaTeX Warning: Label `alg:Lookup' multiply defined.
 
 
@@ -1246,121 +1240,106 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
 
 ]
 Chapter 4.
-
-LaTeX Warning: Reference `alg:Update Circular Array' on page 13 undefined on in
-put line 228.
-
 [13
 
 ]
 Missing character: There is no ; in font nullfont!
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 291.
-Missing character: There is no ; in font nullfont!
 
-Underfull \hbox (badness 10000) in paragraph at lines 293--325
+Underfull \hbox (badness 10000) in paragraph at lines 293--301
 
  []
 
 [14]
-
-LaTeX Warning: Reference `alg:Add a Value to the List' on page 15 undefined on 
-input line 333.
-
-
-LaTeX Warning: Reference `alg:Delete a Value from the List' on page 15 undefine
-d on input line 333.
-
-[15] (./addValueToList.c
+Missing character: There is no ; in font nullfont!
+ [15] (./addValueToList.c
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 4.
-) (./deleteValueFromList.c) [16]
-Underfull \hbox (badness 10000) in paragraph at lines 475--541
+) [16] (./deleteValueFromList.c) [17]
+Underfull \hbox (badness 10000) in paragraph at lines 482--548
 
  []
 
-[17]
 Missing character: There is no ; in font nullfont!
- [18]
+[18]
 Missing character: There is no ; in font nullfont!
  [19]
-
-LaTeX Warning: Reference `alg:Update Circular Array' on page 20 undefined on in
-put line 656.
-
 Missing character: There is no ; in font nullfont!
 
-Underfull \hbox (badness 10000) in paragraph at lines 661--817
+Underfull \hbox (badness 10000) in paragraph at lines 667--823
 
  []
 
-[20] (./serieUpdate.c) (./delete1.c) (./deleteEntry.c) [21] [22]
-(./redestributeNodes.c) (./mergeNodes.c) [23]
-Overfull \vbox (78.8039pt too high) has occurred while \output is active []
+(./serieUpdate.c) [20] [21] (./findLeaf.c) (./delete1.c) [22] (./deleteEntry.c)
 
+Underfull \hbox (badness 10000) in paragraph at lines 915--919
+
+ []
+
+[23] (./mergeNodes.c)
+Underfull \hbox (badness 10000) in paragraph at lines 920--925
+
+ []
 
 [24]
 Overfull \vbox (78.96584pt too high) has occurred while \output is active []
 
 
-[25]
+[25] (./redestributeNodes.c) [26]
+Overfull \vbox (78.8039pt too high) has occurred while \output is active []
+
+
+[27]
 Missing character: There is no ; in font nullfont!
 
-
-LaTeX Warning: Reference `alg:Update Circular Array' on page 26 undefined on in
-put line 966.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 966--970
+Underfull \hbox (badness 10000) in paragraph at lines 994--998
 
  []
 
-(./addRecordToTree.c) (./findLeaf.c) [26] (./splitLeaf.c) (./insertIntoParent.c
-) [27] [28]
+(./addRecordToTree.c) [28] (./splitLeaf.c) (./insertIntoParent.c) [29] [30]
 Missing character: There is no ; in font nullfont!
- [29] (./lookup.c) (./initializeNeighborhood.c) [30]
-(./neighborhoodGrow.c) [31]
+
+[31] (./lookup.c) (./initializeNeighborhood.c) [32] (./neighborhoodGrow.c)
+[33]
 Overfull \vbox (100.96584pt too high) has occurred while \output is active []
 
 
-[32]
+[34]
 Missing character: There is no ; in font nullfont!
- [33]
+ [35]
 Chapter 5.
-[34
-
-]
-Chapter 6.
-[35
-
-]
-Chapter 7.
 [36
 
 ]
-Chapter 8.
+Chapter 6.
 [37
 
-] [38
+]
+Chapter 7.
+[38
+
+]
+Chapter 8.
+[39
+
+] [40
 
 ] (./Bsc.aux)
-
-LaTeX Warning: There were undefined references.
-
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 22538 strings out of 493089
- 450673 string characters out of 6134842
- 941865 words of memory out of 5000000
- 25506 multiletter control sequences out of 15000+600000
+ 22361 strings out of 493089
+ 447486 string characters out of 6134842
+ 787201 words of memory out of 5000000
+ 25329 multiletter control sequences out of 15000+600000
  55501 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,17n,86p,1158b,1274s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,17n,86p,1137b,1271s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texl
@@ -1377,10 +1356,10 @@ nts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type
 elvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Bsc.pdf (38 pages, 305321 bytes).
+Output written on Bsc.pdf (40 pages, 310640 bytes).
 PDF statistics:
- 226 PDF objects out of 1000 (max. 8388607)
- 163 compressed objects within 2 object streams
+ 232 PDF objects out of 1000 (max. 8388607)
+ 167 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

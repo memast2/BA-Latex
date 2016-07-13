@@ -6,15 +6,15 @@
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Example of a $B^+$ tree}}{14}
 \contentsline {figure}{\numberline {4.3}{\ignorespaces Left children keys < 17.2 and right children keys $\geq $ 17.2}}{15}
 \contentsline {figure}{\numberline {4.4}{\ignorespaces Doubly, circular linked list}}{16}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Associated List Approach.}}{17}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Associated List Approach.}}{18}
 \contentsline {figure}{\numberline {4.6}{\ignorespaces Singly linked list}}{18}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces $B^+$ tree with an additional leaf without a parent. }}{18}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces $B^+$ tree with an additional leaf without a parent. }}{19}
 \contentsline {figure}{\numberline {4.8}{\ignorespaces Duplicate handling proposed in \cite {BTreeBook}.}}{19}
 \contentsline {figure}{\numberline {4.9}{\ignorespaces Start situation}}{20}
 \contentsline {figure}{\numberline {4.10}{\ignorespaces Circular Array after the insertion of 41.5}}{21}
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Start situation}}{26}
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Start situation}}{30}
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Proposed data structures in \cite {BScT}.}}{33}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces $B^+$tree after the deletion of $13.2$}}{28}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces $B^+$tree after the insertion of $41.5$}}{32}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Proposed data structures in \cite {BScT}.}}{35}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
