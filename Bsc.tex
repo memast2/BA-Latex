@@ -549,7 +549,7 @@ Unlike in our approach the right sub-tree may also contain keys that are lower t
 \newpage
 \section{Operations}
 \label{sec:OperationsOnBTree}
-The data in the circular array is updated with every new arriving measurement. Therefore, with every $shift$ execution the array is updated. The update method is illustrated in Algrithm \ref{alg:Update Circular Array}. The $shift$ operation not only influences the array data but also the data in the $B^+$ tree. Therefore, the deletion and insertion of a measurement in the tree is executed within the update of the circular array. The implementation of an insertion and deletion within a $B^+$tree is described in Section \ref{sec:OperationsOnBTree}. The $lookup$ of a value is presented in Algorithm \ref{alg:Lookup}.
+The data in the circular array is updated with every new arriving measurement. Therefore, with every $shift$ execution the array is updated. The update method is illustrated in Algrithm \ref{alg:UpdateCA}. The $shift$ operation not only influences the array data but also the data in the $B^+$ tree. Therefore, the deletion and insertion of a measurement in the tree is executed within the update of the circular array. The implementation of an insertion and deletion within a $B^+$tree is described in Section \ref{sec:OperationsOnBTree}. The $lookup$ of a value is presented in Algorithm \ref{alg:Lookup}.
 \\Further, the neighbor$(v,T)$ method uses the $B^+$ tree returning the time point $t \in T$ such that $|v-s(t)|$ is minimal, given a value \emph{v}.
 
 
@@ -1087,7 +1087,7 @@ As a result of deletion, a key value that is present in an interior node or in t
 			m $\leftarrow$ neighbor->pointer[neighbor->numOfKeys]\;
 			insert neighbor->pointers[m] and $kPrime$ to first position in node and shift other pointers and values right
 			remove neighbor->key[m-1], neighbor->pointers[m] from neighbor\;
-			replace $kPrime$ in node->parent by neighbor->keys[m-1]\;
+			replace $kPrime$ in node->parent by neighbor->keys[m-1]\;}
 		\Else{
 		//last value pointer pair in the node\;
 		m $\leftarrow$ neighbor->pointer[neighbor->numOfKeys -1]\;
@@ -1096,7 +1096,7 @@ As a result of deletion, a key value that is present in an interior node or in t
 		replace $kPrime$ in node->parent by node->keys[0]\;
 		}
 		
-	}
+	}	
 	\Else{
 		//node is leftmost child. Take a key-pointer pair from the neighbor to the right\;
 		//Move the neighbor's leftmost key-pointer pair to n's rightmost position\;
@@ -1113,7 +1113,7 @@ As a result of deletion, a key value that is present in an interior node or in t
 			}
 	}
 		
-	}	
+	
 }	
 
 	
@@ -1125,8 +1125,8 @@ As a result of deletion, a key value that is present in an interior node or in t
 
 
 \subsubsection{Insert a Value to the $B^+$tree}
-With every circular array update a new measurement is added to the $B^+$ tree as shown in the Algorithm \ref{alg:UpdateCA} at line 12.\\
-We first find the leaf node in which the search-key value would
+With every circular array update a new measurement is added to the $B^+$ tree as shown in Algorithm \ref{alg:UpdateCA} line 12.\\
+We first find the leaf node where the key would
 appear by using $findLeaf()$. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
 The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
 The $splitAndInsertIntoInnerNode$ method works with the same principle as the $splitLeaves$ method. The difference is that if the inner nodes are split, one key is not included to the inner node but is given one level up to the parent of the splitted nodes. This search-key separates the children. \\
