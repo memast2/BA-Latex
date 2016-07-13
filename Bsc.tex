@@ -21,6 +21,8 @@
 \usepackage{float}
 \usepackage{array}
 \usetikzlibrary{shapes, calc}
+%\usepackage[ruled,noend,noline,slide]{algorithm2e}
+
 
 
 
@@ -40,10 +42,10 @@
 	stringstyle=\color{orange},
 	numbers=left,
 	numbersep=5pt,                
-	numberstyle=\tiny,
+	numberstyle=\tiny
 }
 
-\lstset{escapechar=@,style=customc}
+\lstset{escapechar=@,style=customc,basicstyle=\fontsize{10}{11}\selectfont\ttfamily}
 
 
 %\setlength{\parindent}{0pt} 
@@ -656,7 +658,7 @@ The data in the circular array is updated with every new arriving measurement. T
 
 \subsection{Shift$(\bar{t}, v)$}
 
-We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 25.4 occurs two times, therefore two list values are part of the circular linked list associated to the key 25.4. Further, all keys in the leaves have an associated time point. Some associated linked lists are not illustrated to improve clarity. The size of the circular array is 14 and it is already full. This significates that for every new arriving measurement a value has to be added to and another one has to be deleted from the $B^+$ tree. \\ \\
+We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 25.4 occurs two times, therefore two list values are part of the circular linked list associated to the key. Further, all keys in the leaves have an associated time point. Some associated linked lists are not illustrated to improve clarity. The size of the circular array is 14 and it is already full. This significates that for every new arriving measurement a value has to be added to and another one has to be deleted from the $B^+$ tree. \\ \\
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -878,9 +880,31 @@ If the counter of the array is equal or bigger than the size of the array, there
 
 
 \subsubsection{Delete Value from the $B^+$tree}
+The circular array update Algorithm first deletes a value if necessary and then adds the new value to the tree. Therefore, we first present how the deletion works. 
+
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Delete]{delete1.c}
+	\caption{Delete}
+\end{algorithm}
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Delete Entry]{deleteEntry.c}
+	\caption{Delete Entry}
+\end{algorithm}
+node falls below minimum - Either merge or redistribute.
+Find the appropriate neighbor node with which to merge. Also finds the key in the
+parent between the pointer to the node and the pointer to the neighbor
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Re]{redestributeNodes.c}
+	\caption{Redestribute Nodes}
+\end{algorithm}
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Re]{mergeNodes.c}
+	\caption{Merge Nodes}
+\end{algorithm}
+
 
 \begin{exmp}
-Since the measurement with time point $13:15$ is overwritten by the new value. Therefore, it needs to be deleted from the $B^+$ tree before the new value can be added. The circular array update Algorithm first deletes a value if necessary and then adds the new value to the tree. Hence, the tree after deleting $13.2$ looks as follows: 
+The measurement with time point $13:15$ is overwritten by the new value. Therefore, it needs to be deleted from the $B^+$ tree before the new value is added. Hence, the tree after deleting $13.2$ looks as follows: 
 \end{exmp}
 \begin{figure}[htbp]
 	\centering
@@ -943,6 +967,8 @@ With every circular array update a new measurement is added to the $B^+$ tree as
 We first find the leaf node in which the search-key value would
 appear by using $findLeaf()$. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
 The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
+
+
 \begin{algorithm}[H]
 	\lstinputlisting[label=alg:Add Record to Tree, escapechar=+]{addRecordToTree.c}
 	\caption{Add Measurement To Tree}
@@ -1037,8 +1063,38 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 \subsection{Sorted Access: Neighbor}
 
 \subsubsection{Initialize Neighborhood}
+/*
+* Initializes a new neighborhood in the B+ tree.
+*
+* Parameters:
+*   tree: The  SBTree for this neighborhood
+*   Serie: Serie that constitutes this pattern cell
+*   patternlength: length of the query pattern
+*   offset: position of the Serie within the query pattern
+*           cell. offset=1 means the oldest time point in the
+*           query pattern, offset=patternlength means the latest
+*           time point in the query pattern.
+*/
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Lookup]{initializeNeighborhood.c}
+	\caption{Initialize Neighborhood}
+\end{algorithm}
 
 \subsubsection{Grow Neighborhood}
+/*
+* Grows the neighborhood by one new value and returns its time point via the timestamp
+* parameter. The function returns true if there was a new unseen value and false otherwise
+*
+* Parameters
+*   self: the neighborhood
+*   timeset: a set of seen time points
+*   timestamp: used as a return value, contains the time point of the
+*              new still unseen value discovered by this function
+*/
+\begin{algorithm}[H]
+	\lstinputlisting[label=alg:Lookup]{neighborhoodGrow.c}
+	\caption{Neighborhood Grow}
+\end{algorithm}
 
 
 

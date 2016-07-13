@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  12 JUL 2016 19:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  13 JUL 2016 10:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -997,27 +997,36 @@ LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 LaTeX Warning: Label `fig:BTreeBook' multiply defined.
 
 
+LaTeX Warning: Label `alg:Re' multiply defined.
+
+
 LaTeX Warning: Label `fig:startSituation' multiply defined.
 
 
 LaTeX Warning: Label `fig:startSituation' multiply defined.
+
+
+LaTeX Warning: Label `alg:Lookup' multiply defined.
+
+
+LaTeX Warning: Label `alg:Lookup' multiply defined.
 
 )
 \openout1 = `Bsc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 88.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 90.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -1084,41 +1093,41 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count154
-LaTeX Info: Redefining \celsius on input line 88.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 88.
+LaTeX Info: Redefining \celsius on input line 90.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 90.
 
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 88.
-Package gensymb Info: Using \Omega for \ohm on input line 88.
+LaTeX Info: Redefining \ohm on input line 90.
+Package gensymb Info: Using \Omega for \ohm on input line 90.
 
 Package gensymb Warning: Not defining \micro.
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 92.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 94.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 92.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 92.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 94.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 94.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 92.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 94.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 92.
-LaTeX Font Info:    Try loading font information for U+msa on input line 92.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 94.
+LaTeX Font Info:    Try loading font information for U+msa on input line 94.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 92.
+LaTeX Font Info:    Try loading font information for U+msb on input line 94.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 92.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 94.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -1126,13 +1135,13 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 <IFIlogo.pdf, id=4, 597.23125pt x 845.1575pt>
 File: IFIlogo.pdf Graphic file (type pdf)
  <use IFIlogo.pdf>
-Package pdftex.def Info: IFIlogo.pdf used on input line 92.
+Package pdftex.def Info: IFIlogo.pdf used on input line 94.
 (pdftex.def)             Requested size: 110.57718pt x 156.49014pt.
 
 <dbtgBW.pdf, id=5, 597.23125pt x 845.1575pt>
 File: dbtgBW.pdf Graphic file (type pdf)
  <use dbtgBW.pdf>
-Package pdftex.def Info: dbtgBW.pdf used on input line 92.
+Package pdftex.def Info: dbtgBW.pdf used on input line 94.
 (pdftex.def)             Requested size: 40.20656pt x 56.9055pt.
  [1
 
@@ -1174,7 +1183,7 @@ Class scrreprt Warning: \float@listhead detected!
 (scrreprt)              Loading of package `scrhack' may help to
 (scrreprt)              avoid this warning, if you are using a
 (scrreprt)              a package that still implements the
-(scrreprt)              deprecated \float@listhead interface  on input line 108
+(scrreprt)              deprecated \float@listhead interface  on input line 110
 .
 
 [7
@@ -1203,7 +1212,7 @@ Class scrreprt Warning: \float@addtolists detected!
 (scrreprt)              deprecated \float@addtolist interface .
 
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 116.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 118.
 \c@defn=\count155
 \c@exmp=\count156
 [9
@@ -1211,7 +1220,7 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
 ]
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 129--134
+Underfull \hbox (badness 10000) in paragraph at lines 131--136
 
  []
 
@@ -1220,42 +1229,55 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--134
 ] [11]
 Chapter 3.
 
-Overfull \hbox (8.88022pt too wide) in paragraph at lines 154--156
+Overfull \hbox (8.88022pt too wide) in paragraph at lines 156--158
 \T1/ptm/m/n/12 The present the-sis tries to in-tro-duce an ef-fi-cient way to i
 m-ple-ment the $\OML/cmm/m/it/12 random$ \T1/ptm/m/n/12 and $\OML/cmm/m/it/12 s
 ortedaccess$
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 161.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 163.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 161.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 163.
  [12
 
 ]
 Chapter 4.
+
+LaTeX Warning: Reference `alg:Update Circular Array' on page 13 undefined on in
+put line 228.
+
 [13
 
 ]
 Missing character: There is no ; in font nullfont!
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 289.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 291.
 Missing character: There is no ; in font nullfont!
 
-Underfull \hbox (badness 10000) in paragraph at lines 291--323
+Underfull \hbox (badness 10000) in paragraph at lines 293--325
 
  []
 
-[14] [15] (./addValueToList.c
+[14]
+
+LaTeX Warning: Reference `alg:Add a Value to the List' on page 15 undefined on 
+input line 333.
+
+
+LaTeX Warning: Reference `alg:Delete a Value from the List' on page 15 undefine
+d on input line 333.
+
+[15] (./addValueToList.c
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 4.
 ) (./deleteValueFromList.c) [16]
-Underfull \hbox (badness 10000) in paragraph at lines 473--539
+Underfull \hbox (badness 10000) in paragraph at lines 475--541
 
  []
 
@@ -1264,58 +1286,81 @@ Missing character: There is no ; in font nullfont!
  [18]
 Missing character: There is no ; in font nullfont!
  [19]
+
+LaTeX Warning: Reference `alg:Update Circular Array' on page 20 undefined on in
+put line 656.
+
 Missing character: There is no ; in font nullfont!
 
-Underfull \hbox (badness 10000) in paragraph at lines 659--815
+Underfull \hbox (badness 10000) in paragraph at lines 661--817
 
  []
 
-[20] (./serieUpdate.c) [21]
-Missing character: There is no ; in font nullfont!
- (./addRecordToTree.c)
-Underfull \hbox (badness 10000) in paragraph at lines 942--949
-
- []
-
-(./findLeaf.c) [22] (./splitLeaf.c) (./insertIntoParent.c) [23]
-Overfull \vbox (32.96584pt too high) has occurred while \output is active []
+[20] (./serieUpdate.c) (./delete1.c) (./deleteEntry.c) [21] [22]
+(./redestributeNodes.c) (./mergeNodes.c) [23]
+Overfull \vbox (78.8039pt too high) has occurred while \output is active []
 
 
 [24]
+Overfull \vbox (78.96584pt too high) has occurred while \output is active []
+
+
+[25]
 Missing character: There is no ; in font nullfont!
- [25] (./lookup.c) [26] [27]
+
+
+LaTeX Warning: Reference `alg:Update Circular Array' on page 26 undefined on in
+put line 966.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 966--970
+
+ []
+
+(./addRecordToTree.c) (./findLeaf.c) [26] (./splitLeaf.c) (./insertIntoParent.c
+) [27] [28]
 Missing character: There is no ; in font nullfont!
- [28]
+ [29] (./lookup.c) (./initializeNeighborhood.c) [30]
+(./neighborhoodGrow.c) [31]
+Overfull \vbox (100.96584pt too high) has occurred while \output is active []
+
+
+[32]
+Missing character: There is no ; in font nullfont!
+ [33]
 Chapter 5.
-[29
+[34
 
 ]
 Chapter 6.
-[30
+[35
 
 ]
 Chapter 7.
-[31
+[36
 
 ]
 Chapter 8.
-[32
+[37
 
-] [33
+] [38
 
 ] (./Bsc.aux)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 22365 strings out of 493089
- 447452 string characters out of 6134842
- 801830 words of memory out of 5000000
- 25351 multiletter control sequences out of 15000+600000
+ 22538 strings out of 493089
+ 450673 string characters out of 6134842
+ 941865 words of memory out of 5000000
+ 25506 multiletter control sequences out of 15000+600000
  55501 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,17n,86p,1158b,1287s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,17n,86p,1158b,1274s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texl
@@ -1332,10 +1377,10 @@ nts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type
 elvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Bsc.pdf (33 pages, 291906 bytes).
+Output written on Bsc.pdf (38 pages, 305321 bytes).
 PDF statistics:
- 208 PDF objects out of 1000 (max. 8388607)
- 150 compressed objects within 2 object streams
+ 226 PDF objects out of 1000 (max. 8388607)
+ 163 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

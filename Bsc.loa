@@ -6,11 +6,17 @@
 \contentsline {algorithm}{\numberline {1}{\ignorespaces Add a Value to the List}}{16}
 \contentsline {algorithm}{\numberline {2}{\ignorespaces Delete a Value from the List}}{17}
 \contentsline {algorithm}{\numberline {3}{\ignorespaces Update Circular Array}}{21}
-\contentsline {algorithm}{\numberline {4}{\ignorespaces Add Measurement To Tree}}{23}
-\contentsline {algorithm}{\numberline {5}{\ignorespaces Find Leaf}}{23}
-\contentsline {algorithm}{\numberline {6}{\ignorespaces Split Leaf}}{24}
-\contentsline {algorithm}{\numberline {7}{\ignorespaces Insert into Parent}}{25}
-\contentsline {algorithm}{\numberline {8}{\ignorespaces Lookup}}{26}
+\contentsline {algorithm}{\numberline {4}{\ignorespaces Delete}}{22}
+\contentsline {algorithm}{\numberline {5}{\ignorespaces Delete Entry}}{23}
+\contentsline {algorithm}{\numberline {6}{\ignorespaces Redestribute Nodes}}{24}
+\contentsline {algorithm}{\numberline {7}{\ignorespaces Merge Nodes}}{25}
+\contentsline {algorithm}{\numberline {8}{\ignorespaces Add Measurement To Tree}}{27}
+\contentsline {algorithm}{\numberline {9}{\ignorespaces Find Leaf}}{27}
+\contentsline {algorithm}{\numberline {10}{\ignorespaces Split Leaf}}{28}
+\contentsline {algorithm}{\numberline {11}{\ignorespaces Insert into Parent}}{29}
+\contentsline {algorithm}{\numberline {12}{\ignorespaces Lookup}}{30}
+\contentsline {algorithm}{\numberline {13}{\ignorespaces Initialize Neighborhood}}{31}
+\contentsline {algorithm}{\numberline {14}{\ignorespaces Neighborhood Grow}}{32}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
