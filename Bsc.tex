@@ -9,7 +9,7 @@
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{amsfonts}
-\usepackage{algorithm}
+%\usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{mathtools}
 \usepackage{amsmath}
@@ -21,34 +21,9 @@
 \usepackage{float}
 \usepackage{array}
 \usetikzlibrary{shapes, calc}
-%\usepackage[ruled,noend,noline,slide]{algorithm2e}
+\usepackage[ruled,linesnumbered,lined,commentsnumbered]{algorithm2e}
 
-
-
-
-
-\lstdefinestyle{customc}{
-	belowcaptionskip=1\baselineskip,
-	breaklines=true,
-	frame=none,
-	columns=flexible,
-	xleftmargin=\parindent,
-	language=C,
-	showstringspaces=false,
-	basicstyle=\footnotesize\ttfamily,
-	keywordstyle=\bfseries\color{green!40!black},
-	commentstyle=\itshape\color{purple!40!black},
-	identifierstyle=\color{blue},
-	stringstyle=\color{orange},
-	numbers=left,
-	numbersep=5pt,                
-	numberstyle=\tiny
-}
-
-\lstset{escapechar=@,style=customc,basicstyle=\fontsize{10}{11}\selectfont\ttfamily}
-
-
-%\setlength{\parindent}{0pt} 
+\setlength{\parindent}{0pt} 
 
 
 \titlehead{Department of Informatics, University of Zürich}
@@ -105,9 +80,10 @@
 \tableofcontents
 \listoffigures
 \listoftables
+\listofalgorithms
 \renewcommand{\lstlistingname}{Algorithm}% Listing -> Algorithm
 
-\listofalgorithms
+
 \addtocontents{loa}{\def\string\figurename{Algorithm}}
 
 \chapter{Introduction}
@@ -337,7 +313,7 @@ This Section presents a solution to allow duplicate values in a $B^+$ tree. Furt
 \subsection{Associated doubly, circular Linked List}
 \label{doublyLinked}
 The idea of this method is to associate a doubly, circular linked list to the each key. If a value key occurs multiple times, the new time point is added to the linked list.  I  So instead of inserting the key again and using another block in the leaf, the new time point is inserted as a linked list value.\\ 
-Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $first list value$. Hence, since a shift operation on the circular array leads to a deletion of the oldest measurement, is is always the $first list value$. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. We call this position the $last list value$. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position. The addition and the deletion of a list value form a linked list containing multiple values is illustrated in Algorithm \ref{alg:Add a Value to the List} and Algorithm \ref{alg:Delete a Value from the List}.\\
+Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $first list value$. Hence, since a shift operation on the circular array leads to a deletion of the oldest measurement, is is always the $first list value$. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. We call this position the $last list value$. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position. The addition and the deletion of a list value form a linked list containing multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}.\\
 The leaf nodes in our $B^+$tree also have pointer. But the number of pointer is leaf nodes is always equal to the number of search-keys in the leaf. A pointer at position $i$ points to the doubly, linked list associated with the key at position $i$.\\
 The \emph{neighborhood grow} operation searches a specific time point in the doubly, linked list. Therefore, it cannot just take the oldest or newest time point position like with an insertion or deletion. Hence, In the worst case the entire list would be searched for the specific time point. But since the \emph{neighborhood grow} operation always is executed at the newest measurements in the circular array, we can give an upper bound, namely the pattern length. Therefore the worst case depends on the pattern length and on the distribution of the measurements which are  starting points of the $neighbor$ method.  
 \begin{figure}[H]
@@ -412,140 +388,56 @@ The \emph{neighborhood grow} operation searches a specific time point in the dou
 \end{figure}
 
 \begin{algorithm}[H]
-	\lstinputlisting[label=alg:Add a Value to the List]{addValueToList.c}
-	\caption{Add a Value to the List}
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwData{Insertion node $node$, the time point to delete $t$ and the key associated to the Linked List $L$}
+	\KwResult{Linked List $L$  such that $t$ $\in$ $L$}
+	\Begin{
+	\For{$i\leftarrow 0$ \KwTo numOfKeys in node}{
+		currentKey $\leftarrow$ node->keys[i]\;
+		\If{$k$ == currentKey}{
+			break\;
+		}
+	}
+	firstLV $\leftarrow$ node->pointers[i]\;
+	lastLV $\leftarrow$ firstLV->prev\; 
+	insert $t$ between firstLV and lastLV\;
+		
+	}
+	\label{AddToList}
+	\caption{Add Time Point to Linked List}
 \end{algorithm}
 
+
+%AddvaluetoList
+
 \begin{algorithm}[H]
-	\lstinputlisting[label=alg:Delete a Value from the List]{deleteValueFromList.c}
-	\caption{Delete a Value from the List}
+	\IncMargin{1em}
+	\DontPrintSemicolon
+	\KwData{Node $n$ and index position $index$ for the position of the associated Linked List $l$}
+	\KwResult{Linked List $L$  such that $t$ $\not\in$ $L$}
+	
+	\Begin{	
+	//the list value linked to the node is always the oldest in the list	
+	timePointToDelete $\leftarrow$ node->pointers[index]\;
+	
+	next $\leftarrow$ timePointToDelete->next\; 
+	prev $\leftarrow$ timePointToDelete->prev\; 
+
+	//next is the second oldest key\;
+	leaf->pointers[index] $\leftarrow$  next\;
+	prev->next $\leftarrow$ next\;
+	next->prev $\leftarrow$ prev\;
+}
+	\label{deleteListValue}
+	\caption{Delete Time Point to Linked List}
 \end{algorithm}
+%DeleteValueFromList
 
 \subsection{Alternative Approaches}
 
-A similar idea as in our approach is to add a associate list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new time point is just inserted to its associated list. The Figure \ref{fig:ListApp} illustrates the associated list.
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	
-	% leaf pointers
-	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
-	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
-	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
-	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
-	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
-	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
-	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
-	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
-	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
-	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-	%
-	% leaf nodes
-	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
-	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
-	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
-	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
-	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
-	%
-	
-	% circular array
-	\xyshift{-15mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c1)  {}; \&
-			\node[circularptr] (c2)  {}; \&
-			\node[circularptr] (c3)  {}; \&
-			\node[circularptr] (c13) {}; \\
-			%
-			\node[circularval] (left) {14:15}; \&
-			\node[circularval] {14:30}; \&
-			\node[circularval] {14:50}; \&
-			\node[circularval] (right) {15:10}; \\
-		};
-	}	
-	%
-	% draw pointers between circular array and B+ tree
-	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-	
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Associated List Approach.}
-	\label{fig:ListApp}
-\end{figure}
-
-
-A new time stamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well as with a doubly, circular linked list. But here the array cannot dynamically be extende since the array size must be reallocated with every additional time stamp. \\
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	
-	% leaf pointers
-	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
-	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
-	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
-	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
-	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
-	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
-	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
-	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
-	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
-	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-	%
-	% leaf nodes
-	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
-	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
-	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
-	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
-	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
-	%
-	
-	% circular array
-	\xyshift{-40mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c1)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:15}; \\
-		};
-	}
-	% circular array
-	\xyshift{-10mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c2)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:30}; \\
-		};
-	}	
-	
-	% circular array
-	\xyshift{20mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c3)  {}; \\	
-			%
-			\node[circularval] (left)(right) {14:50}; \\
-		};
-	}	
-	
-	
-	% draw pointers between circular array and B+ tree
-	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-	% draw pointers for linked list
-	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
-	\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c3.west);	
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Singly linked list}
-	\label{fig:SinglyLinked}
-\end{figure}
+A similar idea as in our approach is to add a associate list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new time point is just inserted to its associated list. A new time stamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well as with a doubly, circular linked list. But here the array cannot dynamically be extended since the array size must be reallocated with every additional time stamp. \\
 A singly linked list uses less pointer than a doubly, circular list but since a insertion would cost $O(n)$ because a new value is always inserted to the end of the singly linked list and hence all older time points in the list need to be checked. Therefore, a circular, linked list is more suitable for our requirements than a singly, linked list. \\
 Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. But unlike the doubly, circluar linked list approach searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record.
 \begin{figure}[htbp]
@@ -600,13 +492,9 @@ Another idea to handle duplicate values is to add additional leaves to the tree 
 	\caption{$B^+$ tree with an additional leaf without a parent. }
 	\label{fig:noparents}
 \end{figure}
-\\The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents an additional approach to handle duplicate values. The definition of a key is slightly different when allowing duplicate search-keys. The keys the interior node $K_1, K_2, K_3, ... , K_n$ can be separated to \emph{new} and old keys. $K_i$ is the smallest new key that is part of the sub-tree linked with the $(i+1)$st pointer. If there is no new key associated with the $(i+1)$st pointer, $K_i$ is set to null. 
+\\The book \emph{Database Systems - The Complete Book} \cite{BTreeBook} presents an additional approach to handle duplicate values. The definition of a key is slightly different when allowing duplicate search-keys. The keys the interior node $K_1, K_2, K_3, ... , K_n$ can be separated to \emph{new} and old keys. $K_i$ is the smallest new key that is part of the sub-tree linked with the $(i+1)$st pointer. If there is no new key associated with the $(i+1)$st pointer, $K_i$ is set to null, as illustrated in Figure \ref{fig:BTreeBook}. 
 
-\begin{exmp}
-	The example illustrated in Figure \ref{fig:BTreeBook} illustrates the case, in which the interior node in the right sub-tree $K_1$ is set to null. The leaf node that pointer $(1+1)$ is associated with contains only duplicate key values which is indicated by setting the interior node $K_1$ to null. The search-key in the root node is set to $17$ because it is the lowest $new$ key in the right sub-tree. Since $13.2$ is already in the left sub-tree, the duplicate search-key in the right sub-tree cannot be the key in the root. \\
-	If e.g. $14.2$ would have been added to the tree, the leaves must be reordered, since the $B^+$ tree property that all leaves are ordered from left to right would be hurt.  
-\end{exmp}
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[
 	scale=0.7,
@@ -826,10 +714,9 @@ We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 
 
 \subsubsection{Add a Value to the Circular Array}
 If the counter of the array is equal or bigger than the size of the array, there is a measurement at the update position in the array that needs to be deleted. If not, there is no need to delete a value from the $B^+$ tree, since no value is overwritten in the circular array. 
-\begin{algorithm}[ht!]
-	\lstinputlisting[label=alg:Update Circular Array]{serieUpdate.c}
-	\caption{Update Circular Array}
-\end{algorithm}
+%updateCircularArray
+
+
 \begin{exmp}
 	We assume that a new measurement arrives with time point $14:25$ and key $41.5$. 
 	The value $13.2$ at time point $13:15$ is overwritten by the new measurement. The new circular array looks as follows: 
@@ -894,13 +781,41 @@ Algorithm $FindLeaf$ presents the pseudo-code to find the appropriate leaf.
 \begin{example}
 Assume we want to find the key value $13.2$, since this is the one that has been overwritten by the newly arrived measurement. The function starts at the root of the tree, and goes through the tree until it reaches a leaf node that would contain the searched value. The current node is examined by looking for the smallest $i$ for which the search-key value $13.2$ is greater or equal to. In this case the first pointer comes from the root at index position $0$, since $13.2$ is smaller than $17.1$. This is done by $getInsertPoint$. Then the new current node is set to the child node at pointer position $0$. Then the procedure is repeated until a leaf node is reached. This leaf node either contains $13.2$. Now after the leaf has been identified, the key can be deleted from the tree, which is explained in Section \ref{delete}.
 \end{example} 
+
+%FindLeaf
+
 \begin{algorithm}[H]
-	\lstinputlisting[label=alg:Find Leaf]{findLeaf.c}
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwData{Tree $tree$ and the search-key $k$}
+	\KwResult{The appropriate leaf for the search-key $k$}
+	\Begin{
+		curNode $\leftarrow$ tree->root\; 
+		
+		\If{curNode == NIL}{
+			return curNode\;
+		}
+		\While{curNode is not a Leaf}{
+		Let $i$ = smallest number such that $k$ $\leq$ curNode.$K_i$\;
+		\If{no $i$}{
+			$m$ $\leftarrow$ last non-null pointer in the node\;
+			curNode = curNode.$P_m$\;
+		}
+		\Else{
+			curNode = curNode.$P_i$\;
+		}	
+	}
+	
+	return curNode\;
+}
+	\label{findLeaf}
 	\caption{Find Leaf}
 \end{algorithm}
 
 
-\subsubsection{Delete Value from the $B^+$tree}
+
+\subsubsection{Delete a Value from the $B^+$tree}
 \label{delete}
 The circular array update Algorithm first deletes a value if necessary and then adds the new value to the tree. Since the deletion is executed first, we first present the deletion. \\
 At the beginning, the entry for the measurement to delete is located. This is done by the $findLeaf$ method. 
@@ -908,28 +823,75 @@ Since our $B^+$tree accepts duplicates, it is afterwards checked if the associat
 But if the entries time point is the single value in the linked list the key and its belonging linked list is deleted. Therefore, $DeleteEntry$ is called. After removing the entry, the node has either still enough keys or it needs to be merged with a sibling node or the values have to be redistributed to ensure that each node is at least half-full and hence have the minimum number of keys. 
 
 \begin{algorithm}[H]
-	\lstinputlisting[label=alg:Delete]{delete1.c}
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwData{Tree $tree$, measurement inforamtion: its time point $t$ and its key $k$}
+	\KwResult{Deletes measurement form $tree$}
+	\Begin{
+		//use the findLeaf Method to find right leaf\;
+		leaf $\leftarrow$ findLeaf($tree$, $k$)\; 
+		
+		keyPositionIndex $\leftarrow$ right position index in leaf\;
+					\BlankLine
+		\If{list on pointer at keyPositionIndex has multiple list values}{
+						\BlankLine
+			//delete the value from the list - deletion ends\;
+			deleteFirstListValue(leaf, keyPositionIndex)\;
+		}
+		\Else{
+			//delete the key from the tree\;
+			deleteEntry(tree,leaf, key on keyPostionIndex)\; 
+		}	
+	}
+	\label{delete}
 	\caption{Delete}
 \end{algorithm}
+%Delete
+
 
 The minimum number of keys depends on the node properties. If the node is a leaf node the minimum number of keys in the node is $[(n-1)/2]$. If the node is an internal node the minimum number of keys is $[n/2]-1$ and the minimum number of pointers is $[n/2]$. \\
+
+
 \begin{algorithm}[H]
-	\lstinputlisting[label=alg:Delete Entry]{deleteEntry.c}
-	\caption{Delete Entry}
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwData{Tree $tree$, the node $node$ where the deletion key belongs to, $k$ the key to delete}
+	\KwResult{$k$ $\not\in$$node$}
+	\Begin{
+
+		node $\leftarrow$ remove $k$ from $node$\; 
+		\If{node is the root}{
+			adjust the root\;
+			return\; 	
+		}
+		\If{node is leaf}{
+			minNrOfKeys $\leftarrow$ $[(order-1)/2]$\;
+		}
+		\Else{
+			minNrOfKeys $\leftarrow$ $[order/2]-1$\;
+		}
+			
+		\If{minNrOfKeys $\leq$ number of keys left in node}{
+			//node has still enough keys\; 
+			return\;
+		}		
+		
+	}
+	
+	\label{deleteEntry}
+	\caption{DeleteEntry}
 \end{algorithm}
+%DeleteEntry
+
 We merge the nodes by moving the entries from both the nodes into the left sibling, and deleting the
 now empty right sibling. If there is no left sibling the right sibling is selected. Once the node is deleted, we must also delete the entry in the parent node that pointed to the deleted node. Hence, we traverse the tree upwards until the $deleteEntry$ stops.\\
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Re]{mergeNodes.c}
-	\caption{Merge Nodes}
-\end{algorithm}
+%Merge
+
 If merging is not possible, since the sibling and node together have more than the allowed $n$ pointers, the nodes have to be redistributed. We redistribute the keys, such that each node has at least $[n/2]$ child pointers. Therefore, we move the rightmost pointer from the left sibling to the under-full right sibling. Hence, we also need to move a key so that the newly added pointer is separable. This pointer is neither present in the left sibling nor in the right sibling. So we take a key from the parent node.
 As a result of deletion, a key value that is present in an interior node or in the root node of the $B+$tree may not be present at any leaf of the tree any more.
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Re]{redestributeNodes.c}
-	\caption{Redestribute Nodes}
-\end{algorithm}
-
+%Redistribute
 
 \begin{exmp}
 The measurement with time point $13:15$ is overwritten by the new value. Therefore, it needs to be deleted from the $B^+$ tree before the new value is added. First, the $findLeaf$ method finds the leaf where $13.2$ is located. Then it deletes the value and its associated linked list. The leaf after has just 1 value left and therefore is smaller than the minimum allowed keys of $[(n-1)/2]$. Since $1<[(4-3)/2]$. The left neighbor has still enough space for the only key left in the node, namely, $7.2$. The node is merged with its left sibling. After the key in the parent is not right any more. Since $7.2$ now is part of the left child. The key $7.2$ in the parent is removed as well by calling $DeleteEntry$ at the end of $MergeNodes$. Then the $DeleteEntry$ procedure checks weather this node can be merged with its sibling. Since the node has one pointer left to its now only child and the sibling has already three keys, $23.0,37.6, 43.1$ and hence 4 pointers. So $1+4$ is more than the allowed $4$ pointers in an inner node. \\
@@ -996,21 +958,11 @@ We first find the leaf node in which the search-key value would
 appear by using $findLeaf()$. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the search-key already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the search-keys in the leaf stay equally ordered. If the search-key is new, it is inserted to the leaf. \\
 The measurement is directly inserted to the leaf if the number of keys in the leaf is lower than the tree node size. The tree node size is determined by the parameter $n$. Hence, the tree node size is always $n-1$. The measurement is inserted, so that the leaf keys are still ordered from left to right. \\
 
+%addRecordToTree
 
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Add Record to Tree, escapechar=+]{addRecordToTree.c}
-	\caption{Add Measurement To Tree}
-\end{algorithm}
 
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Split Leaf]{splitLeaf.c}
-	\caption{Split Leaf}
-\end{algorithm}
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Insert into Parent]{insertIntoParent.c}
-	\caption{Insert into Parent}
-\end{algorithm}
-
+%split leaf
+%insertinto parent
 
 \begin{exmp}
 We now consider the example from the beginning, where $41.5$ has been inserted to the circular array. The measurement which already has been inserted to the circular array belongs to a leaf node which is already full. Hence, the $InsertIntoParent()$ method is executed and we find out that the parent is full as well. Therefore, the parent is split to a new node and the old node using the same principle as in the $split Leaf$ method. Therefore, the algorithm is not shown again. After, we see that the parent of the inner node is not full yet. Also, the parent is at the same time the root node. The new new nodes leftmost key is used to insert into the root. We see that the insertion is recursive from the leaves till the root until a node with enough space is found. If the root node is already full the root node would be split as well and a new root node would be allocated. But in our case the root node just gets a new key. Its child nodes are split but the key is not inserted. The new key is just inserted to the root node. Therefore, the new tree after inserting the new measurement looks as follows:  
@@ -1078,11 +1030,7 @@ We now consider the example from the beginning, where $41.5$ has been inserted t
 
 \subsection{Random Access: Lookup a Value}
 Due to the properties of a circular array the lookup of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array by using the $TIMESTAMP\_DIFF$ representing the interval between two consecutive measurements. The last update point can be used as reference time point for the calculation. 
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Lookup]{lookup.c}
-	\caption{Lookup}
-\end{algorithm}
-
+%Lookup
 \subsection{Sorted Access: Neighbor}
 
 \subsubsection{Initialize Neighborhood}
@@ -1098,11 +1046,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 *           query pattern, offset=patternlength means the latest
 *           time point in the query pattern.
 */
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Lookup]{initializeNeighborhood.c}
-	\caption{Initialize Neighborhood}
-\end{algorithm}
-
+%initialize Neighborhood
 \subsubsection{Grow Neighborhood}
 /*
 * Grows the neighborhood by one new value and returns its time point via the timestamp
@@ -1114,129 +1058,40 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 *   timestamp: used as a return value, contains the time point of the
 *              new still unseen value discovered by this function
 */
-\begin{algorithm}[H]
-	\lstinputlisting[label=alg:Lookup]{neighborhoodGrow.c}
-	\caption{Neighborhood Grow}
-\end{algorithm}
-
-
-
-\newpage
-\section{Combination of the Data Structures}
-\label{sec:das}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-scale=0.7,
-every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-every matrix/.style={cells={scale=0.7}},
-]
-% root node
-\xyshift{-20mm}{0mm}{\btreeinodethree{root}{18.6}{}{}};
-
-%
-% intermediate nodes
-\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.3}{}{}{}}
-\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{19.2}{19.4}{19.7}}
-%
-% connecting root to intermediate level nodes
-\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-%
-% leaf nodes
-\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{17.2}{}{}}
-\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.3}{18.2}{18.3}}
-\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{18.6}{18.8}{}}
-\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{19.2}{19.3}{}}
-\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{19.4}{}{}}
-\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{19.7}{19.7}{19.8}}
-%
-% connecting intermediate level to leaf nodes
-\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
-\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
-%
-% leaf pointers
-\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
-\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
-\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
-\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
-\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
-\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
-\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
-\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
-\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
-\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
-%
-% circular array
-\xyshift{-15mm}{-70mm}{
-	\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-		\node[circularptr] (c1)  {}; \&
-		\node[circularptr] (c2)  {}; \&
-		\node[circularptr] (c3)  {}; \&
-		\node[circularptr] (c4)  {}; \&
-		\node[circularptr] (c5)  {}; \&
-		\node[circularptr] (c6)  {}; \&
-		\node[circularptr] (c7)  {}; \&
-		\node[circularptr] (c8)  {}; \&
-		\node[circularptr] (c9)  {}; \&
-		\node[circularptr] (c10) {}; \&
-		\node[circularptr] (c11) {}; \&
-		\node[circularptr] (c12) {}; \&
-		\node[circularptr] (c13) {}; \\
-		%
-		\node[circularval] (left) {14:15}; \&
-		\node[circularval] {14:20}; \&
-		\node[circularval] {14:25}; \&
-		\node[circularval] {\phantom{14:25}}; \&
-		\node[circularval] {13:30}; \&
-		\node[circularval] {13:35}; \&
-		\node[circularval] {13:40}; \&
-		\node[circularval] {13:45}; \&
-		\node[circularval] {13:50}; \&
-		\node[circularval] {13:55}; \&
-		\node[circularval] {14:00}; \&
-		\node[circularval] {14:05}; \&
-		\node[circularval] (right) {14:10}; \\
-	};
-}
-
-%
-% draw pointers between circular array and B+ tree
-\path[btdlink] ([yshift=-2pt] c2.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
-\path[btdlink] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n22-1.center);
-\path[btdlink] ([yshift=-2pt] c11.center) edge[out=90,in=270] ([yshift=2pt] n23-1.center);
-\foreach \x in
-{1,3,6,7,8,9,10,12,13}
-{ \path[->] ([yshift=15pt] c\x.center) edge ([yshift=-2pt] c\x.center); }
-\foreach \x in
-{n11-1,n12-1,n12-2,n21-1,n21-2,n24-1,n24-2,n24-3}
-{ \path[->] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
-%
-% draw borders
-\draw[densely dotted] (-11,1.5) rectangle (8,-5.5);
-\draw[densely dotted] (-11,-6) rectangle (8,-10);
-\node[anchor=south west] at (-11,1.5) {\Large $B^+$ tree};
-\node[anchor=north west] at (-11,-10)  {\Large Circular array};
-%
-% curly brace
-\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
-([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
-node [black,midway,yshift=-0.9cm] {\large size $|W|+1$};
-\end{tikzpicture}
-\vspace{2mm}
-\caption{Proposed data structures in \cite{BScT}.}
-\label{fig:B+tree planned}
-\end{figure}
-
-
-
-
+%neighborhod grow
 
 
 \chapter{Complexity Analysis}
-\subsection{Runtime Complexity}
-\subsection{Space Complexity}
 
+\subsection{Runtime Complexity}
+
+\subsubsection{Circular Array Operations}
+\paragraph{Update}
+$O(1)$ 
+\paragraph{Lookup}
+
+\subsubsection{$B^+$tree Operations}
+Although insertion and deletion operations on B+-trees are complicated, they are not very expensive.
+In the worst case for an insertion is proportional to $\log_{n\setminus2}(|W|)$, where n is
+the maximum number of pointers in a node, and K is the number of keys in the leaf nodes. If there are no duplicate values the number of keys is the size of the time window $|W|$. 
+Since in our case the insertion point of a new measurement to a doubly, linked list is always found in $O(1)$, duplicates have no influence to the complexity of an insertion.  
+\\The worst-case complexity of the deletion procedure is also proportional to
+$\log_{n\setminus2}(|W|)$, even if there are duplicate values.
+
+
+\subsubsection{Neighborhood Operations}
+
+\paragraph{Neighborhood initialize}
+The initialization of the neighborhood needs to search a specific measurement in the $B^+$tree. 
+This is dependent on the number of values in the linked list associated to the key of the specific measurement. 
+But the pattern length gives an upper bound to the maximum required value lookups in a doubly, linked list. In the worst-case the initialization needs to first find the appropriate leaf in $\log_{n\setminus2}(K)+patternlength$
+\paragraph{Neighborhood grow}
+
+
+\subsection{Space Complexity}
+\subsubsection{Circular Array}
+
+\subsubsection{$B^+$tree}
 
 \chapter{Evaluation}
 \label{sec:Experimental}
