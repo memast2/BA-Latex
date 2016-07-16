@@ -5,6 +5,7 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usetikzlibrary{matrix}
 \usepackage{times}
 \usepackage{listings}
 \usepackage{amssymb}
@@ -22,6 +23,9 @@
 \usepackage{array}
 \usetikzlibrary{shapes, calc}
 \usepackage[ruled,linesnumbered,lined,commentsnumbered]{algorithm2e}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \setlength{\parindent}{0pt} 
 
@@ -88,6 +92,7 @@
 
 \chapter{Introduction}
 
+The data kept in main memory needs to be limited to a portion of the streaming time series. In order to be practical for an application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises.
 The thesis presents a way to implement the described data structures after discussing the requirements. Furthermore, it documents the out coming experimental results.
 In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be summarized and concluded.
 
@@ -100,36 +105,84 @@ In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be sum
 
 \chapter{Background}
 \label{background}
-A streaming time series $s$ is a unbounded sequence of data points that is continuously extended, potentially forever. Streaming time series are relevant to applications in diverse domains e.g. in finance, meteorology or sensor networks. All domains have applications that need to be fed continuously with the latest data like the financial stock market or the weather information. But the processing of large volumes of time series data is impractical. A system can only keep a limited size of data in main memory.\\
-The data kept in main memory needs to be limited to a portion of the streaming time series. In order to be practical for an application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises.
+A streaming time series $s$ is a unbounded sequence of data points that is continuously extended, potentially forever. Streaming time series are relevant to applications in diverse domains e.g. in finance, meteorology or sensor networks. Many domains have applications that need to be fed continuously with the latest data like the financial stock market or the weather information. A system can only keep a limited size of data in main memory. Also the processing of large volumes of time series data is impractical.
 
 \section{TKCM}
-A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. Wellenzohn et al.\cite{BScT} presents a two-dimensional query pattern over the most recent values of a set of time series to efficiently impute missing values. The two-dimensional query pattern $P_{\bar{t}}$ is defined with \emph{l} reference time series on the spatial dimension and a time window of length \emph{p} on the time dimension. The idea is to derive the missing value from the \emph{k} most similar past pattern. Therefore, it determines for each \emph{time series} a set of highly correlated \emph{reference time series} which represent similar situations in the past e.g. similar weather situations. Every reference time series has its own associated reference time series to keep the own data complete. \\The missing value $\hat{s}(t)$ is calculated as the average of the values in a set of $\{s(t) | t \in T_k\}$ in the past and will be imputed. TKCM is able to calculate an estimation of a missing value in streaming time series data. \\
-TKCM must not only insert missing values, but also process the newest arriving values efficiently. In order to do that, TKCM must provide an insertion method for new arriving values to insert the new value into a time window $W$. Since the time window has a limited, given size $|W|$, an old value has to be deleted for each new arriving value. Provided that, the oldest time \emph{t} does no more fit into the time window because the window is full. \\
-Further, TKCM must be able to handle duplicate values. Assume the time window contains 100 temperature values from the same weather station and every 5 minutes a new value arrives. It is likely that the same temperature value arrives multiple times. Besides, the most similar base time values for a given value \emph{v} should be efficiently found and returned.\\
-These assumptions are made for the implementation of the index structure for streaming time series data that is presented in the present thesis. 
+A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. Wellenzohn et al.\cite{BScT} present an algorithm that defines a two-dimensional query pattern over the most recent values of a set of time series to efficiently impute missing values. The idea is to derive the missing value in a time series $s$ from the \emph{k} most similar past pattern. Therefore, it determines for each \emph{time series} $s$ a set of highly correlated \emph{reference time series} which exhibit similar behaviour to the base station e.g. similar weather situations. Hence, TKCM is able to calculate an estimation of a missing value in streaming time series data. 
+\begin{defn}
+	Pattern. Let $R_s^d=\{r_1,...,r_d\}$ be the ordered set of reference time series for a time series $s$. A $pattern$ $P(t)$ of length $l > 0$ over $R_s^d$ that is embedded at time $t$ is defined as a $d\times l$ matrix $P(t) = [p_{ij}]_{d\times l}$. 
+\end{defn}
+The two-dimensional query pattern $P(t)$ is anchored at a time point $t$ and consists of the subsequence of length $l$ spanning from $t-l+1$ to $t$ of each reference time series. Each row represents a subsequence of a reference time series and each column represents the values of the reference time series at a time point.\\Every reference time series has its own associated reference time series to keep the own data complete. \\ \\
+TKCM must not only recover and impute missing values, but also process the newest arriving values efficiently. In order to do that, TKCM must provide an insertion method for new arriving values to insert the new value into a streaming time series $s$. Since the time window has a limited, given size $|W|$, an old value has to be deleted for each new arriving value. Provided that, the time series data in window $W$ is already completely filled. \\       
+TKCM must be able to handle duplicate values. Assume the time window contains 100 temperature values from the same weather station and every 5 minutes a new value arrives. It is likely that the same temperature value arrives multiple times.
+\begin{defn}
+Time window $W$. Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the current time point for which the stream produced a new value. 
+\end{defn}
+\begin{defn}
+Streaming time series s. Let $S$ be a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series $s \in S$ at time \emph{t} is denoted as $s(t)$.
+\end{defn}
+Only the values in the time window $W$ are kept in main memory. However, we assume that all the time points $t < \bar{t}$ have a time series \emph{s} that is complete. Hence, $\forall t < \bar{t} : s(t) \ne \text{NIL}$ since \emph{s} contains imputed values if the real ones were missing. 
 
 
 \section{Access Methods}
 \label{AccessMethods}
-TKCM initializes a set $T =\{\}$. The set is filled during execution with all time points \emph{t} for which pattern $P_t$ has already been compared to the query pattern $P_{\bar{t}}$. Besides, TKCM initializes a set $T^*=\{\}$ that contains the \emph{k} time points $t \in T$ that minimize the error $\delta(P_{t}, P_{\bar{t}})$. Therefore, $T^* \subseteq T$ is always true during execution. 
-\\TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and \emph{sorted} access. The two methods are defined as follows: 
+TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and \emph{sorted} access. \emph{Sorted} access is used for finding the most similar value to a given pattern cell and \emph{random} access finds the values to fill the rest of the pattern cells. The two methods are defined as follows: 
 \begin{defn}
-	Random Access. Random access returns value r(t), given time series r and time point t.	
+ 	Random Access. Random access returns value r(t), given time series r and time point t.	
 \end{defn}
 \begin{defn}
-	Sorted Access. Sorted access returns the next yet unseen time point $t_s \notin T$ such that the value $r(t_s-o)$ is most similar to a given pattern cell $P_{\bar{t}}^{r,o}$. $t(s)$ is defined as:
+	Sorted Access. Sorted access returns the next yet unseen time point $t_s \notin T$ such that the value $r(t_s)$ is most similar to a given pattern cell $P_{ij}$. $t(s)$ is defined as:
 	\begin{align*}
-	t_s = \argmin_{t_s \in W \setminus T} |r(t_s-o) - P_{\bar{t}}^{r,o}|
+	t_s = \argmin_{t_s \in W \setminus T} |r(t_s) - P_{ij}|
 	\end{align*}
 \end{defn}
-After $T$ and $T^*$ is initialized, TKCM iterates until set $T^*$ contains the $k$ time points $t$ that minimize the difference $\delta(P_{t}, P_{\bar{t}})$. \\Using the sorted access mode, the algorithm loops through the cells $P_{\bar{t}}^{r,o}$, reading the next potential time point $t_s \notin T$. The time point $t_s \notin T$ is added to $T$. The time point $t_s$ has a corresponding patter $P_{t_s}$ which is at least for one pattern cell similar to the query pattern $P_{\bar{t}}$. \\
-The random access mode is used to look up the values that pattern $P_{t_s}$ is composed of. After each iteration a threshold $\tau$ is computed. The threshold $\tau$ is a lower-bound on the error $\delta (P_{t^{'}}, P_{\bar{t}})$ for any time point $t^{'}$ that is yet unseen. Therefore, during the execution of the algorithm
-$\forall t^{'} \in T : \tau \leq \delta(P_{t^{'}}, P_{\bar{t}}) $ is valid. Informally this significances that the lower-bound is always smaller or equal to the error between pattern $P_{t^{'}}$ and query patter $P_{\bar{t}}$ for all time points $t^{'}$ that are elements of $T$. Once $\forall t \in T^* : \delta(P_{t}, P_{\bar{t}}) \leq \tau$ the algorithm terminates. At the end, $T^*=T_k$.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\definecolor{mycolor}{RGB}{224,224,224}
+\definecolor{mycolor2}{RGB}{192,192,192}
+
+\draw[step=1cm,color=black] (0,0) grid (3,2);
+\node at (0.5,+0.5) {x};
+\node at (1.5,+0.5) {x};
+\node at (2.5,+0.5) {x};
+\node at (0.5,+1.5) {x};
+\node at (1.5,+1.5) {x};
+\node at (2.5,+1.5) {16.7};
+
+\draw[->]  (3,0) -- (4,0);
+
+\draw[step=1cm,color=black] (4,0) grid (7,2);
+\node at (4.5,+0.5) {16.1};
+\node at (5.5,+0.5) {16.6};
+\node at (6.5,+0.5) {17.1};
+\node at (4.5,+1.5) {15.6};
+\node at (5.5,+1.5) {15.9};
+\node at (6.5,+1.5) {16.7};
+
+
+\end{tikzpicture}
+
+
+\end{figure}
+
+
+TKCM initializes a set $T =\{\}$. The set is filled during execution with all time points \emph{t} for which pattern $P(t)$ has already been compared to the query pattern $P(\bar{t})$. 
+Using the sorted access mode, the algorithm loops through the cells $P_{ij}$, reading the next potential time point $t_s \notin T$. The time point $t_s \notin T$ is added to $T$. The time point $t_s$ has a corresponding pattern $P_{t_s}$ which is at least for one pattern cell similar to the query pattern $P_{\bar{t}}$.\\
+The random access mode is used to look up the values that pattern $P(t)$ is composed of. 
 
 \chapter{Problem Definition}
-The present thesis tries to introduce an efficient way to implement the $random$ and $sorted access$ methods described in Section \ref{AccessMethods} for a streaming time series $s$.\\
-Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the current time point for which the stream produced a new value. Besides, consider a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series $s \in S$ at time \emph{t} is denoted as $s(t)$. Only the values in the time window $W$ are kept in main memory. However, we assume that all the time points $t < \bar{t}$ have a time series \emph{s} that is complete. Hence, $\forall t < \bar{t} : s(t) \ne NIL$ since \emph{s} contains imputed values if the real ones were missing. 
+The present thesis tries to introduce an efficient way to implement the $random$ and $sorted access$ methods described in Section \ref{AccessMethods} for a streaming time series $s$.
+
+\section{Context}
+We make the following assumptions for our system: 
+\begin{itemize}  
+	\item The values arrive in a fix interval. E.g. every five minutes. 
+	\item There are no gaps between the arriving values. 
+	\item There are no values arriving out-of-order. 
+\end{itemize}
+
 
 \section{Operations}
 \label{sec:Op}
@@ -140,8 +193,9 @@ The system presented in the present thesis needs to efficiently perform on the s
 	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t \in T$ such that $|v-s(t)|$ is minimal.
 \end{itemize}
 The $lookup$ operation is a random access method, while the $neighbor$ operation is a sorted access method.\\
-Wellenzohn et al.\cite{BScT} suggests a combination of two data structures: a $B^+$tree and a circular array. The lookup operation can be performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$tree are sorted.\\
+Wellenzohn et al.\cite{BScT} suggest a combination of two data structures: a $B^+$tree and a circular array. The lookup operation can be performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$tree are sorted.\\
 The approach in Chapter \ref{sec:Approach} presents the implementation of the random and sorted access modes using the suggested data structures. Further, it proposes a solution to handle duplicate values. 
+
 
 
 \chapter{Approach}
@@ -152,7 +206,7 @@ Each time series $s \in S$ can be implemented as a circular array. The circular 
 
 \section{Circular Array}
 \label{sec:circularArray}
-A circular array is used to store the time series data. The data is assorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.\\
+A circular array is used to store the time series data, sorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.\\
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}[
@@ -265,13 +319,15 @@ A $B^+$tree is able to execute range queries very efficiently, since the leaves 
 
 \subsection{The Structure of the used $B^+$tree}
 \label{structureBtree}
-The used $B^+$tree and the implementation is based on the book of Silberschatz et al.\cite{DatabaseSystemC}. \\
-The difference between the traditional $B^+$tree and our $B^+$tree is on the one hand, that the leaves are linked to the succeeding as well as the preceding leaf to efficiently perform the \emph{neighbor}$(v,T)$ operation and on the other hand, that the $B^+$tree is constructed to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties the $B^+$tree are presented in the following.\\
-A $B^+$tree is organized in blocks. All paths from the root to a leaf have the same length. This significances that the tree is always \emph{balanced}. The balanced property ensures good performance for lookup, insertion and deletion. The $shift$ and the $neighbor$ operation are performed on the $B^+$tree.\\There are three types of nodes that may exist in a $B^+$tree: the root, interior nodes and leave nodes. The parameter \emph{n} determines the number of searchkeys and pointers in a node. The interior nodes can have maximum \emph{n-1} searchkeys and \emph{n} pointers, pointing to its child nodes. \\
-A leaf node must have at least $[(n-1)/2]$ keys and may hold up to $n-1$ keys.\\
-The structure of nonleaf nodes like interior nodes and the root, is the same as for leaf nodes. Except
-for the pointers which points to tree nodes. An interior node must have a minimum of $[n/2]$ pointers. Hence, it must have a minimum of $[n/2]-1$ keys and can hold up to $n$ pointers. \\
-The root node is the only node that can contain less than $[n/2]$ pointers. The root node must have minimum one searchkey and two pointers to child nodes, unless the root node has no children and therefore is a leaf node.
+The used $B^+$tree and the implementation is based on the book of Silberschatz et al.\cite{DatabaseSystemC}. We introduce the most important properties of a $B^+$tree, for further information please refer to the book.\\
+The difference between the traditional $B^+$tree and the $B^+$tree we use is on the one hand, that the leaves are linked to the succeeding as well as the preceding leaf to efficiently perform the \emph{neighbor}$(v,T)$ operation and on the other hand, that the $B^+$tree is constructed to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties the $B^+$tree are presented in the following.\\
+All paths from the root to a leaf have the same length. This significances that the tree is always \emph{balanced}. The balanced property ensures good performance for lookup, insertion and deletion. The $shift$ and the $neighbor$ operation are performed on the $B^+$tree.\\There are three types of nodes that may exist in a $B^+$tree: the root, interior nodes and leave nodes. The parameter \emph{n} determines the number of searchkeys and pointers in a node.
+
+\paragraph{Leaf}
+A leaf node must have at least $\ceil{(n-1)/2}$ keys and may hold up to $n-1$ keys.
+\paragraph{Interior Node}
+The interior nodes can have maximum \emph{n-1} searchkeys and \emph{n} pointers, pointing to its child nodes. The structure of nonleaf nodes like interior nodes and the root, is the same as for leaf nodes. Except for the pointers which points to tree nodes. An interior node must have a minimum of $\ceil{n/2}$ pointers. Hence, it must have a minimum of $\ceil{n/2}-1$ keys and can hold up to $n$ pointers.
+\paragraph{Root}The root node is the only node that can contain less than $\ceil{n/2}$ pointers. The root node must have minimum one searchkey and two pointers to child nodes, unless the root node has no children and therefore is a leaf node.
 \begin{example}
 	If $n$ is set to 7, an internal node may have between 4 and 7 children and therefore between 3 and 6 keys. The root may have between 2 and 7 children or if it is the only node in the tree it can have no children and just 1 key. A leaf node must have at least 3 keys and can have maximum 6 keys.
 \end{example}
@@ -1330,7 +1386,7 @@ We now consider the example from the beginning, where $41.5$ has been inserted t
 	%
 	
 	\foreach \x in
-	{n11-1,n11-2,n11-3,n12-1,n12-2,n21-1,n21-2,n22-1,n22-2, n23-1, n23-2, n23-3}
+	{n11-1,n11-2,n11-3,n12-1,n12-2,n21-1,n21-2,n22-1,n22-2, n23-1, n23-2, n24-1,n24-2}
 	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
 	%
 	
@@ -1404,7 +1460,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 		% circular array
 		\xyshift{-15mm}{-100mm}{
 			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-				\node[circularptr, fill=myorange] (c1)  {2.5}; \&
+				\node[circularptr, fill=myorange] (c1)  {37.6}; \&
 				\node[circularptr, fill=myblue] (c2)  {25.4}; \&
 				\node[circularptr, fill=myyellow] (c3)  {3.0}; \&
 				\node[circularptr] (c4)  {13.2}; \&
@@ -1417,7 +1473,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 				\node[circularptr] (c11) {38.9}; \&
 				\node[circularptr] (c12) {47.1}; \&
 				\node[circularptr] (c13) {43.1}; \&
-				\node[circularptr] (c14) {40.3};  \\
+				\node[circularptr] (c14) {2.5};  \\
 				%
 				\node[circularval, fill=myorange] (left) {14:10}; \&
 				\node[circularval, fill=myblue] {14:15}; \&
@@ -1456,7 +1512,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7.2}{13.2}{}}
 	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
 	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{40.3}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{}}
 	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43.1}{47.1}{}}
 	%
 	% connecting intermediate level to leaf nodes
@@ -1493,6 +1549,35 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 		};
 	}	
 	
+	
+		% circular array
+		\xyshift{20mm}{-60mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c5)  {}; \\	
+				%
+				\node[circularval] (left)(right) {13:30}; \\
+			};
+		}
+		% circular array
+		\xyshift{50mm}{-60mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr, fill=myorange] (c6)  {}; \\	
+				%
+				\node[circularval,fill=myorange] (left)(right) {14:10}; \\
+			};
+		}	
+		% draw pointers between circular array and B+ tree
+		\path[btlink2] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n23-1.center);
+		% draw pointers for linked list
+		\draw[btlink] ([yshift=-10pt] c5.east) -- ([yshift=-10pt] c6.west);
+		\draw[btlink] ([yshift=-20pt] c6.west) -- ([yshift=-20pt] c5.east);
+		
+		%circular links
+		\path[btlink] ([yshift=-10pt] c5.west)  edge[out=220,in=250] ([yshift=-10pt] c6.east);
+		\path[btlink2] ([yshift=-20pt] c5.west)  edge[out=220,in=250] ([yshift=-20pt] c6.east);	
+		
+		
+	
 	% draw pointers between circular array and B+ tree
 	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
 	% draw pointers for linked list
@@ -1510,7 +1595,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
 			\node[circularptr] (c3)  {}; \\	
 			%
-			\node[circularval] (left)(right) {14:10}; \\
+			\node[circularval] (left)(right) {14:05}; \\
 		};
 	}
 	
@@ -1525,7 +1610,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 	% list  value
 	\xyshift{-70mm}{-50mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c4)  {}; \\	
+			\node[circularptr,fill=myyellow] (c4)  {}; \\	
 			%
 			\node[circularval, fill=myyellow] (left)(right) {14:20}; \\
 		};
@@ -1539,7 +1624,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 	\path[btlink2] ([yshift=-24pt] c4.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c4.east);
 	
 	\foreach \x in
-	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-2, n23-3, n24-1,n24-2}
 	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
 	%
 	
@@ -1704,9 +1789,18 @@ But the pattern length gives an upper bound to the maximum required value lookup
 
 \chapter{Evaluation}
 \label{sec:Experimental}
-memory und runtime evaluation: 
-nodesize, verteilung der daten 
-Datenset erstellen 
+
+- runtime with different tree node sizes \\
+- runtime with no duplicates\\
+- runtime with duplicates\\
+- increase size W\\
+- 
+- runtime neighborhood initialization - pattern length\\
+- runtime neighborhood grow\\
+
+memory und runtime evaluation:\\ 
+nodesize, verteilung der daten \\
+Datenset erstellen \\
 
 
 \section{Experimental Setup}
