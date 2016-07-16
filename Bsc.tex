@@ -194,7 +194,7 @@ The system presented in the present thesis needs to efficiently perform on the s
 	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
 	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
 	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t \in T$ such that $|v-s(t)|$ is minimal.
-	\item new\_neighborhood$(t,v,j,l)$: given a value \emph{v} for the time point $t$, return the new neighborhood $N$ at $q_{ij}$.
+	\item new\_neighborhood$(t,v,j,l)$: given a value \emph{v} for the time point $t$, return the new neighborhood $N$ at $t$.
 \end{itemize}
 Wellenzohn et al.\cite{BScT} suggest a combination of two data structures: a $B^+$tree and a circular array. The lookup operation can be performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$tree are sorted.\\
 The approach in Chapter \ref{sec:Approach} presents the implementation of the random and sorted access modes using the suggested data structures. Further, it proposes a solution to handle duplicate values. 
@@ -938,18 +938,18 @@ As a result of deletion, a key value that is present in an interior node or in t
 	\KwData{Tree $tree$, measurement inforamtion: its time point $t$ and its key $k$}
 	\KwResult{Deletes measurement form $tree$}
 	\Begin{
-		//use the findLeaf Method to find right leaf\;
+
 		leaf $\leftarrow$ findLeaf($tree$, $k$)\; 
 		
 		keyPositionIndex $\leftarrow$ right position index in leaf\;
 					\BlankLine
-		\If{list on pointer at keyPositionIndex has multiple list values}{
+		\eIf{list on pointer at keyPositionIndex has multiple list values}{
 						\BlankLine
-			//delete the value from the list - deletion ends\;
+
 			deleteFirstListValue(leaf, keyPositionIndex)\;
 		}
-		\Else{
-			//delete the key from the tree\;
+		{
+
 			deleteEntry(tree,leaf, key on keyPostionIndex)\; 
 		}	
 	}
