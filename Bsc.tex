@@ -137,34 +137,34 @@ TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and
 	\end{align*}
 \end{defn}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}
 \definecolor{mycolor}{RGB}{224,224,224}
 \definecolor{mycolor2}{RGB}{192,192,192}
 
 \draw[step=1cm,color=black] (0,0) grid (3,2);
-\node at (0.5,+0.5) {x};
-\node at (1.5,+0.5) {x};
-\node at (2.5,+0.5) {x};
-\node at (0.5,+1.5) {x};
-\node at (1.5,+1.5) {x};
-\node at (2.5,+1.5) {16.7};
+\node at (0.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}]{x.xx};
+\node at (1.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:45}$}]{x.xx};
+\node at (2.5,+0.5) [label=right:$r_2$,label={[font=\tiny,label distance=0.3cm]below:$\text{13:50}$}]{x.xx};
+\node at (0.5,+1.5) {x.xx};
+\node at (1.5,+1.5) {x.xx};
+\node at (2.5,+1.5) [label=right:$r_1$]{16.7};
 
-\draw[->]  (3,0) -- (4,0);
+\draw[->]  (3.5,1) -- (4.5,1);
 
-\draw[step=1cm,color=black] (4,0) grid (7,2);
-\node at (4.5,+0.5) {16.1};
-\node at (5.5,+0.5) {16.6};
-\node at (6.5,+0.5) {17.1};
-\node at (4.5,+1.5) {15.6};
-\node at (5.5,+1.5) {15.9};
-\node at (6.5,+1.5) {16.7};
+\draw[step=1cm,color=black] (5,0) grid (8,2);
+\node at (5.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}]{16.1};
+\node at (6.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:45}$}]{16.6};
+\node at (7.5,+0.5) [label=right:$r_2$,label={[font=\tiny,label distance=0.3cm]below:$\text{13:50}$}]{17.1};
+\node at (5.5,+1.5) {15.6};
+\node at (6.5,+1.5) {15.9};
+\node at (7.5,+1.5) [label=right:$r_1$] {16.7} ;
 
 
 \end{tikzpicture}
 
-
+\caption{Pattern of length $l=3$ and $d=2$ reference time series.}
 \end{figure}
 
 
