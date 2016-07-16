@@ -109,19 +109,22 @@ A streaming time series $s$ is a unbounded sequence of data points that is conti
 
 \section{TKCM}
 A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. Wellenzohn et al.\cite{BScT} present an algorithm that defines a two-dimensional query pattern over the most recent values of a set of time series to efficiently impute missing values. The idea is to derive the missing value in a time series $s$ from the \emph{k} most similar past pattern. Therefore, it determines for each \emph{time series} $s$ a set of highly correlated \emph{reference time series} which exhibit similar behaviour to the base station e.g. similar weather situations. Hence, TKCM is able to calculate an estimation of a missing value in streaming time series data. 
+
+\begin{defn}
+	Streaming Time Series. Let $S$ be a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series $s \in S$ at time \emph{t} is denoted as $s(t)$. For base time series $s$, let $R_s = \langle r_1, r_2,...\rangle$ be an ordered sequence of the time series $r_i \in S \setminus \{s\}$. The set of $\text{reference time series}$ for $s$, $R_s^d$, at the current time $\bar{t}$ are the first $d$ time series in $R_s$ for which $r(\bar{t}) \neq \text{NIL}$.
+\end{defn}
 \begin{defn}
 	Pattern. Let $R_s^d=\{r_1,...,r_d\}$ be the ordered set of reference time series for a time series $s$. A $pattern$ $P(t)$ of length $l > 0$ over $R_s^d$ that is embedded at time $t$ is defined as a $d\times l$ matrix $P(t) = [p_{ij}]_{d\times l}$. 
 \end{defn}
-The two-dimensional query pattern $P(t)$ is anchored at a time point $t$ and consists of the subsequence of length $l$ spanning from $t-l+1$ to $t$ of each reference time series. Each row represents a subsequence of a reference time series and each column represents the values of the reference time series at a time point.\\Every reference time series has its own associated reference time series to keep the own data complete. \\ \\
+The two-dimensional query pattern $P(t)$ is anchored at a time point $t$ and consists of the subsequence of length $l$ spanning from $t-l+1$ to $t$ of each reference time series. Each row represents a subsequence of a reference time series and each column represents the values of the reference time series at a time point.\\Every reference time series has its own associated reference time series to keep the own data complete. 
+\begin{defn}
+	Time window $W$. Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the current time point for which the stream produced a new value. 
+\end{defn}
+
+Only the values in the time window $W$ are kept in main memory. However, we assume that all the time points $t < \bar{t}$ have a time series \emph{s} that is complete. Hence, $\forall t < \bar{t} : s(t) \ne \text{NIL}$ since \emph{s} contains imputed values if the real ones were missing. \\
 TKCM must not only recover and impute missing values, but also process the newest arriving values efficiently. In order to do that, TKCM must provide an insertion method for new arriving values to insert the new value into a streaming time series $s$. Since the time window has a limited, given size $|W|$, an old value has to be deleted for each new arriving value. Provided that, the time series data in window $W$ is already completely filled. \\       
 TKCM must be able to handle duplicate values. Assume the time window contains 100 temperature values from the same weather station and every 5 minutes a new value arrives. It is likely that the same temperature value arrives multiple times.
-\begin{defn}
-Time window $W$. Let $W=[ \underline{t}, \bar{t} ]$ be a sliding window of length $|W|$. Time $\underline{t}$ stands for the oldest time point that fits into the time window and $\bar{t}$ stands for the current time point for which the stream produced a new value. 
-\end{defn}
-\begin{defn}
-Streaming time series s. Let $S$ be a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series $s \in S$ at time \emph{t} is denoted as $s(t)$.
-\end{defn}
-Only the values in the time window $W$ are kept in main memory. However, we assume that all the time points $t < \bar{t}$ have a time series \emph{s} that is complete. Hence, $\forall t < \bar{t} : s(t) \ne \text{NIL}$ since \emph{s} contains imputed values if the real ones were missing. 
+
 
 
 \section{Access Methods}
@@ -191,8 +194,8 @@ The system presented in the present thesis needs to efficiently perform on the s
 	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
 	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
 	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t \in T$ such that $|v-s(t)|$ is minimal.
+	\item new\_neighborhood$(t,v,j,l)$: given a value \emph{v} for the time point $t$, return the new neighborhood $N$ at $q_{ij}$.
 \end{itemize}
-The $lookup$ operation is a random access method, while the $neighbor$ operation is a sorted access method.\\
 Wellenzohn et al.\cite{BScT} suggest a combination of two data structures: a $B^+$tree and a circular array. The lookup operation can be performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$tree are sorted.\\
 The approach in Chapter \ref{sec:Approach} presents the implementation of the random and sorted access modes using the suggested data structures. Further, it proposes a solution to handle duplicate values. 
 
@@ -1032,10 +1035,10 @@ As a result of deletion, a key value that is present in an interior node or in t
 			adjust the root\;
 			return\; 	
 		}
-		\If{node is leaf}{
+		\eIf{node is leaf}{
 			minNrOfKeys $\leftarrow$ $[(order-1)/2]$\;
 		}
-		\Else{
+		{
 			minNrOfKeys $\leftarrow$ $[order/2]-1$\;
 		}
 			
@@ -1047,11 +1050,11 @@ As a result of deletion, a key value that is present in an interior node or in t
 		//node has not enough keys - merge or rearranges necessary\; 
 		neighborIndex $\leftarrow$ get pointer position of left sibling in parent node\;
 		
-		\If{no left sibling}{
+		\eIf{no left sibling}{
 			kIndex $\leftarrow$ 0; \;
 			neighbor $\leftarrow$ node->parent->pointers[1]\;
 		}
-		\Else{
+		{
 			kIndex $\leftarrow$ neighborIndex; \;
 			neighbor $\leftarrow$ node->parent->pointers[neighborIndex]\;
 		}
@@ -1065,10 +1068,10 @@ As a result of deletion, a key value that is present in an interior node or in t
 		}
 
 		//Merge if both nodes together have enough space\;
-		\If{(neighbor->numOfKeys + node->numOfKeys ) < capacity}{
+		\eIf{(neighbor->numOfKeys + node->numOfKeys ) < capacity}{
 		  	mergeNodes(tree, node, neighbor, neighbourIndex, innerKeyPrime)\;
 		 }
-		 \Else{
+		 {
 		  	redestributeNodes(tree, node, neighbor, neighbourIndex, kIndex, innerKeyPrime)\;
 		}   
 	}
@@ -1094,7 +1097,7 @@ As a result of deletion, a key value that is present in an interior node or in t
 	neighborInsertionIndex $\leftarrow$ neighbor->numOfKeys\;
    
    //Append kPrime and the following pointers\;
-    \If{node is no leaf}{
+    \eIf{node is no leaf}{
     	neighbor->keys[neighborInsertionIndex] $\leftarrow$ kPrime\;
     	neighbor->numOfKeys++\;
     	decreasingIndex $\leftarrow$ 0\;
@@ -1117,9 +1120,10 @@ As a result of deletion, a key value that is present in an interior node or in t
     	}
     
     }
-     // a leaf, append the keys and pointers of the node to the neighbor\;
-     //Set the neighbor's last pointer to point to what had been the node's right neighbor\;
-    \Else{
+    {
+    	 // a leaf, append the keys and pointers of the node to the neighbor\;
+    	 //Set the neighbor's last pointer to point to what had been the node's right neighbor\;
+    	
     	   \For{i $\leftarrow$ neighborInsertionIndex, j $\leftarrow$ 0; j < node->numOfKeys}{
     	   	neighbor->keys[i] $\leftarrow$ node->keys[j]\;
     	   	neighbor->pointers[i] = node->pointers[j]\;
@@ -1146,14 +1150,14 @@ As a result of deletion, a key value that is present in an interior node or in t
 
 \Begin{
 	 
-	\If{node has neighbor to the left side}{
+	\eIf{node has neighbor to the left side}{
 		//Pull the neighbor's last key-pointer pair over from the neighbor's right end to n's 
-		\If{node is not a leaf}{
+		\eIf{node is not a leaf}{
 			m $\leftarrow$ neighbor->pointer[neighbor->numOfKeys]\;
 			insert neighbor->pointers[m] and $kPrime$ to first position in node and shift other pointers and values right
 			remove neighbor->key[m-1], neighbor->pointers[m] from neighbor\;
 			replace $kPrime$ in node->parent by neighbor->keys[m-1]\;}
-		\Else{
+		{
 		//last value pointer pair in the node\;
 		m $\leftarrow$ neighbor->pointer[neighbor->numOfKeys -1]\;
 		insert neighbor->pointers[m] and neighbor->keys[m] to first position in node and shift other pointers and values right
@@ -1162,15 +1166,15 @@ As a result of deletion, a key value that is present in an interior node or in t
 		}
 		
 	}	
-	\Else{
+	{
 		//node is leftmost child. Take a key-pointer pair from the neighbor to the right\;
 		//Move the neighbor's leftmost key-pointer pair to n's rightmost position\;
-		\If{node is not a leaf}{
+		\eIf{node is not a leaf}{
 			node->keys[node->numOfKeys] $\leftarrow$ $kPrime$\;
 			node->pointers[node->numOfKeys +1] $\leftarrow$ neighbor->pointers[0]\;
 			replace $kPrime$ in node->parent by neighbor->keys[0]\;
 			remove neighbor->keys[0], neighbor->pointers[0] from neighbor\;}
-			\Else{
+		{
 			node->keys[node->numOfKeys] $\leftarrow$ neighbor->keys[0]\;
 			node->pointers[node->numOfKeys +1] $\leftarrow$ neighbor->pointers[0]\;
 		    node->parent->keys[kIndex] = neighbor->keys[1]\;
@@ -1214,7 +1218,7 @@ The $splitAndInsertIntoInnerNode$ method works with the same principle as the $s
 		    
 		 leaf $\leftarrow$ findLeaf(tree, value)\;
 		//insert to leaf as doubly linked list value\;
-		    \If{isDuplicateKey(leaf, time, value)}{
+		    \uIf{isDuplicateKey(leaf, time, value)}{
 		    	addDuplicateToDoublyLinkedList(leaf, time, value)\;
 		    }
 		    \uElseIf{leaf->numOfKeys < tree->nodeSize}{

@@ -21,7 +21,7 @@
 \contentsline {subsubsection}{\nonumberline Add a Value to the Circular Array}{20}
 \contentsline {subsubsection}{\nonumberline Searching in the $B^+$tree}{21}
 \contentsline {subsubsection}{\nonumberline Delete a Value from the $B^+$tree}{21}
-\contentsline {subsubsection}{\nonumberline Insert a Value to the $B^+$tree}{27}
+\contentsline {subsubsection}{\nonumberline Insert a Value to the $B^+$tree}{26}
 \contentsline {subsection}{\numberline {4.4.2}Random Access: Lookup a Value}{30}
 \contentsline {subsection}{\numberline {4.4.3}Sorted Access: Neighbor}{31}
 \contentsline {subsubsection}{\nonumberline Initialize Neighborhood}{31}
