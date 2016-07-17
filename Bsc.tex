@@ -111,6 +111,9 @@ A streaming time series $s$ is a unbounded sequence of data points that is conti
 A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. Wellenzohn et al.\cite{BScT} present an algorithm that defines a two-dimensional query pattern over the most recent values of a set of time series to efficiently impute missing values. The idea is to derive the missing value in a time series $s$ from the \emph{k} most similar past pattern. Therefore, it determines for each \emph{time series} $s$ a set of highly correlated \emph{reference time series} which exhibit similar behaviour to the base station e.g. similar weather situations. Hence, TKCM is able to calculate an estimation of a missing value in streaming time series data. 
 
 \begin{defn}
+	Measurement. A measurement consists of a value $v$ at a time point $t$.
+\end{defn}
+\begin{defn}
 	Streaming Time Series. Let $S$ be a set $S = \{s_1,s_2,...\}$ of streaming time series. The value of time series $s \in S$ at time \emph{t} is denoted as $s(t)$. For base time series $s$, let $R_s = \langle r_1, r_2,...\rangle$ be an ordered sequence of the time series $r_i \in S \setminus \{s\}$. The set of $\text{reference time series}$ for $s$, $R_s^d$, at the current time $\bar{t}$ are the first $d$ time series in $R_s$ for which $r(\bar{t}) \neq \text{NIL}$.
 \end{defn}
 \begin{defn}
@@ -146,23 +149,25 @@ TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and
 \definecolor{mycolor}{RGB}{224,224,224}
 \definecolor{mycolor2}{RGB}{192,192,192}
 
+\draw[->]  (-3.2,1) -- (-1,1) node [pos=0.5,above,font=\footnotesize] {sorted access};
+
 \draw[step=1cm,color=black] (0,0) grid (3,2);
-\node at (0.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}]{x.xx};
+\node at (0.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}, label={[font=\tiny,label distance=0.1cm]left:$\text{i=2}$}]{x.xx};
 \node at (1.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:45}$}]{x.xx};
 \node at (2.5,+0.5) [label=right:$r_2$,label={[font=\tiny,label distance=0.3cm]below:$\text{13:50}$}]{x.xx};
-\node at (0.5,+1.5) {x.xx};
-\node at (1.5,+1.5) {x.xx};
-\node at (2.5,+1.5) [label=right:$r_1$]{16.7};
+\node at (0.5,+1.5) [label={[font=\tiny,label distance=0.3cm]above:$\text{j=1}$}, label={[font=\tiny,label distance=0.1cm]left:$\text{i=1}$}]{x.xx};
+\node at (1.5,+1.5) [label={[font=\tiny,label distance=0.3cm]above:$\text{j=2}$}]{x.xx};
+\node at (2.5,+1.5) [label=right:$r_1$,label={[font=\tiny,label distance=0.25cm]above:$\text{j=3}$}]{16.7};
 
-\draw[->]  (3.5,1) -- (4.5,1);
+\draw[->]  (3.8,1) -- (6.0,1) node [pos=0.5,above,font=\footnotesize] {random access};
 
-\draw[step=1cm,color=black] (5,0) grid (8,2);
-\node at (5.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}]{16.1};
-\node at (6.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:45}$}]{16.6};
-\node at (7.5,+0.5) [label=right:$r_2$,label={[font=\tiny,label distance=0.3cm]below:$\text{13:50}$}]{17.1};
-\node at (5.5,+1.5) {15.6};
-\node at (6.5,+1.5) {15.9};
-\node at (7.5,+1.5) [label=right:$r_1$] {16.7} ;
+\draw[step=1cm,color=black] (7,0) grid (10,2);
+\node at (7.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:40}$}, label={[font=\tiny,label distance=0.1cm]left:$\text{i=2}$}]{16.1};
+\node at (8.5,+0.5) [label={[font=\tiny,label distance=0.3cm]below:$\text{13:45}$}]{16.6};
+\node at (9.5,+0.5) [label=right:$r_2$,label={[font=\tiny,label distance=0.3cm]below:$\text{13:50}$}]{17.1};
+\node at (7.5,+1.5)[label={[font=\tiny,label distance=0.3cm]above:$\text{j=1}$}, label={[font=\tiny,label distance=0.1cm]left:$\text{i=1}$}]{15.6};
+\node at (8.5,+1.5) [label={[font=\tiny,label distance=0.25cm]above:$\text{j=2}$}]{15.9};
+\node at (9.5,+1.5) [label=right:$r_1$,label={[font=\tiny,label distance=0.25cm]above:$\text{j=3}$}] {16.7} ;
 
 
 \end{tikzpicture}
@@ -171,8 +176,8 @@ TKCM uses two methods for accessing any time series $r \in S$, \emph{random} and
 \end{figure}
 
 
-TKCM initializes a set $T =\{\}$. The set is filled during execution with all time points \emph{t} for which pattern $P(t)$ has already been compared to the query pattern $P(\bar{t})$. 
-Using the sorted access mode, the algorithm loops through the cells $P_{ij}$, reading the next potential time point $t_s \notin T$. The time point $t_s \notin T$ is added to $T$. The time point $t_s$ has a corresponding pattern $P_{t_s}$ which is at least for one pattern cell similar to the query pattern $P_{\bar{t}}$.\\
+TKCM initializes a set $T =\{\}$. The set is filled during execution with all time points \emph{t} for which a pattern P(t) has been found. 
+Using the sorted access mode, the algorithm finds the next yet unseen time point $t_s \notin T$ for which the value is most similar to a given measurement in a pattern cell $P_{ij}$. The time point $t_s \notin T$ is added to $T$. The time point $t_s$ has a corresponding pattern $P_{t_s}$ which is at least for one pattern cell similar to the query pattern cell $P_{ij}$.\\
 The random access mode is used to look up the values that pattern $P(t)$ is composed of. 
 
 \chapter{Problem Definition}
@@ -194,7 +199,7 @@ The system presented in the present thesis needs to efficiently perform on the s
 	\item shift$(\bar{t}, v)$: add value \emph{v} for the new current time point $\bar{t}$ and remove value \emph{v'} for the time point $\underline{t} - 1$ that just dropped out of time window $W$.
 	\item lookup$(t)$: return the value of time series \emph{s} at time \emph{t}, denoted by $s(t)$.
 	\item neighbor$(v, T)$: given a value \emph{v} and a set of time points $T$, return the time point $t \in T$ such that $|v-s(t)|$ is minimal.
-	\item new\_neighborhood$(t,v,j,l)$: given a value \emph{v} for the time point $t$, return the new neighborhood $N$ at $t$.
+	\item new\_neighborhood$(t,v,j,l)$: given a value \emph{v} for the time point $t$, the pattern length $l$ and the index $j$, return the new neighborhood $N$ at $t$.
 \end{itemize}
 Wellenzohn et al.\cite{BScT} suggest a combination of two data structures: a $B^+$tree and a circular array. The lookup operation can be performed by the circular array, while the neighbor operation takes advantage of the fact that the leaves of a $B^+$tree are sorted.\\
 The approach in Chapter \ref{sec:Approach} presents the implementation of the random and sorted access modes using the suggested data structures. Further, it proposes a solution to handle duplicate values. 
@@ -210,55 +215,133 @@ Each time series $s \in S$ can be implemented as a circular array. The circular 
 \section{Circular Array}
 \label{sec:circularArray}
 A circular array is used to store the time series data, sorted by time. Further, the time interval is predefined e.g. every 5 minutes a new value arrives.\\ The value and time are directly stored in the circular array. The last update position is stored in a variable and updated with every insertion. The circular array is shown in Figure \ref{fig:cat}.\\
-\begin{figure}[htbp]
-	\centering
-	\begin{tikzpicture}[
-	scale=0.7,
-	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-	every matrix/.style={cells={scale=0.7}},
-	]
-	
-	% circular array
-	\xyshift{-15mm}{-70mm}{
-		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
-			\node[circularptr] (c1)  {3.2}; \&
-			\node[circularptr] (c2)  {1.3}; \&
-			\node[circularptr] (c3)  {4.5}; \&
-			\node[circularptr] (c4)  {4.6}; \&
-			\node[circularptr] (c5)  {6.2}; \&
-			\node[circularptr] (c6)  {3.2}; \&
-			\node[circularptr] (c7)  {11.2}; \&
-			\node[circularptr] (c8)  {55.3}; \&
-			\node[circularptr] (c9)  {9.1}; \&
-			\node[circularptr] (c10) {3.9}; \&
-			\node[circularptr] (c11) {5.0}; \&
-			\node[circularptr] (c12) {1.4};  \\
-			%
-			\node[circularval] (left) {14:10}; \&
-			\node[circularval] {14:15}; \&
-			\node[circularval] {14:20}; \&
-			\node[circularval] {14:25}; \&
-			\node[circularval] {13:30}; \&
-			\node[circularval] {13:35}; \&
-			\node[circularval] {13:40}; \&
-			\node[circularval] {13:45}; \&
-			\node[circularval] {13:50}; \&
-			\node[circularval] {13:55}; \&
-			\node[circularval] {14:00}; \&
-			\node[circularval] (right){14:05};\\
-		};
-	}
-	% curly brace
-	\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
-	([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
-	node [black,midway,yshift=-0.9cm] {\large size $|W|$};
-	\end{tikzpicture}
-	\vspace{2mm}
-	\caption{Circular array of size $|W|$.}
-	\label{fig:cat}
-\end{figure}\\
-The circular array stores the data, containing all measurement time stamps and values, the size, the last update position and a counter, which counts the total number of measurements added to the array. The addition of a new measurement to the array is presented in Algorithm \ref{alg:UpdateCA}.
+\lstset{language=C}
+\begin{lstlisting}
+struct {
+  timeStamp time;
+  double value;
+} Serie;
 
+struct {
+  Serie * data;
+  int size;
+  int lastUpdatePosition;
+  int count;
+} Circular Array;
+\end{lstlisting}
+\BlankLine
+\BlankLine
+
+The circular array has two phases:
+\begin{itemize}  
+	\item First, the array is not full and is filled with every new arriving measurement until every position in the circular array is filled.  
+
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}[
+				scale=0.7,
+				every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+				every matrix/.style={cells={scale=0.7}},
+				]
+				
+				\definecolor{mycolor}{RGB}{224,224,224}
+				
+				% circular array
+				\xyshift{-15mm}{-70mm}{
+					\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+						\node[circularptr] (c1)  {2.2}; \&
+						\node[circularptr] (c2)  {1.9}; \&
+						\node[circularptr] (c3)  {1.5}; \&
+						\node[circularptr] (c4)  {3.6}; \&
+						\node[circularptr] (c5)  {6.2}; \&
+						\node[circularptr, fill=mycolor] (c6)  {3.2}; \&
+						\node[circularptr] (c7)  {}; \&
+						\node[circularptr] (c8)  {}; \&
+						\node[circularptr] (c9)  {}; \&
+						\node[circularptr] (c10) {}; \&
+						\node[circularptr] (c11) {}; \&
+						\node[circularptr] (c12) {};  \\
+						%
+						\node[circularval] (left) {13:10}; \&
+						\node[circularval] {13:15}; \&
+						\node[circularval] {13:20}; \&
+						\node[circularval] {13:25}; \&
+						\node[circularval] {13:30}; \&
+						\node[circularval, fill=mycolor] {13:35}; \&
+						\node[circularval] {}; \&
+						\node[circularval] {}; \&
+						\node[circularval] {}; \&
+						\node[circularval] {}; \&
+						\node[circularval] {}; \&
+						\node[circularval] (right){};\\
+					};
+				}
+				% curly brace
+				\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+				([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+				node [black,midway,yshift=-0.9cm] {\large size $|W|$};
+				\end{tikzpicture}
+				\vspace{2mm}
+				\caption{Unfilled circular array of size $|W|$.}
+				\label{fig:cat}
+			\end{figure}
+		
+	\item After the circular array is full the number of measurements stays constant
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[
+		scale=0.7,
+		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+		every matrix/.style={cells={scale=0.7}},
+		]
+		
+		\definecolor{mycolor}{RGB}{224,224,224}
+		
+		% circular array
+		\xyshift{-15mm}{-70mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (c1)  {3.2}; \&
+				\node[circularptr] (c2)  {1.3}; \&
+				\node[circularptr] (c3)  {4.5}; \&
+				\node[circularptr, fill=mycolor] (c4)  {4.6}; \&
+				\node[circularptr] (c5)  {6.2}; \&
+				\node[circularptr] (c6)  {3.2}; \&
+				\node[circularptr] (c7)  {11.2}; \&
+				\node[circularptr] (c8)  {55.3}; \&
+				\node[circularptr] (c9)  {9.1}; \&
+				\node[circularptr] (c10) {3.9}; \&
+				\node[circularptr] (c11) {5.0}; \&
+				\node[circularptr] (c12) {1.4};  \\
+				%
+				\node[circularval] (left) {14:10}; \&
+				\node[circularval] {14:15}; \&
+				\node[circularval] {14:20}; \&
+				\node[circularval, fill=mycolor] {14:25}; \&
+				\node[circularval] {13:30}; \&
+				\node[circularval] {13:35}; \&
+				\node[circularval] {13:40}; \&
+				\node[circularval] {13:45}; \&
+				\node[circularval] {13:50}; \&
+				\node[circularval] {13:55}; \&
+				\node[circularval] {14:00}; \&
+				\node[circularval] (right){14:05};\\
+			};
+		}
+		% curly brace
+		\draw [decorate,decoration={brace,mirror,amplitude=10pt}]
+		([yshift=-5pt] left.south west) -- ([yshift=-5pt] right.south east)
+		node [black,midway,yshift=-0.9cm] {\large size $|W|$};
+		\end{tikzpicture}
+		\vspace{2mm}
+		\caption{Filled circular array of size $|W|$.}
+		\label{fig:cat}
+	\end{figure}
+\end{itemize}
+
+
+The circular array stores the data, containing all measurement time stamps and values, the size, the last update position and a counter, which counts the total number of measurements in the  array. 
+
+\subsection{Observation}
 
 \newpage
 \section{$B^+$ Tree}
@@ -323,7 +406,7 @@ A $B^+$tree is able to execute range queries very efficiently, since the leaves 
 \subsection{The Structure of the used $B^+$tree}
 \label{structureBtree}
 The used $B^+$tree and the implementation is based on the book of Silberschatz et al.\cite{DatabaseSystemC}. We introduce the most important properties of a $B^+$tree, for further information please refer to the book.\\
-The difference between the traditional $B^+$tree and the $B^+$tree we use is on the one hand, that the leaves are linked to the succeeding as well as the preceding leaf to efficiently perform the \emph{neighbor}$(v,T)$ operation and on the other hand, that the $B^+$tree is constructed to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties the $B^+$tree are presented in the following.\\
+The difference between the traditional $B^+$tree and the $B^+$tree we use is on the one hand, that the leaves are linked to the succeeding as well as the preceding leaf to efficiently perform the \emph{neighbor}$(v,T)$ operation and on the other hand, that the $B^+$tree is constructed to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties of our $B^+$tree are presented in the following.\\
 All paths from the root to a leaf have the same length. This significances that the tree is always \emph{balanced}. The balanced property ensures good performance for lookup, insertion and deletion. The $shift$ and the $neighbor$ operation are performed on the $B^+$tree.\\There are three types of nodes that may exist in a $B^+$tree: the root, interior nodes and leave nodes. The parameter \emph{n} determines the number of searchkeys and pointers in a node.
 
 \paragraph{Leaf}
@@ -334,7 +417,7 @@ The interior nodes can have maximum \emph{n-1} searchkeys and \emph{n} pointers,
 \begin{example}
 	If $n$ is set to 7, an internal node may have between 4 and 7 children and therefore between 3 and 6 keys. The root may have between 2 and 7 children or if it is the only node in the tree it can have no children and just 1 key. A leaf node must have at least 3 keys and can have maximum 6 keys.
 \end{example}
-A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 1, 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. The searchkeys in the leaves are sorted from left to right. 
+A node contains $m$ non-null pointers $\left(m \leq n\right)$. For $i = 1, 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. The searchkeys in the leaves are sorted from left to right. 
 \begin{figure}[ht!]
 	\centering
 	\begin{tikzpicture}[
@@ -362,7 +445,25 @@ A node containing $m$ pointers $\left(m \leq n\right)$. For $i = 1, 2, 3, . . . 
 	\caption{Left children keys < 17.2 and right children keys $\geq$ 17.2}
 	\label{fig:BTreeBook}
 \end{figure} 
-\\A value in the time window $W$ can occur multiple times. Hence, the values are not unique. Since the values are used as searchkeys, the $B^+$tree must be able to handle duplicate values. Section \ref{sec:allowDV} proposes our approach that allow to use duplicate values in a $B^+$tree. 
+
+\lstset{language=C}
+\begin{lstlisting}
+struct {
+  struct Node *parent;
+  void ** pointers;
+  int numOfKeys;
+  double * keys;
+  bool isLeaf;
+  struct Node *prev, *next;
+} Node;
+\end{lstlisting}
+\BlankLine
+\BlankLine
+
+A value in the time window $W$ can occur multiple times, hence, the values are not unique. Since the values are used as searchkeys, the $B^+$tree must be able to handle duplicate values. Section \ref{sec:allowDV} proposes our approach that allow to use duplicate values in a $B^+$tree. 
+
+\subsection{Observation}
+The $B^+$tree has properties that allow an efficient implementation of the $neighbor(v,t)$ and the 
 
 \section{Handling Duplicate Values}
 \label{sec:allowDV}
@@ -371,7 +472,7 @@ This Section presents a solution to allow duplicate values in a $B^+$tree. Furth
 \subsection{Associated doubly, circular Linked List}
 \label{doublyLinked}
 The idea of this method is to associate a doubly, circular linked list to the each key in a leaf node. Every key has an associated linked list, where the time points are stored. If a key occurs multiple times, the time points are simply added to the linked list. So instead of inserting the key again and using another block in the leaf, the new time point is inserted as a linked list value.\\ 
-Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $first list value$. Since a shift operation on the circular array leads to a deletion of the oldest measurement in the array, it is always the $first list value$ in the linked list. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. We call the list value at this position the $last list value$. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $14:15$, is connected to the tree and the newest time point $14:50$ is at the previous position. The addition and the deletion of a list value form a linked list containing multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}.\\
+Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in the list, so the lowest time point, always is the one connected to the leaf key. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $first list value$. Since a shift operation on the circular array leads to a deletion of the oldest measurement in the array, it is always the $first list value$ in the linked list. Also, a new measurement can be inserted without looping through the list. It is always added to the position before the oldest time point. We call the list value at this position the $last list value$. The Figure \ref{fig:DoublyLinked} illustrates that the oldest time point, here $\text{14:15}$, is connected to the tree and the newest time point $\text{14:50}$ is at the previous position. Just the leaf level is illustrated for clarity. The addition and the deletion of a list value form a linked list containing multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}.\\
 The leaf nodes in our $B^+$tree also have pointers, the pointers to the associated linked list. But the number of pointers in leaf nodes is always equal to the number of searchkeys in the leaf. A pointer at position $i$ points to the doubly, linked list associated with the key at position $i$.\\
 
 \begin{figure}[H]
@@ -448,7 +549,7 @@ The leaf nodes in our $B^+$tree also have pointers, the pointers to the associat
 	\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=220,in=250] ([yshift=-20pt] c3.east);
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Doubly, circular linked list}
+	\caption{Doubly, circular linked list associated to a leaf node}
 	\label{fig:DoublyLinked}
 \end{figure}
 
@@ -459,15 +560,9 @@ The \emph{neighborhood grow} operation searches a specific time point in the dou
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{Insertion node $node$, the time point to delete $t$ and the key associated to the Linked List $L$}
+	\KwData{Insertion node $node$ and pointer to the linke list $L$, the time point to delete $t$}
 	\KwResult{Linked List $L$  such that $t$ $\in$ $L$}
 	\Begin{
-		\For{$i\leftarrow 0$ \KwTo numOfKeys in node}{
-			currentKey $\leftarrow$ node->keys[i]\;
-			\If{$k$ == currentKey}{
-				break\;
-			}
-		}
 		firstLV $\leftarrow$ node->pointers[i]\;
 		lastLV $\leftarrow$ firstLV->prev\; 
 		insert $t$ between firstLV and lastLV and link them\;	
@@ -487,7 +582,7 @@ The \emph{neighborhood grow} operation searches a specific time point in the dou
 	\KwResult{Linked List $L$  such that $t$ $\not\in$ $L$}
 	
 	\Begin{	
-	//the list value linked to the node is always the oldest in the list\;	
+
 	timePointToDelete $\leftarrow$ node->pointers[index]\;
 	
 	next $\leftarrow$ timePointToDelete->next\; 
@@ -504,9 +599,12 @@ The \emph{neighborhood grow} operation searches a specific time point in the dou
 \end{algorithm}
 %DeleteValueFromList
 
+\subsubsection{Observation}
+
+
 \subsection{Alternative Approaches}
 
-A similar idea as in our approach is to add a associate list to the each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new time point is just inserted to its associated list. A new time stamp can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well as with a doubly, circular linked list. But here the array cannot dynamically be extended since the array size must be reallocated with every additional time stamp. \\
+A similar idea as in our approach is to add a associated array to each key that occurs multiple times. So instead of inserting the key again and using another block in the leaf, the new time point is just inserted to its associated list. A new time point can be inserted to the end of the list in $O(1)$ and since the time window $W$ slides forward, the value that should be deleted first from the tree, normally, is at the first position in the list. Therefore, a value can be deleted in $O(1)$ from the list as well as with a doubly, circular linked list. But here the array cannot dynamically be extended since the array size must be reallocated with every additional time stamp. \\
 A singly linked list uses less pointer than a doubly, circular list but since a insertion would cost $O(n)$ because a new value is always inserted to the end of the singly linked list and hence all older time points in the list need to be checked. Therefore, a circular, linked list is more suitable for our requirements than a singly, linked list. \\
 Another idea to handle duplicate values is to add additional leaves to the tree that do not have a parent node. As shown in Figure \ref{fig:noparents}, the node containing the temperature value \emph{18.3} had been split, since the values did no longer fit into one leaf. The value \emph{18.4} would belong into the same leaf as \emph{18.3} but there is no more space. Instead of splitting the leaf, the additional leaf without a parent is filled up. If e.g. a value \emph{18.5} must be inserted the leaf without a parent must be split. The new leaf would again receive a parent and the old leaf including the duplicate values would stay parent-less. But unlike the doubly, circluar linked list approach searching a specific record may take long, depending on the number of duplicate temperature values to the left side of the record.
 \begin{figure}[htbp]
@@ -730,15 +828,16 @@ We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 
 	\foreach \x in
 	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
 	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
-	%
 	
+	
+	\definecolor{mycolor}{RGB}{224,224,224}
 	
 	% circular array
 	\xyshift{-15mm}{-100mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
 			\node[circularptr] (c1)  {2.5}; \&
 			\node[circularptr] (c2)  {25.4}; \&
-			\node[circularptr] (c3)  {3.0}; \&
+			\node[circularptr, fill=mycolor] (c3)  {3.0}; \&
 			\node[circularptr] (c4)  {13.2}; \&
 			\node[circularptr] (c5)  {23.0}; \&
 			\node[circularptr] (c6)  {17.1}; \&
@@ -753,7 +852,7 @@ We assume we have the situation illustrated in Figure \ref{fig:startSituation}. 
 			%
 			\node[circularval] (left) {14:10}; \&
 			\node[circularval] {14:15}; \&
-			\node[circularval] {14:20}; \&
+			\node[circularval, fill=mycolor] {14:20}; \&
 			\node[circularval] {13:15}; \&
 			\node[circularval] {13:20}; \&
 			\node[circularval] {13:25}; \&
@@ -788,7 +887,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{Tree $tree$, the circular array $array$, the new timestamp $t$ and the new value $v$}
+	\KwData{Tree $tree$, the circular array $array$, the new time point $t$ and the new value $v$}
 	\KwResult{The updated array}
 	\Begin{
 
@@ -823,9 +922,60 @@ If the counter of the array is equal or bigger than the size of the array, there
 
 
 \begin{exmp}
-	We assume that a new measurement arrives with time point $14:25$ and key $41.5$. 
-	The value $13.2$ at time point $13:15$ is overwritten by the new measurement. The new circular array looks as follows: 
+	We assume that a new measurement arrives with time point $\text{14:25}$ and key $41.5$. 
+	The value $13.2$ at time point $\text{13:15}$ is overwritten by the new measurement. The new circular array looks as follows: 
 \end{exmp}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	
+	\definecolor{mycolor}{RGB}{224,224,224}
+	
+	% circular array
+	\xyshift{-15mm}{-100mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {2.5}; \&
+			\node[circularptr] (c2)  {25.4}; \&
+			\node[circularptr,fill=mycolor] (c3)  {3.0}; \&
+			\node[circularptr](c4) {41.5}; \&
+			\node[circularptr] (c5)  {23.0}; \&
+			\node[circularptr] (c6)  {17.1}; \&
+			\node[circularptr] (c7)  {37.6}; \&
+			\node[circularptr] (c8)  {18.1}; \&
+			\node[circularptr] (c9)  {7.2}; \&
+			\node[circularptr] (c10) {25.4}; \&
+			\node[circularptr] (c11) {38.9}; \&
+			\node[circularptr] (c12) {47.1}; \&
+			\node[circularptr] (c13) {43.1}; \&
+			\node[circularptr] (c14) {40.3};  \\
+			%
+			\node[circularval] (left) {14:10}; \&
+			\node[circularval] {14:15}; \&
+			\node[circularval,fill=mycolor] {14:20}; \&
+			\node[circularval]{13:15}; \&
+			\node[circularval] {13:20}; \&
+			\node[circularval] {13:25}; \&
+			\node[circularval] {13:30}; \&
+			\node[circularval] {13:35}; \&
+			\node[circularval] {13:40}; \&
+			\node[circularval] {13:45}; \&
+			\node[circularval] {13:50}; \&
+			\node[circularval] {13:55}; \&
+			\node[circularval] {14:00}; \&
+			\node[circularval] (right){14:05};\\
+		};
+	}
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Circular Array before}
+	\label{fig:circAfter}
+\end{figure}
+
 
 \begin{figure}[htbp]
 	\centering
@@ -843,7 +993,7 @@ If the counter of the array is equal or bigger than the size of the array, there
 				\node[circularptr] (c1)  {2.5}; \&
 				\node[circularptr] (c2)  {25.4}; \&
 				\node[circularptr] (c3)  {3.0}; \&
-				\node[circularptr,fill=mycolor](c4) {41.5}; \&
+				\node[circularptr,fill=mycolor](c4) {13.2}; \&
 				\node[circularptr] (c5)  {23.0}; \&
 				\node[circularptr] (c6)  {17.1}; \&
 				\node[circularptr] (c7)  {37.6}; \&
@@ -1204,7 +1354,7 @@ The $splitAndInsertIntoInnerNode$ method works with the same principle as the $s
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{Tree $tree$, the new timestamp $time$ and the new value $value$}
+	\KwData{Tree $tree$, the new time point $time$ and the new value $value$}
 	\KwResult{The tree includes the new value $value$}
 	
 	\Begin{
@@ -1413,7 +1563,7 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{The circular array $array$ and the timestamp $t$}
+	\KwData{The circular array $array$ and the time point $t$}
 	\KwResult{Returns true if $t\in array$ }
 	
 	\Begin{
@@ -1447,6 +1597,26 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 \subsection{Sorted Access: Neighbor}
 
 \subsubsection{Initialize Neighborhood}
+
+\lstset{language=C}
+\begin{lstlisting}
+struct {
+  ListValue * timeStampPosition;
+  Node * LeafPosition;
+  int indexPosition;
+} NeighborhoodPosition;
+
+struct {
+  int l;
+  int j;
+  double key;
+  NeighborhoodPosition leftPosition;
+  NeighborhoodPosition rightPosition;
+} Neighborhood;
+\end{lstlisting}
+\BlankLine
+\BlankLine
+
 
 
 \begin{figure}[htbp]
@@ -1694,13 +1864,13 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 
 \subsubsection{Grow Neighborhood}
 /*
-* Grows the neighborhood by one new value and returns its time point via the timestamp
+* Grows the neighborhood by one new value and returns its time point via the time point
 * parameter. The function returns true if there was a new unseen value and false otherwise
 *
 * Parameters
 *   self: the neighborhood
 *   timeset: a set of seen time points
-*   timestamp: used as a return value, contains the time point of the
+*   time point: used as a return value, contains the time point of the
 *              new still unseen value discovered by this function
 */
 %neighborhod grow
