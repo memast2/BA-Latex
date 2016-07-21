@@ -1500,7 +1500,7 @@ As a result of deletion, a key value that is present in an interior node or in t
 
 \newpage
 \subsubsection{Insert a Value to the $B^+$tree}
-With every circular array update a new measurement is added to the $B^+$tree as shown in Algorithm \ref{alg:UpdateCA} line 12.\\
+With every circular array update a new measurement is added to the $B^+$tree.\\
 We first find the leaf node where the key would
 appear by using $findLeaf()$. We then insert an entry, positioning it such that the search keys are still in order. Besides, a new doubly, circular linked list is allocated where the time point is inserted. If the searchkey already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the searchkeys in the leaf remain unchanged. If the searchkey is new, it is inserted to the leaf. \\
 The measurement is directly inserted to the leaf if there is still space left. The measurement is inserted, such that the leaf keys are still ordered from left to right. \\
@@ -1818,27 +1818,45 @@ Due to the properties of a circular array the lookup of a value at time $t$ is v
 \subsection{Sorted Access: Neighbor}
 
 \subsubsection{Initialize Neighborhood}
-
+The Algorithm \ref{initializeNeighborhood} initializes a new neighborhood. A neighborhood consists of the following attributes: 
 \lstset{language=C}
 \begin{lstlisting}
 struct {
-  ListValue * timeStampPosition;
-  Node * LeafPosition;
-  int indexPosition;
-} NeighborhoodPosition;
+  ListValue * timeStampPos;
+  Node * LeafPos;
+  int indexPos;
+} NeighborhoodPos;
 
 struct {
   int l;
   int j;
   double key;
-  NeighborhoodPosition leftPosition;
-  NeighborhoodPosition rightPosition;
+  NeighborhoodPos leftPosition;
+  NeighborhoodPos rightPos;
 } Neighborhood;
 \end{lstlisting}
 \BlankLine
-\BlankLine
+A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query pattern $Q(t)$, where $leftPos^-$ and $rightPos^+$ are positions in the leaves of the $B^+$tree. They represent the left and right border of the neighborhood. Initially the neighborhood positions are set to the position of $q_{ij}$ in the $B^+$tree. In total $d \times l$ neighborhoods are initialized. Every time series in the query pattern initializes $l$ patterns. The index $j$ represents the position of the measurement within the query pattern. If $j=1$ the oldest time point in the query pattern is meant and if $j=l$, thus $j$ is equal to the pattern length, the latest time point in the query pattern is meant. 
 
 
+
+\begin{example}
+	If $d=1$ just one time series is used in the query pattern $Q(t)$. Figure \ref{Qpatt} illustrates an example of a query pattern with $d=1$. In total $l$ neighborhoods are initialized in time series $r_1$. The Figure \ref{fig:initialize} shows the circular array and the $B^+$tree for the time series $r_1$ after the initialization.
+\end{example}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\definecolor{mycolor}{RGB}{224,224,224}
+	\definecolor{mycolor2}{RGB}{192,192,192}
+	\draw[step=1cm,color=black] (0,0) grid (3,1);
+	\node at (0.5,+0.5) [label={[font=\tiny,label distance=0.3cm]above:$\text{j=1}$}, label={[font=\tiny,label distance=0.1cm]left:$\text{i=1}$}, label={[font=\tiny,label distance=0.3cm]below:$\text{14:10}$}]{37.6};
+	\node at (1.5,+0.5) [label={[font=\tiny,label distance=0.3cm]above:$\text{j=2}$},label={[font=\tiny,label distance=0.3cm]below:$\text{14:15}$}]{25.4};
+	\node at (2.5,+0.5) [label=right:$r_1$,label={[font=\tiny,label distance=0.3cm]above:$\text{j=3}$},label={[font=\tiny,label distance=0.3cm]below:$\text{14:20}$}]{3.0};	
+	\end{tikzpicture}
+	\caption{Query Pattern Q(t) of length $l=3$ and $d=1$ reference time series}
+	\label{Qpatt}
+\end{figure}
 
 \begin{figure}[htbp]
 	\centering
@@ -2026,25 +2044,12 @@ struct {
 
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Start situation}
-	\label{fig:startSituation}
+	\caption{The circular array and the $B^+$tree for time series $r_1$ after initialization.}
+	\label{fig:initialize}
 \end{figure}
 
 
 
-/*
-* Initializes a new neighborhood in the B+ tree.
-*
-* Parameters:
-*   tree: The  SBTree for this neighborhood
-*   Serie: Serie that constitutes this pattern cell
-*   patternlength: length of the query pattern
-*   offset: position of the Serie within the query pattern
-*           cell. offset=1 means the oldest time point in the
-*           query pattern, offset=patternlength means the latest
-*           time point in the query pattern.
-*/
-%initialize Neighborhood
 
 
 \begin{algorithm}[H]
@@ -2056,8 +2061,8 @@ struct {
 	
 	\Begin{
 		    neighboorhood.key $\leftarrow$ measurement.value\;
-		    neighboorhood.offset $\leftarrow$ offset\;
-		    neighboorhood.patternLength $\leftarrow$ patternLength\;
+		    neighboorhood.j $\leftarrow$ j\;
+		    neighboorhood.patternLength $\leftarrow$ l\;
 		    
 		    \BlankLine
 		    leafNode $\leftarrow$ findLeaf(tree, measurement.value)\;
@@ -2080,23 +2085,123 @@ struct {
 	
 	
 
-	\caption{initializeNeighborhood}	\label{initializeNeighborhood}
+	\caption{new\_neighborhood$(t,v,j,l)$}	\label{initializeNeighborhood}
 \end{algorithm}
 
-\subsubsection{Grow Neighborhood}
-The \emph{neighborhood grow} is then executed $k$ times.
 
-/*
-* Grows the neighborhood by one new value and returns its time point via the time point
-* parameter. The function returns true if there was a new unseen value and false otherwise
-*
-* Parameters
-*   self: the neighborhood
-*   timeset: a set of seen time points
-*   time point: used as a return value, contains the time point of the
-*              new still unseen value discovered by this function
-*/
-%neighborhod grow
+
+\subsubsection{Grow Neighborhood}
+After the initialization of the $l \times d$ neighborhoods the $k$ non-overlapping patterns are calculated. Thus, the neighbor$(v, T)$ operation is executed until the $k$ patterns that contain the most similar values to $q_{ij}$ are retrieved.
+The neighbor$(v, T)$ operation searches the time point for the next most similar value to a query pattern cell $q_{ij}$ of the query pattern $Q(t)$, that starts a new pattern $P(t)$ by filling the missing pattern values by random access. The neighborhood $N(q_{ij})$ is expanded until such a value is retrieved. Some time points may have to be skipped because the time point anchored a pattern previously or the pattern would be out of the window or overlapping with the query pattern $Q(t)$. The next unseen most similar value to $q_{ij}$ is either at position $t^-$ or $t^+$, which represent the time points to the direct left or right of $leftPos^-$ and $rightPos^+$. If the $t^-$ is more or equally similar to $q_{ij}$ than $t^+$ is to $q_{ij}$, the $leftPos^-$ is decremented and $t=t^-$. If $t^+$ is more similar $t=t^+$.
+
+\begin{example}
+Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded. 
+\end{example}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	
+	\definecolor{myorange}{RGB}{255,178,102}
+	\definecolor{myblue}{RGB}{51,153,255}
+	\definecolor{myyellow}{RGB}{255,255,102}
+
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7.2}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37.6}{38.9}{}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43.1}{47.1}{}}
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	
+	% circular array
+	\xyshift{-40mm}{-60mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c1)  {}; \\	
+			%
+			\node[circularval] (left)(right) {13:45}; \\
+		};
+	}
+	% circular array
+	\xyshift{-10mm}{-60mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr, fill=myblue] (c2)  {}; \\	
+			%
+			\node[circularval,fill=myblue] (left)(right) {14:15}; \\
+		};
+	}	
+	
+	
+	% circular array
+	\xyshift{20mm}{-60mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c5)  {}; \\	
+			%
+			\node[circularval] (left)(right) {13:30}; \\
+		};
+	}
+	% circular array
+	\xyshift{50mm}{-60mm}{
+		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\node[circularptr] (c6)  {}; \\	
+			%
+			\node[circularval] (left)(right) {14:10}; \\
+		};
+	}	
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c5.center)  edge[out=90,in=270] ([yshift=2pt] n23-1.center);
+	% draw pointers for linked list
+	\draw[btlink] ([yshift=-10pt] c5.east) -- ([yshift=-10pt] c6.west);
+	\draw[btlink] ([yshift=-20pt] c6.west) -- ([yshift=-20pt] c5.east);
+	
+	%circular links
+	\path[btlink] ([yshift=-10pt] c5.west)  edge[out=220,in=250] ([yshift=-10pt] c6.east);
+	\path[btlink2] ([yshift=-20pt] c5.west)  edge[out=220,in=250] ([yshift=-20pt] c6.east);	
+	
+	
+	
+	% draw pointers between circular array and B+ tree
+	\path[btlink2] ([yshift=-2pt] c1.center)  edge[out=90,in=270] ([yshift=2pt] n22-2.center);
+	% draw pointers for linked list
+	\draw[btlink] ([yshift=-10pt] c1.east) -- ([yshift=-10pt] c2.west);
+	%\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c1.east);
+	\draw[btlink] ([yshift=-20pt] c2.west) -- ([yshift=-20pt] c1.east);
+	
+	%circular links
+	\path[btlink] ([yshift=-10pt] c1.west)  edge[out=220,in=250] ([yshift=-10pt] c2.east);
+	\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=220,in=250] ([yshift=-20pt] c2.east);
+
+	
+	\foreach \x in
+	{n11-1,n11-2,n12-1,n12-2,n21-1,n21-2,n22-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+	
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{The circular array and the $B^+$tree for time series $r_1$ after initialization.}
+	\label{fig:increase}
+\end{figure}
+
+
 
 
 \begin{algorithm}[H]
@@ -2107,8 +2212,8 @@ The \emph{neighborhood grow} is then executed $k$ times.
 	\KwResult{}
 	
 	\Begin{
-		    leftPos $\leftarrow$ self.leftPosition\;
-		    rightPos $\leftarrow$ self.rightPosition\;
+		    $leftPos^-$ $\leftarrow$ self.leftPosition\;
+		    $rightPos^+$ $\leftarrow$ self.rightPosition\;
 
 
 		    \While{$t^-$ $\neq$ NIL and TimeSetContains($t^-$ $-(j + l)$)}{
@@ -2121,16 +2226,16 @@ The \emph{neighborhood grow} is then executed $k$ times.
 		     	$rightPos^+$ $\leftarrow$ $rightPosition^+$ $+ 1$\;
 		    }
 		    
-		   \If{$t^-$ $\neq$ NIL and  $t^+$ $\neq$ NIL }{
-		   	\If{$|r_{i}(t^-)$ - self.key$|$ $\leq$ $|r_{i}(t^+)$ - self.key$|$}{
+		   \uIf{$t^-$ $\neq$ NIL and  $t^+$ $\neq$ NIL }{
+			   	\eIf{$|r_{i}(t^-)$ - self.key$|$ $\leq$ $|r_{i}(t^+)$ - self.key$|$}{
 		   		
-		   		$leftPos^-\leftarrow$ $leftPos^- - 1$\; $t$ $\leftarrow$ $t^-$\;
+			   		$leftPos^-\leftarrow$ $leftPos^- - 1$\; $t$ $\leftarrow$ $t^-$\;
 		 		
+			   	}
+			   	{
+			   		$rightPos^+\leftarrow$ $rightPos^+ + 1$\; $t$ $\leftarrow$ $t^+$\;
+			   	}
 		   	}
-		   	\Else{
-		   		$rightPos^+\leftarrow$ $rightPos^+ + 1$\; $t$ $\leftarrow$ $t^+$\;
-		   	}
-		   	
 		   	\uElseIf{$t^-$ $\neq$ NIL}{
 		   		
 		   		$leftPos^-\leftarrow$ $leftPos^- - 1$\; $t$ $\leftarrow$ $t^-$\;
@@ -2142,14 +2247,14 @@ The \emph{neighborhood grow} is then executed $k$ times.
 		   	\Else{
 		   		return false\; 	
 		   	}
-		   }
+		   
 	
 		    return true\;
 	}	
 	
 	
 
-	\caption{NeighborhoodGrow}	\label{NeighborhoodGrow}
+	\caption{Neighbor$(v, T)$}	\label{NeighborhoodGrow}
 \end{algorithm}
 
 \chapter{Complexity Analysis}
