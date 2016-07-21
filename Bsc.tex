@@ -515,7 +515,7 @@ The idea of this method is to associate a doubly, circular linked list to the ea
 
 
 We use a doubly, circular linked list for our system, where time points are stored as the key of a list element. Every searchkey in a leaf node of our $B^+$tree has an associated linked list. If a measurement value occurs multiple times in the time series $s$, the time points of the measurements are simply added to the linked list associated to the searchkey representing the value of the measurement. So instead of inserting the key again and using another position in the leaf, the new time point is inserted as a linked list value.\\ 
-Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in a list, so the lowest time point, always is the element connected by a pointer from the leaf key to the list. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $head$. Thus, we call the list value at this position the $tail$. \\The Figure \ref{fig:DoublyLinked} illustrates the leaf level of a $B^+$tree and the associated linked lists. It shows that the oldest time point, here $\text{14:15}$, is connected to the tree and the newest time point, $\text{14:50}$, the tail, is at the previous position. Also, the Figure illustrates that a single value in a doubly, circular linked list is linked to itself. The upper level of the $B^+$tree and the rest of the linked lists are left away for clarity. 
+Associating a doubly, circular linked list that is interconnected in both directions is ideal for satisfying our requirements. The oldest value in a list, so the lowest time point, always is the element connected by a pointer from the leaf key to the list. Even though the doubly, circular linked list not really has an end and a beginning, we name the time point associated to the leaf the $head$ and we call the heads predecessor the $tail$. \\The Figure \ref{fig:DoublyLinked} illustrates the leaf level of a $B^+$tree and the associated linked lists. It shows that the oldest time point, here $\text{14:15}$, is connected to the tree and the newest time point, $\text{14:50}$, the tail, is at the previous position. Also, the Figure illustrates that a single value in a doubly, circular linked list is linked to itself. The upper level of the $B^+$tree and the rest of the linked lists are left away for clarity. 
 
 
 \begin{figure}[H]
@@ -614,19 +614,32 @@ Associating a doubly, circular linked list that is interconnected in both direct
 	\label{fig:DoublyLinked}
 \end{figure}
 
-The insertion and the deletion of a list value from a linked list which contains multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}, respectively.\\
 As described above, the leaf nodes in our $B^+$tree also have pointers, namely pointers to the associated linked list. But the number of pointers in leaf nodes is always equal to the number of searchkeys in the leaf. A pointer at position $i$ points to the doubly, linked list associated with the leaf key at position $i$.\\
+
+\lstset{language=C}
+\begin{lstlisting}
+struct {
+  timeStamp timestamp;
+  struct ListValue *prev, *next;
+} ListValue;
+\end{lstlisting}
+\BlankLine
+
+A linked list element consist of the time point and the pointers to the predecessor $prev$ and to the successor $next$. 
+The insertion and the deletion of a list value from a linked list which contains multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}, respectively.\\
+
 
 \begin{algorithm}[H]
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{Insertion node $node$ and pointer to the linke list $L$, the time point to delete $t$}
+	\KwData{Leaf $node$, the index position $i$ to the linked list $L$ and the time point to insert $t$}
 	\KwResult{Linked List $L$  such that $t$ $\in$ $L$}
 	\Begin{
-		firstLV $\leftarrow$ node->pointers[i]\;
-		lastLV $\leftarrow$ firstLV->prev\; 
-		insert $t$ between firstLV and lastLV and link them\;	
+		head $\leftarrow$ node.pointers[i]\;
+		tail $\leftarrow$ head.prev\; 
+		insert $t$ between head and tail\;	
+		doubly link $t$ to head and tail\;
 	}
 	
 	\caption{Add Time Point to Linked List}
@@ -639,20 +652,20 @@ As described above, the leaf nodes in our $B^+$tree also have pointers, namely p
 \begin{algorithm}[H]
 	\IncMargin{1em}
 	\DontPrintSemicolon
-	\KwData{Node $node$ and index position $index$ for the position of the associated Linked List $L$}
-	\KwResult{Linked List $L$  such that $t$ $\not\in$ $L$}
+	\KwData{Leaf $node$ and index position $i$ for the position of the associated Linked List $L$}
+	\KwResult{Linked List $L$ such that $t$ $\not\in$ $L$}
 	
 	\Begin{	
 
-	timePointToDelete $\leftarrow$ node->pointers[index]\;
+	elementToDelete $\leftarrow$ node.pointers[i]\;
 	
-	next $\leftarrow$ timePointToDelete->next\; 
-	prev $\leftarrow$ timePointToDelete->prev\; 
+	nextElement $\leftarrow$ elementToDelete.next\; 
+	prevElement $\leftarrow$ elementToDelete.prev\; 
 	\BlankLine
 	//next is the second oldest key\;
-	leaf->pointers[index] $\leftarrow$  next\;
-	prev->next $\leftarrow$ next\;
-	next->prev $\leftarrow$ prev\;
+	leaf.pointers[i] $\leftarrow$  next\;
+	prevElement.next $\leftarrow$ nextElement\;
+	prevElement.prev $\leftarrow$ prevElement\;
 }
 
 	\caption{Delete Time Point from Linked List}
