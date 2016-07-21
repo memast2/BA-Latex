@@ -1,49 +1,51 @@
-\contentsline {chapter}{\numberline {1}Introduction}{9}
-\contentsline {section}{\numberline {1.1}Thesis Outline}{9}
-\contentsline {chapter}{\numberline {2}Background}{10}
-\contentsline {section}{\numberline {2.1}TKCM}{10}
-\contentsline {section}{\numberline {2.2}Access Methods}{11}
-\contentsline {chapter}{\numberline {3}Problem Definition}{13}
-\contentsline {section}{\numberline {3.1}Context}{13}
-\contentsline {section}{\numberline {3.2}Operations}{13}
-\contentsline {chapter}{\numberline {4}Approach}{14}
-\contentsline {section}{\numberline {4.1}Circular Array}{14}
-\contentsline {subsection}{\numberline {4.1.1}Observation}{15}
-\contentsline {section}{\numberline {4.2}$B^+$ Tree}{16}
-\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{16}
-\contentsline {paragraph}{\nonumberline Leaf}{16}
-\contentsline {paragraph}{\nonumberline Interior Node}{16}
+\contentsline {chapter}{\numberline {1}Introduction}{10}
+\contentsline {section}{\numberline {1.1}Thesis Outline}{10}
+\contentsline {chapter}{\numberline {2}Background}{11}
+\contentsline {section}{\numberline {2.1}TKCM}{11}
+\contentsline {section}{\numberline {2.2}Access Methods}{12}
+\contentsline {chapter}{\numberline {3}Problem Definition}{14}
+\contentsline {section}{\numberline {3.1}Context}{14}
+\contentsline {section}{\numberline {3.2}Operations}{14}
+\contentsline {chapter}{\numberline {4}Approach}{15}
+\contentsline {section}{\numberline {4.1}Circular Array}{15}
+\contentsline {subsection}{\numberline {4.1.1}Phases}{16}
+\contentsline {subsection}{\numberline {4.1.2}Observation}{16}
+\contentsline {section}{\numberline {4.2}$B^+$tree}{17}
+\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{17}
+\contentsline {paragraph}{\nonumberline Leaf}{17}
+\contentsline {paragraph}{\nonumberline Interior Node}{17}
 \contentsline {paragraph}{\nonumberline Root}{17}
-\contentsline {subsection}{\numberline {4.2.2}Observation}{17}
-\contentsline {section}{\numberline {4.3}Handling Duplicate Values}{17}
-\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{18}
-\contentsline {subsubsection}{\nonumberline Observation}{19}
-\contentsline {subsection}{\numberline {4.3.2}Alternative Approaches}{19}
-\contentsline {section}{\numberline {4.4}Operations}{21}
-\contentsline {subsection}{\numberline {4.4.1}Shift$(\mathaccentV {bar}016{t}, v)$}{22}
-\contentsline {subsubsection}{\nonumberline Add a Value to the Circular Array}{22}
-\contentsline {subsubsection}{\nonumberline Searching in the $B^+$tree}{23}
-\contentsline {subsubsection}{\nonumberline Delete a Value from the $B^+$tree}{24}
-\contentsline {subsubsection}{\nonumberline Insert a Value to the $B^+$tree}{28}
-\contentsline {subsection}{\numberline {4.4.2}Random Access: Lookup a Value}{32}
-\contentsline {subsection}{\numberline {4.4.3}Sorted Access: Neighbor}{33}
-\contentsline {subsubsection}{\nonumberline Initialize Neighborhood}{33}
-\contentsline {subsubsection}{\nonumberline Grow Neighborhood}{34}
-\contentsline {chapter}{\numberline {5}Complexity Analysis}{36}
-\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{36}
-\contentsline {subsubsection}{\nonumberline Circular Array Operations}{36}
-\contentsline {paragraph}{\nonumberline Update}{36}
-\contentsline {paragraph}{\nonumberline Lookup}{36}
-\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{36}
-\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{36}
-\contentsline {paragraph}{\nonumberline Neighborhood initialize}{36}
-\contentsline {paragraph}{\nonumberline Neighborhood grow}{36}
-\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{36}
-\contentsline {subsubsection}{\nonumberline Circular Array}{36}
-\contentsline {subsubsection}{\nonumberline $B^+$tree}{36}
-\contentsline {chapter}{\numberline {6}Evaluation}{37}
-\contentsline {section}{\numberline {6.1}Experimental Setup}{37}
-\contentsline {section}{\numberline {6.2}Results}{37}
-\contentsline {section}{\numberline {6.3}Discussion}{37}
-\contentsline {chapter}{\numberline {7}Related Works}{38}
-\contentsline {chapter}{\numberline {8}Summary and Conclusion}{39}
+\contentsline {subsection}{\numberline {4.2.2}Application to our System}{18}
+\contentsline {subsection}{\numberline {4.2.3}Observation}{19}
+\contentsline {section}{\numberline {4.3}Handling Duplicate Values}{19}
+\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{19}
+\contentsline {subsubsection}{\nonumberline Observation}{21}
+\contentsline {subsection}{\numberline {4.3.2}Alternative Approaches}{22}
+\contentsline {section}{\numberline {4.4}Operations}{24}
+\contentsline {subsection}{\numberline {4.4.1}Shift$(\mathaccentV {bar}016{t}, v)$}{25}
+\contentsline {subsubsection}{\nonumberline Add a Value to the Circular Array}{25}
+\contentsline {subsubsection}{\nonumberline Searching in the $B^+$tree}{26}
+\contentsline {subsubsection}{\nonumberline Delete a Value from the $B^+$tree}{27}
+\contentsline {subsubsection}{\nonumberline Insert a Value to the $B^+$tree}{31}
+\contentsline {subsection}{\numberline {4.4.2}Random Access: Lookup a Value}{35}
+\contentsline {subsection}{\numberline {4.4.3}Sorted Access: Neighbor}{36}
+\contentsline {subsubsection}{\nonumberline Initialize Neighborhood}{36}
+\contentsline {subsubsection}{\nonumberline Grow Neighborhood}{37}
+\contentsline {chapter}{\numberline {5}Complexity Analysis}{39}
+\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{39}
+\contentsline {subsubsection}{\nonumberline Circular Array Operations}{39}
+\contentsline {paragraph}{\nonumberline Update}{39}
+\contentsline {paragraph}{\nonumberline Lookup}{39}
+\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{39}
+\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{39}
+\contentsline {paragraph}{\nonumberline Neighborhood initialize}{39}
+\contentsline {paragraph}{\nonumberline Neighborhood grow}{39}
+\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{39}
+\contentsline {subsubsection}{\nonumberline Circular Array}{39}
+\contentsline {subsubsection}{\nonumberline $B^+$tree}{39}
+\contentsline {chapter}{\numberline {6}Evaluation}{40}
+\contentsline {section}{\numberline {6.1}Experimental Setup}{40}
+\contentsline {section}{\numberline {6.2}Results}{40}
+\contentsline {section}{\numberline {6.3}Discussion}{40}
+\contentsline {chapter}{\numberline {7}Related Works}{41}
+\contentsline {chapter}{\numberline {8}Summary and Conclusion}{42}
