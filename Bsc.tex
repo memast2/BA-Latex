@@ -76,8 +76,9 @@
 
 
 \begin{abstract}
-Many domains have applications that need to be fed continuously with the latest data. The financial stock market need to be fed with the latest exchange rates. This time series data is continuously extended, potentially even forever.\\
-We propose a system that keeps a portion of time series data in main memory and which allow an efficient random and sorted access to the data in a time series. 
+A streaming time series is an unbounded sequence of data points that is continuously extended, potentially forever. Many applications need to be fed continuously with the latest data. The data points arrive in a predefined interval, e.g. every 5 minutes a new value arrives. Such time series are relevant to applications in diverse domains. Imagine a meteorology station that sends a temperature measurement every 3 minutes or imagine a trader in the financial stock market who depends on updated pricing information.\\
+We present the implementation of an index structure for streaming time series data. Our system keeps a limited size of time series data in main memory. As a result, it is able to access the information of past measurements in time window $W$. We introduce an implementation approach using two data structures, a circular array and a $B^+$tree, to efficiently access the data of past measurements .
+
 \end{abstract}
 
 \chapter*{Zusammenfassung}
@@ -358,7 +359,7 @@ The circular array has two phases:
 \end{itemize}
 
 \subsection{Observation}
-The measurements in a circular array are stored in a defined interval without any gaps in between. Therefore the value position and insertion can be easily calculated.
+The measurements in a circular array are stored in a defined interval without any gaps in between. Therefore the value position and insertion can be calculated.
 \begin{example}
 The value at time point $\text{14.25}$ is the newest measurement. Hence, the last update position is at time point $\text{14.25}$. A new measurement will be inserted at the next position in the circular array. So at the position of the oldest time point $\text{13:30}$\\
 In order to lookup the value at time point $\text{14:00}$ we can take advantage of the fixed interval. If the last update position is at time point $\text{14.25}$, we can directly calculate the position for time point $\text{14:00}$, using the last update position and the fixed interval.
@@ -494,7 +495,7 @@ The keys in an inner node and in a leaf node are always sorted from left to righ
 The $B^+$tree described above contains searchkeys. In our case these searchkeys are the measurement values in our circular array. A value in time series $s$ can occur multiple times because the values are not unique. But for an efficient traversal of the tree the searchkeys should be comparable to each other. But, since the values are used as searchkeys, the $B^+$tree must be able to handle possible duplicates. Besides, the $B^+$tree needs to store the time point of a measurement because the time point is the amendment to the value of a measurement that makes it uniquely identifiable. Also the time point  is returned by the neighbor$(v,T)$ operation which is executed on the $B^+$tree. Section \ref{sec:allowDV} proposes an approach that allow to use duplicate values in a $B^+$tree and it explains how the time points of the measurements are stored. 
 
 \subsection{Observation}
-The next higher value $hv$ of a given value $v$ in a $B^+$tree is at the same time the right neighbor of $v$ and the next lower value $lv$ is also the left neighbor of $v$, since the leaves and their keys are sorted from left to right.
+The next higher value of a given value $v$ in a $B^+$tree is at the same time the right neighbor of $v$ and the next lower value is also the left neighbor of $v$, since the leaves and their keys are sorted from left to right.
 \begin{example}
 	Assume we want to know the most similar value to the key $40$ in the $B^+$tree illustrated in Figure \ref{fig:BTreeBook}. We just have to compare $40$ to two values, namely the right neighbor $43$ and the left neighbor $38.9$. Hence, we find out that $38.9$ is the most similar value in the entire $B^+$tree. 
 \end{example}
@@ -2523,15 +2524,10 @@ In the experiments we construct a data set with measurement values with a time s
 \section{Runtime}
 \section{Memory}
 
-
-\chapter{Related Works}
-
-
 \chapter{Summary and Conclusion}
 \label{sec:Summary}
+We studied the requirements for keeping a portion of a streaming time series in main memory and simultaneous provide efficient access possibilities to the measurements in a time series. The system we presented uses two different data structures to achieve efficient access operations. Random access is efficiently performed on a circular array and sorted access is efficiently performed on a $B^+$tree with leaves linked in both directions, thus, to the respective successor and predecessor. \\Furthermore, the system can handle duplicate values with a simple but powerful circular, doubly linked list. The duplicate handling is not only simple to implement but also effective in terms of update velocity. Moreover, retrieving a specific value in the linked list has an upper bound and therefore is efficiently performed in most cases. 
 
-+ wie macht man es effizient: bound erwähnen (neighborhood), leaves sortiert, neighborhood teuer. leaves sortiert ist gut, 
-welche tree.nodesize
 
 
 \begin{thebibliography}{99}
@@ -2539,8 +2535,6 @@ welche tree.nodesize
 	
 	\bibitem{BScT} K. Wellenzohn, M. Böhlen, A. Dignos, J. Gamper, and H. Mitterer: \emph{Continuous imputation of missing values in highly correlated streams of time series data}; Unpublished, 2016.
 	
-	\bibitem{BTreeBook} Hector Garcia-Molina, Jeffrey D. Ullman, Jennifer Widom: \emph{Database Systems - The Complete Book}; ISBN 0-13-031995-3, 2002 by Prentice Hall
-		
 	\bibitem{DatabaseSystemC} Abraham Silberschatz, Henry F. Korth, S. Sudarshan: \emph{Database System Concepts}; ISBN 978-0-07-352332-3, 2011 by The McGraw-Hill Companies, Inc.
 
 	\bibitem{LinkedListBook} Thomas H. Cormen, Charles E. Leiserson, Ronald L.Rivest, Clifford Stein: \emph{Introduction to Algorithms}; Massachusetts Institute of Technology, Massachusetts, USA, 2009. 
