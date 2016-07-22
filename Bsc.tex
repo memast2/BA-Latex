@@ -2092,10 +2092,11 @@ A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query patt
 
 \subsubsection{Grow Neighborhood}
 After the initialization of the $l \times d$ neighborhoods the $k$ non-overlapping patterns are calculated. Thus, the neighbor$(v, T)$ operation is executed until the $k$ patterns that contain the most similar values to $q_{ij}$ are retrieved.
-The neighbor$(v, T)$ operation searches the time point for the next most similar value to a query pattern cell $q_{ij}$ of the query pattern $Q(t)$, that starts a new pattern $P(t)$ by filling the missing pattern values by random access. The neighborhood $N(q_{ij})$ is expanded until such a value is retrieved. Some time points may have to be skipped because the time point anchored a pattern previously or the pattern would be out of the window or overlapping with the query pattern $Q(t)$. The next unseen most similar value to $q_{ij}$ is either at position $t^-$ or $t^+$, which represent the time points to the direct left or right of $leftPos^-$ and $rightPos^+$. If the $t^-$ is more or equally similar to $q_{ij}$ than $t^+$ is to $q_{ij}$, the $leftPos^-$ is decremented and $t=t^-$. If $t^+$ is more similar $t=t^+$.
+The neighbor$(v, T)$ operation searches the time point for the next most similar value to a query pattern cell $q_{ij}$ of the query pattern $Q(t)$, that starts a new pattern $P(t)$ by filling the missing pattern values by random access. The neighborhood $N(q_{ij})$ is expanded until such a value is retrieved. Some time points may have to be skipped because the time point anchored a pattern previously. The next unseen most similar value to $q_{ij}$ is either at position $t^-$ or $t^+$, which represent the time points to the direct left or right of $leftPos^-$ and $rightPos^+$. If the $t^-$ is more or equally similar to $q_{ij}$ than $t^+$ is to $q_{ij}$, the $leftPos^-$ is decremented and $t=t^-$. If $t^+$ is more similar $t=t^+$.
 
 \begin{example}
-Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded. 
+Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded. We assume that the other neighborhoods $N(q_{11})$ and $N(q_{13})$ has not been initialized yet. 
+Hence, there are no additional time points anchored for a pattern previously and the timeset $T$ is initially empty. If the Neighbor$(v,T)$ is executed 3 times the resulting neighborhood will look as follows:  
 \end{example}
 
 \begin{figure}[htbp]
@@ -2188,6 +2189,9 @@ Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded.
 	\path[btlink] ([yshift=-10pt] c1.west)  edge[out=220,in=250] ([yshift=-10pt] c2.east);
 	\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=220,in=250] ([yshift=-20pt] c2.east);
 
+
+	
+
 	
 	\foreach \x in
 	{n11-1,n11-2,n12-1,n12-2,n21-1,n21-2,n22-1, n23-2, n23-3, n24-1,n24-2}
@@ -2195,9 +2199,136 @@ Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded.
 	%
 	
 	
+	%second
+	
+	
+	
+		% leaf nodes
+		\xyshift{-90mm}{-90mm}{\btreelnodethree{xn11}{2.5}{3.0}{}}
+		\xyshift{-60mm}{-90mm}{\btreelnodethree{xn12}{7.2}{13.2}{}}
+		\xyshift{-30mm}{-90mm}{\btreelnodethree{xn21}{17.1}{18.1}{}}
+		\xyshift{ 0mm}{-90mm}{\btreelnodethree{xn22}{23.0}{25.4}{}}
+		\xyshift{ 30mm}{-90mm}{\btreelnodethree{xn23}{37.6}{38.9}{}}
+		\xyshift{ 60mm}{-90mm}{\btreelnodethree{xn24}{43.1}{47.1}{}}
+		%
+		% leaf pointers
+		\draw[btlink] ([yshift=+3pt] xn11-c.east) -- ([yshift=+3pt] xn12-a.west);
+		\draw[btlink] ([yshift=-3pt] xn12-a.west) -- ([yshift=-3pt] xn11-c.east);
+		\draw[btlink] ([yshift=+3pt] xn12-c.east) -- ([yshift=+3pt] xn21-a.west);
+		\draw[btlink] ([yshift=-3pt] xn21-a.west) -- ([yshift=-3pt] xn12-c.east);
+		\draw[btlink] ([yshift=+3pt] xn21-c.east) -- ([yshift=+3pt] xn22-a.west);
+		\draw[btlink] ([yshift=-3pt] xn22-a.west) -- ([yshift=-3pt] xn21-c.east);
+		\draw[btlink] ([yshift=+3pt] xn22-c.east) -- ([yshift=+3pt] xn23-a.west);
+		\draw[btlink] ([yshift=-3pt] xn23-a.west) -- ([yshift=-3pt] xn22-c.east);
+		\draw[btlink] ([yshift=+3pt]xn23-c.east) -- ([yshift=+3pt] xn24-a.west);
+		\draw[btlink] ([yshift=-3pt] xn24-a.west) -- ([yshift=-3pt] xn23-c.east);
+		%
+		
+		% circular array
+		\xyshift{-40mm}{-120mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr,fill=myblue] (xc1)  {}; \\	
+				%
+				\node[circularval,fill=myblue] (left)(right) {13:45}; \\
+			};
+		}
+		% circular array
+		\xyshift{-10mm}{-120mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr, fill=myblue] (xc2)  {}; \\	
+				%
+				\node[circularval,fill=myblue] (left)(right) {14:15}; \\
+			};
+		}	
+		
+		
+		% circular array
+		\xyshift{20mm}{-120mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (xc5)  {}; \\	
+				%
+				\node[circularval] (left)(right) {13:30}; \\
+			};
+		}
+		% circular array
+		\xyshift{50mm}{-120mm}{
+			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\node[circularptr] (xc6)  {}; \\	
+				%
+				\node[circularval] (left)(right) {14:10}; \\
+			};
+		}	
+		% draw pointers between circular array and B+ tree
+		\path[btlink2] ([yshift=-2pt] xc5.center)  edge[out=90,in=270] ([yshift=2pt] xn23-1.center);
+		% draw pointers for linked list
+		\draw[btlink] ([yshift=-10pt] xc5.east) -- ([yshift=-10pt] xc6.west);
+		\draw[btlink] ([yshift=-20pt] xc6.west) -- ([yshift=-20pt] xc5.east);
+		
+		%circular links
+		\path[btlink] ([yshift=-10pt] xc5.west)  edge[out=220,in=250] ([yshift=-10pt] xc6.east);
+		\path[btlink2] ([yshift=-20pt] xc5.west)  edge[out=220,in=250] ([yshift=-20pt] xc6.east);	
+		
+		
+		
+		% draw pointers between circular array and B+ tree
+		\path[btlink2] ([yshift=-2pt] xc1.center)  edge[out=90,in=270] ([yshift=2pt] xn22-2.center);
+		% draw pointers for linked list
+		\draw[btlink] ([yshift=-10pt] xc1.east) -- ([yshift=-10pt] xc2.west);
+		%\draw[btlink] ([yshift=-10pt] c2.east) -- ([yshift=-10pt] c1.east);
+		\draw[btlink] ([yshift=-20pt] xc2.west) -- ([yshift=-20pt] xc1.east);
+		
+		%circular links
+		\path[btlink] ([yshift=-10pt] xc1.west)  edge[out=220,in=250] ([yshift=-10pt] xc2.east);
+		\path[btlink2] ([yshift=-20pt] xc1.west)  edge[out=220,in=250] ([yshift=-20pt] xc2.east);
+		
+		
+			% list  value
+			\xyshift{-60mm}{-120mm}{
+				\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+					\node[circularptr,fill=myblue] (c3)  {}; \\	
+					%
+					\node[circularval,fill=myblue] (left)(right) {13:20}; \\
+				};
+			}
+			
+			% draw pointers between list value and B+ tree
+			\path[btlink2] ([yshift=-2pt] c3.center)  edge[out=90,in=270] ([yshift=2pt] xn22-1.center);
+			
+			%circular links
+			\path[btlink] ([yshift=-16pt] c3.west)  edge[out=-1500,in=-60] ([yshift=-16pt] c3.east);
+			\path[btlink2] ([yshift=-24pt] c3.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c3.east);
+		
+				
+				% list  value
+				\xyshift{-80mm}{-120mm}{
+					\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+						\node[circularptr,fill=myblue] (c7)  {}; \\	
+						%
+						\node[circularval,fill=myblue] (left)(right) {13:35}; \\
+					};
+				}
+				
+				% draw pointers between list value and B+ tree
+				\path[btlink2] ([yshift=-2pt] c7.center)  edge[out=90,in=270] ([yshift=2pt] xn21-2.center);
+				
+				%circular links
+				\path[btlink] ([yshift=-16pt] c7.west)  edge[out=-1500,in=-60] ([yshift=-16pt] c7.east);
+				\path[btlink2] ([yshift=-24pt] c7.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c7.east);
+				
+		
+		
+		\foreach \x in
+		{xn11-1,xn11-2,xn12-1,xn12-2,xn21-1, xn23-2, xn23-3, xn24-1,xn24-2}
+		{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+		%
+		
+		
+	
+	
+	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{The circular array and the $B^+$tree for time series $r_1$ after initialization.}
+	\caption{Status of $N(q_{12})$ after growing 3 times}
 	\label{fig:increase}
 \end{figure}
 
@@ -2208,8 +2339,8 @@ Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded.
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwData{}
-	\KwResult{}
+	\KwData{Query pattern value $q_{ij}$ and the set of visited time points $T$}
+	\KwResult{Time point of the next most similar value to $q_{ij}$}
 	
 	\Begin{
 		    $leftPos^-$ $\leftarrow$ self.leftPosition\;
@@ -2245,11 +2376,11 @@ Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded.
 		   		
 		   	}
 		   	\Else{
-		   		return false\; 	
+		   		return NIL\; 	
 		   	}
 		   
 	
-		    return true\;
+		    return t\;
 	}	
 	
 	
@@ -2258,38 +2389,117 @@ Figure \ref{fig:increase} shows how the neighborhood $N(q_{12})$ is expanded.
 \end{algorithm}
 
 \chapter{Complexity Analysis}
+This analysis refers to a single time series $s$ for which a $B^+$tree and a circular array are maintained and the complexity calculations are valid for our context, e.g. the linked list elements are traversed at most $l$ times. 
+\newtheorem{mydef}{Lemma}
 
 \subsection{Runtime Complexity}
 
+\paragraph{Circular, Doubly Linked List}
+\begin{mydef}
+	The insertion of a new time point to the linked list needs $O(1)$.
+\end{mydef}
+\begin{proof}
+	For each new value produced by a time series $s$ a linked list in the $B^+$tree is expanded. Since the new value is always inserted at the tail position it needs $O(1)$.
+\end{proof}
+\begin{mydef}
+	The deletion of a time point from the linked list needs $O(1)$.
+\end{mydef}
+\begin{proof}
+	For each deletion in a $B^+$tree a time point needs to be removed from a linked list. Since the oldest value is always at the head position, the deletion needs $O(1)$.
+\end{proof}
+\begin{mydef}
+	The search of a specific time point if the new\_neighborhood$(t,v,j,l)$ operation is executed takes at most $O(l)$ time.
+\end{mydef}
+\begin{proof}
+	A time series $s$ in a pattern $P(t)$ initializes $l$ neighborhoods. Hence in the worst case, if the $l$ newest measurements in the circular array of $s$ have the same value and thus are stored in the same linked list in the $B^+$tree, $l$ list elements have to be traversed to find the specific measurement time point. 
+\end{proof}
+
 \subsubsection{Circular Array Operations}
-\paragraph{Update}
-$O(1)$ 
-\paragraph{Lookup}
+\begin{mydef}
+	The update of the circular array takes $O(1)$ time.
+\end{mydef}
+\begin{proof}
+	The next update position in a circular array is computet in $O(1)$ time, hence the update takes $O(1)$ time. 
+\end{proof}
+\begin{mydef}
+	The lookup of a time point $t$ takes $O(1)$ time.
+\end{mydef}
+\begin{proof}
+	The lookup algorithm needs to calculate the position for the time point $t$. Since the position can be directly calculated the calculation is done in $O(1)$.
+\end{proof}
 
 \subsubsection{$B^+$tree Operations}
-Although insertion and deletion operations on B+-trees are complicated, they are not very expensive.
-In the worst case for an insertion is proportional to $\log_{n\setminus2}(|W|)$, where n is
-the maximum number of pointers in a node, and K is the number of keys in the leaf nodes. If there are no duplicate values the number of keys is the size of the time window $|W|$. 
-Since in our case the insertion point of a new measurement to a doubly, linked list is always found in $O(1)$, duplicates have no influence to the complexity of an insertion.  
-\\The worst-case complexity of the deletion procedure is also proportional to
-$\log_{n\setminus2}(|W|)$, even if there are duplicate values.
+\begin{mydef}
+	The search of a measurement in the $B^+$tree takes at most $O(l + \log_{n\setminus2}(|W|) \times n)$ time.
+\end{mydef}
+\begin{proof}
+	To search the insertion and deletion position in a $B^+$tree takes $O(\log_{n\setminus2}(|W|) \times n)$. For the neighbor$(v,T)$ operation the pattern length $l$ provides an upper bound for the maximum required value lookups in a doubly, linked list.
+\end{proof}
+
+\begin{mydef}
+	The insertion of a measurement to the $B^+$tree takes $O(\log_{n\setminus2}(|W|) \times n)$ time.
+\end{mydef}
+\begin{proof}
+	In the worst case for an insertion is proportional to $\log_{n\setminus2}(|W|)$, where $n$ is the maximum number of pointers in a node, and $K$ is the number of keys in the leaf nodes. If there are no duplicate values the number of keys is the size of the time window $|W|$. Since in our case the insertion point of a new measurement to a doubly, linked list is always found in $O(1)$, duplicates have no influence to the complexity of an insertion.  
+\end{proof}
+\begin{mydef}
+	The deletion of a measurement from the $B^+$tree takes $O(\log_{n\setminus2}(|W|) \times n)$ time.
+\end{mydef}
+\begin{proof}
+	 If there are no duplicate values the number of leaf keys is the size of the time window $|W|$. Since the deletion point of a new measurement from a doubly, linked list is always found in $O(1)$, duplicates as well have no influence to the complexity of a deletion. 
+\end{proof}
 
 
 \subsubsection{Neighborhood Operations}
+\begin{mydef}
+	The initialization of all $l$ neighborhoods for time series $s$ takes  $O(l \times(l+\log_{n\setminus2}(|W|) \times n))$ time.
+\end{mydef}
+\begin{proof}
+	The initialization of the neighborhood needs to search a specific measurement in the $B^+$tree. Hence the complexity is equal to the search operation in a $B^+$tree. The pattern length gives an upper bound to the maximum required value lookups in a doubly, linked list.
+\end{proof}
 
-\paragraph{Neighborhood initialize}
-The initialization of the neighborhood needs to search a specific measurement in the $B^+$tree. 
-This is dependent on the number of values in the linked list associated to the key of the specific measurement. 
-But the pattern length gives an upper bound to the maximum required value lookups in a doubly, linked list. In the worst-case the initialization needs to first find the appropriate leaf in $\log_{n\setminus2}(K)+patternlength$
-\paragraph{Neighborhood grow}
-
+\begin{mydef}
+	The neighbor$(v,T)$ takes $O(|T|)$ time.
+\end{mydef}
+\begin{proof}
+	If the time set contains $|T|$ time points and since at most $|T|$ time points have to be skipped the neighbor$(v,T)$ takes at most at most $O(|T|)$ time.
+\end{proof}
 
 \subsection{Space Complexity}
-\subsubsection{Circular Array}
 
-\subsubsection{$B^+$tree}
+\begin{mydef}
+	The space complexity of a circular array is $O(|W|)$.
+\end{mydef}
+\begin{proof}
+	Every circular array for a time series $s$ has a size |W|. Hence the space complexity of one circular array is $O(|W|)$.
+\end{proof}
 
-\chapter{Evaluation}
+\begin{mydef}
+	The space complexity of all circular, doubly linked lists in the $B^+$tree is $O(|W|)$.
+\end{mydef}
+\begin{proof}
+	For every measurement in the circular array of size $|W|$ a time point is stored in a linked list in the $B^+$tree.
+\end{proof}
+
+\begin{mydef}
+	The space complexity of a $B^+$tree is $O(|W|)$. 
+\end{mydef}
+\begin{proof}
+	For every measurement in the circular array space for the measurement value and the time point is allocated in the tree. 
+\end{proof}
+
+\begin{mydef}
+	The space complexity of all neighborhood in a time series $s$ is $O(l \times (|W|)$. 
+\end{mydef}
+\begin{proof}
+	In the worst case each neighborhood may span the whole sliding window of size $|W|$. Hence $l$ neighborhoods of size $|W|$ are possible.
+\end{proof}
+
+
+
+
+
+\chapter{Experimental Evaluation}
 \label{sec:Experimental}
 
 - runtime with different tree node sizes \\
@@ -2305,9 +2515,11 @@ nodesize, verteilung der daten \\
 Datenset erstellen \\
 
 
-\section{Experimental Setup}
-\section{Results}
-\section{Discussion}
+\section{Setup}
+In the experiments we construct a data set with measurement values with a time span of 50 years between the newest and the oldest value. We set the window size $|W|$ to 2 years, the pattern length is set to $10$ and we use one reference time series $r$, thus $d=1$. The interval between two values is set to $3$ minutes. Since 20 measurements arrive per hour the data set contains in total 8'760'000 measurements in 50 years. We assume the data set contains temperature values between -20 and 40 degrees. Hence duplicates are likely. The values are random but always in this bound. 
+
+\section{Runtime}
+\section{Memory}
 
 
 \chapter{Related Works}

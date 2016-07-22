@@ -1,0 +1,45 @@
+\contentsline {chapter}{\numberline {1}Introduction}{9}
+\contentsline {section}{\numberline {1.1}Thesis Outline}{9}
+\contentsline {chapter}{\numberline {2}Background}{10}
+\contentsline {section}{\numberline {2.1}TKCM}{10}
+\contentsline {section}{\numberline {2.2}Access Methods}{11}
+\contentsline {chapter}{\numberline {3}Problem Definition}{13}
+\contentsline {section}{\numberline {3.1}Context}{13}
+\contentsline {section}{\numberline {3.2}Operations}{13}
+\contentsline {chapter}{\numberline {4}Approach}{14}
+\contentsline {section}{\numberline {4.1}Circular Array}{14}
+\contentsline {subsection}{\numberline {4.1.1}Phases}{15}
+\contentsline {subsection}{\numberline {4.1.2}Observation}{15}
+\contentsline {section}{\numberline {4.2}$B^+$tree}{16}
+\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{16}
+\contentsline {paragraph}{\nonumberline Leaf}{16}
+\contentsline {paragraph}{\nonumberline Interior Node}{16}
+\contentsline {paragraph}{\nonumberline Root}{16}
+\contentsline {subsection}{\numberline {4.2.2}Application to our System}{17}
+\contentsline {subsection}{\numberline {4.2.3}Observation}{18}
+\contentsline {section}{\numberline {4.3}Handling Duplicate Values}{18}
+\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{18}
+\contentsline {subsubsection}{\nonumberline Observation}{20}
+\contentsline {section}{\numberline {4.4}Operations}{21}
+\contentsline {subsection}{\numberline {4.4.1}Shift$(\mathaccentV {bar}016{t}, v)$}{22}
+\contentsline {subsubsection}{\nonumberline Add a Value to the Circular Array}{22}
+\contentsline {subsubsection}{\nonumberline Searching in the $B^+$tree}{23}
+\contentsline {subsubsection}{\nonumberline Delete a Value from the $B^+$tree}{23}
+\contentsline {subsubsection}{\nonumberline Insert a Value to the $B^+$tree}{30}
+\contentsline {subsection}{\numberline {4.4.2}Random Access: Lookup a Value}{33}
+\contentsline {subsection}{\numberline {4.4.3}Sorted Access: Neighbor}{34}
+\contentsline {subsubsection}{\nonumberline Initialize Neighborhood}{34}
+\contentsline {subsubsection}{\nonumberline Grow Neighborhood}{36}
+\contentsline {chapter}{\numberline {5}Complexity Analysis}{38}
+\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{38}
+\contentsline {paragraph}{\nonumberline Circular, Doubly Linked List}{38}
+\contentsline {subsubsection}{\nonumberline Circular Array Operations}{38}
+\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{39}
+\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{39}
+\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{39}
+\contentsline {chapter}{\numberline {6}Experimental Evaluation}{41}
+\contentsline {section}{\numberline {6.1}Setup}{41}
+\contentsline {section}{\numberline {6.2}Runtime}{41}
+\contentsline {section}{\numberline {6.3}Memory}{41}
+\contentsline {chapter}{\numberline {7}Related Works}{42}
+\contentsline {chapter}{\numberline {8}Summary and Conclusion}{43}
