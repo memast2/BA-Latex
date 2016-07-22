@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  22 JUL 2016 14:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.12)  22 JUL 2016 16:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1234,31 +1234,36 @@ Class scrreprt Warning: \float@addtolists detected!
 (scrreprt)              a package that still implements the
 (scrreprt)              deprecated \float@addtolist interface .
 
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 101.
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--100
+
+ []
+
 \c@defn=\count158
 \c@exmp=\count159
 [9
 
 ]
 Chapter 2.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 110.
 [10
 
 ] [11] [12]
 Chapter 3.
 
-Overfull \hbox (6.45946pt too wide) in paragraph at lines 203--204
+Overfull \hbox (6.45946pt too wide) in paragraph at lines 202--203
 \T1/ptm/m/n/12 The present the-sis tries to in-tro-duce an ef-fi-cient way to i
 m-ple-ment the $\OML/cmm/m/it/12 random$ \T1/ptm/m/n/12 and $[]$
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 208.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 207.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 208.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 207.
  [13
 
 ]
@@ -1270,7 +1275,7 @@ File: lstlang1.sty 2014/09/06 1.5e listings language file
 File: lstmisc.sty 2014/09/06 1.5e (Carsten Heinz)
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 254.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 253.
  [14
 
 ]
@@ -1278,18 +1283,18 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
  [17] [18]
-Underfull \hbox (badness 10000) in paragraph at lines 618--619
+Underfull \hbox (badness 10000) in paragraph at lines 617--618
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 629--631
+Underfull \hbox (badness 10000) in paragraph at lines 628--630
 
  []
 
 [19]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 644.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 643.
  [20]
 Missing character: There is no ; in font nullfont!
  [21] [22] [23]
@@ -1306,7 +1311,7 @@ Overfull \vbox (24.249pt too high) has occurred while \output is active []
 
 
 [28] [29]
-Overfull \hbox (8.13461pt too wide) in paragraph at lines 1503--1544
+Overfull \hbox (8.13461pt too wide) in paragraph at lines 1502--1543
 \T1/ptm/m/n/12 The $\OML/cmm/m/it/12 splitAndInsertIntoInnerNode$ \T1/ptm/m/n/1
 2 method works with the same prin-ci-ple as the $\OML/cmm/m/it/12 splitLeaves$
  []
@@ -1734,12 +1739,12 @@ Class scrreprt Warning: Usage of deprecated font command `\rm'!
 [40]
 Chapter 6.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2505--2512
+Underfull \hbox (badness 10000) in paragraph at lines 2507--2514
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2513--2516
+Underfull \hbox (badness 10000) in paragraph at lines 2515--2518
 
  []
 
@@ -1761,10 +1766,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 24127 strings out of 493089
- 475120 string characters out of 6134842
- 671518 words of memory out of 5000000
- 27134 multiletter control sequences out of 15000+600000
+ 24129 strings out of 493089
+ 475151 string characters out of 6134842
+ 670536 words of memory out of 5000000
+ 27136 multiletter control sequences out of 15000+600000
  62495 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,18n,86p,1475b,1587s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1784,7 +1789,7 @@ st/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2015/texmf-dist/font
 s/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/ur
 w/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/ut
 mri8a.pfb>
-Output written on Bsc.pdf (44 pages, 318832 bytes).
+Output written on Bsc.pdf (44 pages, 320209 bytes).
 PDF statistics:
  241 PDF objects out of 1000 (max. 8388607)
  173 compressed objects within 2 object streams

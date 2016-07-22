@@ -1,5 +1,4 @@
 \contentsline {chapter}{\numberline {1}Introduction}{9}
-\contentsline {section}{\numberline {1.1}Thesis Outline}{9}
 \contentsline {chapter}{\numberline {2}Background}{10}
 \contentsline {section}{\numberline {2.1}TKCM}{10}
 \contentsline {section}{\numberline {2.2}Access Methods}{11}

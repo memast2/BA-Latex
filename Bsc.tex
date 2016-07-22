@@ -92,13 +92,11 @@ We propose a system that keeps a portion of time series data in main memory and 
 \addtocontents{loa}{\def\string\figurename{Algorithm}}
 
 \chapter{Introduction}
-A streaming time series $s$ is an unbounded sequence of data points that is continuously extended, potentially forever. Streaming time series are relevant to applications in diverse domains e.g. in finance, meteorology or sensor networks. Many domains have applications that need to be fed continuously with the latest data, like the financial stock market or the weather information. A system can only keep a limited size of data in main memory. Also the processing of large volumes of time series data is impractical.
-
-The data kept in main memory needs to be limited to a portion of the streaming time series. In order to be practical for an application like the financial stock market, the data that arrives in a defined time interval (e.g. every 2 minutes) needs to be completely processed until the succeeding data arises.
-The thesis presents a way to implement the described data structures after discussing the requirements. Furthermore, it documents the out coming experimental results.
-In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be summarized and concluded.
-
-\section{Thesis Outline}
+A streaming time series is an unbounded sequence of data points that is continuously extended, potentially forever. The data points arrive in a predefined interval, e.g. every 5 minutes a new value arrives. Such time series are relevant to applications in diverse domains. Imagine a meteorology station that sends a temperature measurement every 3 minutes or imagine a trader in the financial stock market who depends on updated pricing information. Thus, various applications need to be fed continuously with the latest data. \\
+Our system neither forgets about and thus deletes all old measurements that have arrived nor keeps all of them, since a system can only keep a limited size of data in main memory. But because it keeps a portion of the data it is still able to access the past measurements information. It provides data structures and operations to efficiently access the time point and the value of a measurement.\\
+The thesis suggests an implementation for an index structure for streaming time series data. In order to achieve efficient access to the time points and values of all measurements in a time series the system uses two data structures: A circular array in combination with a $B^+$tree. The circular array has a limited size $|W|$. The measurements are stored in the array, sorted by time. The $B^+$tree as well contains the same measurements with time points in time window $W$. The leaves of the tree are sorted from left to right by the measurement value. Thus, range queries can be efficiently performed. For every new measurement the time window $W$ slides forward and hence the circular array and the $B^+$tree are updated. If a measurements time point is not in the sliding window $W$ any more, it is deleted from both data structures. The introduced system is not only implemented but also analysed in terms of space and runtime complexity. Further, an experimental evaluation tries to underpin the theoretical advantages and results of the approach.
+\\ \\
+At the beginning of this thesis, in chapter \ref{background}, the TKCM algorithm designed by Wellenzohn et al.\cite{BScT} is introduced in order to achieve a better understanding for the context where our system can be applicable and for the requirements our system must satisfy. Chapter \ref{ProblemDefinition} describes the context and introduces the operations that our system must be able to perform. In chapter \ref{sec:Approach}, our approach is represented and its advantages are discussed. Further, the pseudo-code for implementing the system is outlined. After that, the runtime and space complexity of the implementation is presented in chapter \ref{Complexity}. Followed by an experimental evaluation of the implemented system in chapter \ref{sec:Experimental}. Finally, the thesis is summed up in chapter \ref{sec:Summary}.
 
 
 \newtheorem{defn}{Definition}[section]
@@ -107,7 +105,7 @@ In the end of the thesis, in Chapter \ref{sec:Summary}, the findings will be sum
 
 \chapter{Background}
 \label{background}
-A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. To efficiently impute missing values, Wellenzohn et al.\cite{BScT} present the Top-$k$ Case Matching algorithm (TKCM). The algorithm is introduced in Section \ref{TKCM}.
+A streaming time series is not always gapless. Due to sensor failures or transmission errors, values can get missing. To efficiently impute missing values, Wellenzohn et al.\cite{BScT} present the Top-$k$ Case Matching algorithm (TKCM). The algorithm and its connection to our thesis is introduced in Section \ref{TKCM}.
 
 \section{TKCM}
 \label{TKCM}
@@ -200,6 +198,7 @@ Using the sorted access mode, the algorithm finds the next yet unseen time point
 The random access mode is used to look up the values that pattern $P(t)$ is composed of. 
 
 \chapter{Problem Definition}
+\label{ProblemDefinition}
 The present thesis tries to introduce an efficient way to implement the $random$ and $\text{sorted access}$ methods described in Section \ref{AccessMethods} for a streaming time series $s$.
 
 \section{Context}
@@ -2389,6 +2388,7 @@ Hence, there are no additional time points anchored for a pattern previously and
 \end{algorithm}
 
 \chapter{Complexity Analysis}
+\label{Complexity}
 This analysis refers to a single time series $s$ for which a $B^+$tree and a circular array are maintained and the complexity calculations are valid for our context, e.g. the linked list elements are traversed at most $l$ times. 
 \newtheorem{mydef}{Lemma}
 
@@ -2501,6 +2501,8 @@ This analysis refers to a single time series $s$ for which a $B^+$tree and a cir
 
 \chapter{Experimental Evaluation}
 \label{sec:Experimental}
+This chapter describes our experimental setup and results. We evaluated our algorithms on
+running time and memory usage for different parameters.
 
 - runtime with different tree node sizes \\
 - runtime with no duplicates\\
