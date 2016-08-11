@@ -6,19 +6,20 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces A $B^+$tree with the related circular array.}}{15}
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Shifted circular array.}}{16}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Circular Array after the insertion of 41.5.}}{17}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Update of a circular array.}}{17}
 \contentsline {figure}{\numberline {4.4}{\ignorespaces $2.5$ is the value at time point $\text {14:10}$.}}{18}
 \contentsline {figure}{\numberline {4.5}{\ignorespaces Left children keys < 17.2 and right children keys $\geq $ 17.2.}}{19}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Doubly, circular linked lists associated to leaf nodes.}}{22}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Start situation}}{24}
-\contentsline {figure}{\numberline {4.8}{\ignorespaces The node has still enough keys.}}{26}
-\contentsline {figure}{\numberline {4.9}{\ignorespaces The node can be merged with its sibling.}}{26}
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Some entries are redistributed.}}{26}
-\contentsline {figure}{\numberline {4.11}{\ignorespaces $B^+$tree after the deletion of $13.2$.}}{27}
-\contentsline {figure}{\numberline {4.12}{\ignorespaces $B^+$tree after the insertion of $41.5$.}}{30}
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Query Pattern Q(t) of length $l=3$ and $d=1$ reference time series.}}{31}
-\contentsline {figure}{\numberline {4.14}{\ignorespaces The circular array and the $B^+$tree for time series $r_1$ after initialization.}}{31}
-\contentsline {figure}{\numberline {4.15}{\ignorespaces Status of $N(q_{1,2})$ after growing 3 times.}}{33}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Example of a complete $B^+$tree.}}{21}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Circular doubly linked lists associated to leaf nodes.}}{22}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Start situation}}{24}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces The node has still enough keys.}}{26}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Some entries must be redistributed.}}{27}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces The node can be merged with its sibling.}}{27}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Deleting $13.2$ from the $B^+$tree.}}{28}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces $B^+$tree after the insertion of $41.5$.}}{31}
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Query Pattern Q(t) of length $l=3$ and $d=1$ reference time series.}}{32}
+\contentsline {figure}{\numberline {4.15}{\ignorespaces The circular array and the $B^+$tree for time series $r_1$ after initialization.}}{32}
+\contentsline {figure}{\numberline {4.16}{\ignorespaces Status of $N(q_{1,2})$ after growing 3 times.}}{34}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

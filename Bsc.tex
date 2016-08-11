@@ -14,7 +14,7 @@
 \usepackage{algpseudocode}
 \usepackage{mathtools}
 \usepackage{amsmath}
-\usepackage{url}
+\usepackage[hyphens]{url}
 \usepackage{chapterbib}
 \usepackage{gensymb}
 \usepackage{BTree}
@@ -25,6 +25,14 @@
 \usepackage[ruled,linesnumbered,lined,commentsnumbered]{algorithm2e}
 \usepackage{pgfplots}
 \usepackage[titletoc]{appendix}
+
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks%  save the current one
+	\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+	\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+	\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+	\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+	\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+	\do\Y\do\Z}
 
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -74,7 +82,7 @@
 \maketitle
 
 \chapter*{Acknowledgements}
-
+I especially would like to thank my supervisor Kevin Wellenzohn for his advice, his amazing support and his endurance. I could learn a lot from this thesis at the Database Technology Group of the University of Zurich. Therefore, I would like to thank Prof. Dr. Michael Böhlen for this opportunity. Further, I would like to thank my boyfriend and my family for motivating and supporting me.
 
 
 \begin{abstract}
@@ -147,6 +155,7 @@ To impute a missing value, TKCM defines a query pattern $Q(\bar{t})$ over the mo
 	\caption{Example of a query pattern Q(t) of length $l=3$ and $d=2$ reference time series.}
 \end{figure}
 \begin{defn}
+	\label{pattCell}
 	(Pattern) Let $R_s^d=\{r_1,...,r_d\}$ be the ordered set of reference time series for a time series $s$. A $pattern$ $P(t)$ of length $l > 0$ over $R_s^d$ that is embedded at time $t$ is defined as a $d\times l$ matrix $P(t) = [p_{i,j}]_{d\times l}$ where $p_{i,j}=S_i(t-j+l)$. $P(t)$ is a set of pattern cells $p_{i,j}$, such that $p_{i,j}$ $\in P(t)$. 
 \end{defn}
 The two-dimensional query pattern $Q(\bar{t})$ is anchored at a time point $\bar{t}$ and consists of the subsequence of length $l$ spanning from $(\bar{t}-l+1$ to $\bar{t})$ of each reference time series. Each row represents a subsequence of a reference time series and each column represents the values of the reference time series at a time point.\\ 
@@ -161,7 +170,7 @@ TKCM must not only impute missing values, but also process the new measurements 
 
 \section{Access Methods}
 \label{AccessMethods}
-The Next Pattern (Def. \ref{def3})  is built on top of two access methods.\emph{Sorted} access is used to find the most similar value to a given query pattern cell $q_{i,j}$ and \emph{random} access retrieves the values to fill the remaining pattern cells. The two methods are defined as follows: 
+The Next Pattern (Def. \ref{def3}) is built on top of two access methods.\emph{Sorted} access is used to find the most similar value to a given query pattern cell $q_{i,j}$ (Def. \ref{pattCell}) and \emph{random} access retrieves the values to fill the remaining pattern cells. The two methods are defined as follows: 
 %check if follows or followed
 \begin{defn}
 	\label{sorted}
@@ -485,45 +494,43 @@ The circular array can be in two different states:
 	The value at time point $\text{14:25}$ in array 2 in Figure \ref{fig:cat} is the newest measurement. Hence, the last update position is at time point $\text{14:25}$. A new measurement will be inserted at the next position in the circular array. So at the position of the oldest time point $\text{13:30}$. In order to lookup the value at time point $\text{14:00}$ we can take advantage of the fixed interval. If the last update position is at time point $\text{14.25}$, we can directly calculate the position for time point $\text{14:00}$, using the last update position and the fixed interval.
 \end{example} 
 
-\subsection{Shift$(\bar{t}, v)$: Update The Circular Array}
+\subsection{Shift$(\bar{t}, v)$}
 
-The measurements in a circular array are stored in a defined interval without any gaps in between. Therefore the value position and insertion can be calculated. The circular array has a $count$ attribute that is equal or smaller than the size of the array. It represents the number of measurements in the array. If the $count$ is equal to the size of the array one measurement has to be deleted for every arriving measurement. If not, there is no need to delete a value from the tree, since no value is overwritten. \\
-The insertion of a new measurement is presented in Algorithm \ref{alg:UpdateCA}. The random access of a value at time point $t$ is presented in Algorithm \ref{alg:Lookup}.
+The measurements in a circular array are stored in a defined interval without any gaps in between. Therefore, the value position and insertion can be calculated. The circular array has a $count$ attribute that is equal or smaller to $|W|$, which represents the number of measurements in the array. If the $count$ is equal to $|W|$ one measurement has to be deleted for every arriving measurement. Otherwise, there is no need to delete a value from the tree since no value dropped out of the sliding window $W$. The insertion of a new measurement is presented in Algorithm \ref{alg:UpdateCA}.
 
 \BlankLine
 \begin{algorithm}[H]
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwIn{Tree $tree$, the circular array $array$, the new time point $t$ and the new value $v$}
-	\KwOut{The $array$ such that $t$,$v$ $\in$ $array$}
+	\KwIn{Tree $tree$, the circular array $array$, the new time point $\bar{t}$ and the new value $v$}
+	\KwOut{The $array$ such that ($\bar{t}$,$v$) $\in$ $array$}
 	
 	
 	newPos $\leftarrow$ 0\;
 	
-	\If{array.count < |W|}{
+	\eIf{array.count < |W|}{
 		
-		//the array contains no value yet\;
 		\If{array.count $\neq$ 0}{
-			newPos $\leftarrow$ (array.lastPos + 1) \%|W|\;
+			newPos $\leftarrow$ (array.lastPos + 1) \% |W|\;
 		}
 		array.count++\;
 	}
-	\Else{
-		newPos $\leftarrow$ (array.lastPos + 1) \%|W|\;
+	{
+		newPos $\leftarrow$ (array.lastPos + 1) \% |W|\;
 		//delete measurement from tree\;
-		delete(tree, array.data[newPos].time, array.data[newPos].value)\;
+		Delete(tree, array.data[newPos].time, array.data[newPos].value)\;
 		
 	}
 	
-	array.data[newPos].time $\leftarrow$ t\;
+	array.data[newPos].time $\leftarrow$ $\bar{t}$\;
 	array.data[newPos].value $\leftarrow$ v\;
 	array.lastPos $\leftarrow$ newPos\;
 	
-	addRecordToTree(tree, t, v)\;
+	AddMeasurement(tree, $\bar{t}$, v)\;
 	
 	
-	\caption{Shift$(tree, array, t, v)$}
+	\caption{Shift$(tree, array, \bar{t}, v)$}
 	\label{alg:UpdateCA}
 \end{algorithm}
 
@@ -531,8 +538,8 @@ The insertion of a new measurement is presented in Algorithm \ref{alg:UpdateCA}.
 
 
 \begin{exmp}
-	We assume a new measurement arrives with time point $\text{14:25}$ and value $41.5$. 
-	The value $13.2$ at time point $\text{13:15}$ is overwritten by the new measurement. This update is illustrated in Figure \ref{fig:circAfter}. 
+	We assume a new measurement arrives with time point $\text{14:25}$ and value $13.2$. 
+	The value $41.5$ at time point $\text{13:15}$ is replaced by the new measurement in the circular array. Figure \ref{fig:circAfter} show the circular array before and after the update.
 \end{exmp}
 \begin{figure}[H]
 	\centering
@@ -619,13 +626,13 @@ The insertion of a new measurement is presented in Algorithm \ref{alg:UpdateCA}.
 	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Circular Array after the insertion of 41.5.}
+	\caption{Update of a circular array.}
 	\label{fig:circAfter}
 \end{figure}
 
 
-\subsection{Random Access: Lookup a Value}
-Due to the properties of a circular array the random access of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array by using the interval between two consecutive measurements. The $randomAccess$ operation is used to fill a pattern $P(t)$ that is anchored at a time point $t$ returned by executing sortedAccess$(v,T)$. The last update point can be used as reference time point for the calculation. The RandomAccess$(t)$ is presented in Algorithm \ref{alg:Lookup}.
+\subsection{Random Access}
+Due to the properties of a circular array the random access of a value at time $t$ is very efficient. Since the position can be directly calculated without looping through the array, since the values arrive in a fixed interval (e.g. every 3 minutes). The $RandomAccess$ operation is used to fill a pattern $P(t)$ that is anchored at a time point $t$. The last update point can be used as reference time point for the calculation. The RandomAccess$(t)$ is presented in Algorithm \ref{alg:Lookup}.
 %Lookup
 \BlankLine
 \begin{algorithm}[H]
@@ -664,7 +671,7 @@ Due to the properties of a circular array the random access of a value at time $
 
 
 \begin{exmp}
-	We assume we want to find the measurement value at time point $\text{14:10}$. The last update position was at time point $\text{14:20}$, thus the step is calculated as $-3$ and the position of time point $\text{14:10}$ is $0$.$2.5$ is returned by the $randomAccess$ Algorithm. The circular array is illustrated in Figure \ref{fig:circANow}.   
+	We want to find the measurement value at time point $\text{14:10}$ in the circular array shown in Figure \ref{fig:circANow}. The last update position was at time point $\text{14:25}$, thus the step is calculated as $-3$ and the value at position $0$ with time point $\text{14:10}$ is $2.5$. The value is returned by the $RandomAccess$ Algorithm. 
 \end{exmp}
 
 
@@ -685,6 +692,7 @@ Due to the properties of a circular array the random access of a value at time $
 			\node[circularptr,fill=myorange] (c1)  {2.5}; \&
 			\node[circularptr] (c2)  {25.4}; \&
 			\node[circularptr] (c3)  {3.0}; \&
+			\draw node [black,midway,yshift=0.6cm] {lastPos};
 			\node[circularptr,fill=mycolor](c4) {13.2}; \&
 			\node[circularptr] (c5)  {23.0}; \&
 			\node[circularptr] (c6)  {17.1}; \&
@@ -742,7 +750,7 @@ We introduce the most important properties of a $B^+$tree, for further informati
 The differences between the traditional $B^+$tree and the $B^+$tree we use are the following: On the one hand, the leaves in our $B^+$tree are linked to the succeeding as well as the preceding leaf to efficiently perform the sortedAccess$(v,T)$ operation. On the other hand, our $B^+$tree is able to handle duplicate values. How our tree handles duplicate values is described in Section \ref{sec:allowDV}. The other properties of our used $B^+$tree are presented in the following.\\
 The parameter $n$ determines the maximum number of pointers in a node and $n-1$ represents the maximum number of searchkeys, hence the size of a tree node. The keys in a node are always sorted from left to right. 
 \begin{example}
-	If $n$ is set to 7, an internal node may have between $\ceil{7/2} =$ 4 and 7 children and between 3 and 6 keys. Because $\ceil{n/2}-1 =$ 3, for $n=7$. The root may have between 2 and 7 children or if it is the only node in the tree it can have no children and just one key. A leaf node must have at least 3 keys and can have maximum 6 keys.
+	If $n$ is set to 7, an internal node may have between $\ceil{7/2} =$ 4 and 7 children and between 3 and 6 keys. Because $\ceil{n/2}-1 =$ 3 for $n=7$. The root may have between 2 and 7 children or if it is the only node in the tree it can have no children and just one key. A leaf node must have at least 3 keys and can have maximum 6 keys.
 \end{example}
 A node contains $m$ non-null pointers $\left(m \leq n\right)$. For $i = 2, 3, . . . ,m-1$, pointer $P_i$ points to the subtree that contains searchkey values less than $K_i$ and greater than or equal to $K_{i-1}$. Pointer $P_m$ points to the part of the subtree that contains those key values greater than or equal to $K_{m-1}$. 
 
@@ -780,7 +788,7 @@ A node contains $m$ non-null pointers $\left(m \leq n\right)$. For $i = 2, 3, . 
 There are three types of nodes that may exist in a $B^+$tree: the root, interior nodes and leave nodes.
 \begin{itemize}
 	\item (Leaf) A leaf node must have at least $\ceil{(n-1)/2}$ keys and may hold at most $n-1$ keys.
-	\item (Inner Node) The interior nodes can have at most $n-1$ searchkeys and $n$ pointers, pointing to its child nodes. The pointers of nonleaf nodes point to tree nodes. An interior node must have at least $\ceil{n/2}$ pointers and can hold at most $n$ pointers. Hence, it must have at least $\ceil{n/2}-1$ keys and at most $n-1$ keys.
+	\item (Inner Node) The inner nodes can have at most $n-1$ searchkeys and $n$ pointers, pointing to its child nodes. An inner node must have at least $\ceil{n/2}$ pointers and can hold at most $n$ pointers. Hence, it must have at least $\ceil{n/2}-1$ keys and at most $n-1$ keys.
 	\item (Root) The root node is the only node that can contain less than $\ceil{n/2}$ pointers. The root node must have at least one searchkey and two pointers to child nodes, unless the root is a leaf node and hence has no children.
 \end{itemize}
 
@@ -799,31 +807,93 @@ struct Node{
 };
 \end{lstlisting}
 \BlankLine
-The node structure can be used for every type of node, since the structure of the root, the inner nodes and the leaf nodes is similar. A $B+$tree is built out of multiple nodes that include: A pointer to the parent, which is \emph{NIL} if there is no parent. Further, pointers to child nodes or in leaves pointers to measurement time points. Besides, the number of keys that a node holds at the moment is stored and of course, the actual keys. Additionally, a boolean is used to represent if a node is a leaf node. A node can have two pointers to the previous and the next node. These two pointers are only used if the node is a leaf node. If not they are set to $NIL$.
+The node structure can be used for every type of node, since the structure of the root, the inner nodes and the leaf nodes is similar. A $B+$tree is built out of multiple nodes that include: A pointer to the parent, which is \emph{NIL} if there is no parent. Further, pointers to child nodes or in leaves pointers to measurement time points. Besides, the number of keys that a node holds at the moment is stored and of course, the actual keys. Additionally, a boolean is used to represent if a node is a leaf node. A node can have two pointers to the previous and the next node. These two pointers are only used if the node is a leaf node otherwise they are set to $NIL$.
 
+\subsubsection{Observation}
+The next higher value of a given value $v$ in a $B^+$tree is at the same time the right neighbor of $v$ and the next lower value is also the left neighbor of $v$, since the leaves and their keys are sorted from left to right.\\
+Another property of the $B^+$tree we can exploit is that the path from the root to a leaf node always has the same length, thus, the number of nodes to traverse to find a specific value in a leaf is always the same. 
 
-\subsection{Application to our System}
-The $B^+$tree described above contains searchkeys. In our case these searchkeys are the measurement values in our circular array. A value in time series $s$ can occur multiple times because the values are not unique. But for an efficient traversal of the tree the searchkeys should be comparable to each other. But, since the values are used as searchkeys, the $B^+$tree must be able to handle possible duplicates. Besides, the $B^+$tree needs to store the time point of a measurement because the time point is the amendment to the value of a measurement that makes it uniquely identifiable. Also the time point is returned by the sortedAccess$(v,T)$ operation. Section \ref{sec:allowDV} proposes an approach that allow to use duplicate values in a $B^+$tree and it explains how the time points of the measurements are stored. 
-
-\subsection{Observation}
-The next higher value of a given value $v$ in a $B^+$tree is at the same time the right neighbor of $v$ and the next lower value is also the left neighbor of $v$, since the leaves and their keys are sorted from left to right.
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[
+	scale=0.7,
+	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+	every matrix/.style={cells={scale=0.7}},
+	]
+	% root node
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17}{}{}};
+	
+	%
+	% intermediate nodes
+	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{7}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{23}{37}{43}}
+	%
+	% connecting root to intermediate level nodes
+	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+	%
+	% leaf nodes
+	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3}{6.1}}
+	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{7}{13.2}{}}
+	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{17}{18.1}{}}
+	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{23}{25.4}{}}
+	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{37}{38.9}{40}}
+	\xyshift{ 60mm}{-30mm}{\btreelnodethree{n24}{43}{47.1}{}}
+	%
+	% connecting intermediate level to leaf nodes
+	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+	\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+	%
+	% leaf pointers
+	\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+	\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+	\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+	\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+	\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+	\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+	\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+	\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+	\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+	\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+	%
+	
+	\foreach \x in
+	{n11-1, n11-2, n11-3,n12-1, n12-2,n21-1,n21-2,n22-1, n22-2, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+	%
+	
+	
+	\end{tikzpicture}
+	\vspace{2mm}
+	\caption{Example of a complete $B^+$tree.}
+	\label{fig:BTreeBook}
+\end{figure}
 \begin{example}
 	Assume we want to know the most similar value to the key $40$ in the $B^+$tree illustrated in Figure \ref{fig:BTreeBook}. We just have to compare $40$ to two values, namely the right neighbor $43$ and the left neighbor $38.9$. Hence, we find out that $38.9$ is the most similar value in the entire $B^+$tree. 
 \end{example}
-Another property of the $B^+$tree we can exploit is that the path from the root to a leaf node always has the same length, thus, the number of nodes to traverse to find a specific value in a leaf is always the same. 
 
-\subsection{Handling Duplicate Values: Associated doubly, circular Linked List}
+
+
+\subsubsection{Application to our System}
+The $B^+$tree described above contains searchkeys. In our case these searchkeys are the measurement values in our circular array. A value in time series $s$ can occur multiple times because the values are not unique and since the values are used as searchkeys, the $B^+$tree must be able to handle possible duplicates. Section \ref{sec:allowDV} proposes an approach that allows to use duplicate values in a $B^+$tree and it explains how the time points of measurements are stored in the tree. 
+
+
+
+\subsection{Handling Duplicate Values: Associated Circular Doubly Linked List}
 \label{sec:allowDV}
 This Section presents our approach to handle duplicate values in our $B^+$tree, in regard to our requirements. 
 \label{doublyLinked}
-The idea is to associate a doubly, circular linked list to each key in leaf nodes. Cormen et al.\cite{LinkedListBook} define linked lists as follows: 
-\begin{definition}
-	Linked List. A linked list is a data structure arranged in linear order. The order is determined by a pointer in every linked list element. It can either be sorted in order of the keys or it can be unsorted. Given an element $e$ in a linked list $L$, $e.next$ points to the successor element in the list. The first element, or head, of the list has no predecessor and the last element, or tail, has no predecessor. A linked list can either be singly or doubly linked. A doubly linked list element has an additional pointer which points to the predecessor, namely $e.prev$.\\
-	Each element of a doubly, linked list is an object with an attribute $key$ and two pointer attributes: $next$ and $prev$. In a circular list the $prev$ pointer of the head of the list points to the tail and the $next$ pointer ot the tail points to the $head$. If the element $e$ is the only element in the doubly, linked list the pointers $next$ and $prev$ point to $e$ itself. 
-\end{definition}
+The idea is to associate a doubly, circular linked list to each key in leaf nodes. Cormen et al.\cite{LinkedListBook} define three types of linked lists.
+\begin{enumerate}
+	\item (Singly Linked List) A singly linked list can either be sorted in order of the keys or it can be unsorted. The order is determined by a pointer in every linked list element $e$. $e.next$ points to the successor element in the list. The first element, or $head$, of the list has no predecessor and the last element, or $tail$, has no predecessor. 
+	\item (Doubly Linked List) A doubly linked list element has an additional pointer which points to the predecessor, namely $e.prev$. Each element of a doubly, linked list is an object with an attribute $key$ and two pointer attributes: $next$ and $prev$.
+	\item (Circular Doubly Linked List) In a circular doubly linked list the $prev$ pointer of the head of the list points to the tail and the $next$ pointer ot the tail points to the $head$. If the element $e$ is the only element in the list the pointers $next$ and $prev$ point to $e$ itself. 
+\end{enumerate}
 
-We use a doubly, circular linked list for our system. For clarity, we name the circular, linked list in the following only linked list. The measurement time points represent the key of a list element. Every searchkey in a leaf node of our $B^+$tree has an associated linked list. If a measurement value occurs multiple times in the time series $s$, the time points of the measurements are simply added to the linked list associated to the searchkey. As we know, the searchkey represents a value of a measurement. So instead of inserting the key again and using another position in the leaf, the new time point is inserted to the associated linked list.\\ 
-Associating a doubly, circular linked list is ideal to satisfy our requirements. The oldest value in a list, so the lowest time point, always is the element connected by a pointer from the leaf key to the list. Even though the doubly, circular linked list not literally has an end and a beginning, we name the time point associated to the leaf the $head$ and we call the heads predecessor the $tail$. \\The Figure \ref{fig:DoublyLinked} illustrates the leaf level of a $B^+$tree and the associated linked lists. It shows that the oldest time point, here $\text{14:15}$, is connected to the tree and the newest time point, $\text{14:50}$, the tail, is the predecessor. Also, the Figure illustrates that a single element in a doubly, circular linked list is linked to itself. The higher levels of the $B^+$tree and the additional linked lists are left away for clarity. 
+We use a doubly, circular linked list for our system. For clarity, we name the circular doubly linked list in the following only linked list. The measurement time points represent the key of a list element. Every searchkey in a leaf node of our $B^+$tree has an associated linked list. If the same measurement value is added multiple times to the time series $s$, the time points of the measurements are added to the linked list associated to the searchkey. So instead of inserting the key again and using another position in the leaf, the new time point is inserted to the associated linked list.\\ 
+The oldest value in a list, so the lowest time point, always is the element connected by a pointer from the leaf key to the list. Even though the linked list not literally has an end and a beginning, we name the time point associated to the leaf the $head$ and we call the heads predecessor the $tail$. 
+\begin{example}
+Figure \ref{fig:DoublyLinked} illustrates the leaf level of a $B^+$tree and linked lists. It shows that the oldest time point, here $\text{14:15}$, is connected to the tree and the newest time point, $\text{14:50}$, the tail, is the predecessor. Also, the Figure illustrates that a single element in a linked list is linked to itself. The higher levels of the $B^+$tree and the additional linked lists are left away for clarity. 
+\end{example}
 
 
 \begin{figure}[H]
@@ -856,8 +926,11 @@ Associating a doubly, circular linked list is ideal to satisfy our requirements.
 	%
 	
 	% circular array
+	
+
 	\xyshift{-40mm}{-70mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\draw node[black,midway,yshift=0.6cm,xshift=-0.4cm] {head};
 			\node[circularptr] (c1)  {}; \\	
 			%
 			\node[circularval] (left)(right) {14:15}; \\
@@ -866,6 +939,7 @@ Associating a doubly, circular linked list is ideal to satisfy our requirements.
 	% circular array
 	\xyshift{-10mm}{-70mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\draw node[black,midway,yshift=0.6cm,xshift=-0.4cm] { };
 			\node[circularptr] (c2)  {}; \\	
 			%
 			\node[circularval] (left)(right) {14:30}; \\
@@ -875,6 +949,7 @@ Associating a doubly, circular linked list is ideal to satisfy our requirements.
 	% circular array
 	\xyshift{20mm}{-70mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+			\draw node [black,midway,yshift=0.6cm] {tail};
 			\node[circularptr] (c3)  {}; \\	
 			%
 			\node[circularval] (left)(right) {14:50}; \\
@@ -885,6 +960,8 @@ Associating a doubly, circular linked list is ideal to satisfy our requirements.
 		% circular array
 		\xyshift{-90mm}{-70mm}{
 			\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
+				\draw node[black,midway,yshift=0.6cm,xshift=-0.4cm] {head};
+					\draw node [black,midway,yshift=0.6cm,xshift=0.4cm] {= tail};
 				\node[circularptr] (c5)  {}; \\	
 				%
 				\node[circularval] (left)(right) {13:50}; \\
@@ -918,12 +995,12 @@ Associating a doubly, circular linked list is ideal to satisfy our requirements.
 	\path[btlink2] ([yshift=-20pt] c1.west)  edge[out=220,in=250] ([yshift=-20pt] c3.east);
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{Doubly, circular linked lists associated to leaf nodes.}
+	\caption{Circular doubly linked lists associated to leaf nodes.}
 	\label{fig:DoublyLinked}
 \end{figure}
 
-As described above, the leaf nodes in our $B^+$tree also have pointers, namely pointers to the associated linked list. The number of pointers in a leaf node is always equal to the number of searchkeys in the leaf. Hence, a pointer at position $i$ points to the doubly, linked list associated with the leaf key at position $i$.\\
-A doubly, circular linked list element consists of the time point and the pointers to the predecessor $prev$ and to the successor $next$. This can be represented as follows: 
+As described above, the leaf nodes in our $B^+$tree also have pointers, namely pointers to the associated linked list. The number of pointers in a leaf node is always equal to the number of searchkeys in the leaf. Hence, a pointer at position $i$ points to the linked list associated with the leaf key at position $i$.\\
+A linked list element consists of the time point and the pointers to the predecessor $prev$ and to the successor $next$. This can be represented as follows: 
 \lstset{language=C}
 \begin{lstlisting}
 struct Element{
@@ -932,7 +1009,8 @@ struct Element{
 };
 \end{lstlisting}
 
-
+\subsubsection{Observation}
+The linked list associated to the measurement value stores the appropriate time point. The newest measurement with time point $\bar{t}$ that is added to an existing linked list always has a newer time point compared to all other time points in the same list and also compared to the other measurements in the tree. Because $\forall t: \underline{t} \leq t < \bar{t}$ holds for all time points in the tree. Consequently, a new time point is always inserted at the tail position. Therefore, the linked list is always sorted by the time from head to tail. A $shift$ operation on the circular array leads to a deletion of the oldest measurement in time series $s$, thus, the measurements time point, as explained, is always at the head position. Also, a new measurement can be inserted without looping through the list. It is always added to the tail position.\\ \\
 The insertion and the deletion of a list value from a linked list that contains multiple values is illustrated in Algorithm \ref{AddToList} and Algorithm \ref{deleteListValue}, respectively.
 \BlankLine
 \begin{algorithm}[H]
@@ -951,17 +1029,17 @@ The insertion and the deletion of a list value from a linked list that contains 
 	\caption{AddNewTail$(node, i, t)$}
 	\label{AddToList}
 \end{algorithm}
-
-
 %AddvaluetoList
+
+
+\renewcommand*\footnoterule{}
+
 
 \begin{algorithm}[H]
 	\IncMargin{1em}
 	\DontPrintSemicolon
-	\KwIn{Leaf $node$ and index position $i$ for the position of the associated Linked List $L$}
+	\footnote{Algorithm \ref{deleteListValue} is only used for linked lists that contain multiple elements.}\KwIn{Leaf $node$ and index position $i$ for the position of the associated Linked List $L$}
 	\KwOut{Linked List $L$ such that $t$ $\not\in$ $L$}
-	
-
 
 	head $\leftarrow$ node.pointers[i]\;
 	
@@ -976,17 +1054,13 @@ The insertion and the deletion of a list value from a linked list that contains 
 	\caption{DeleteHead$(node, i)$}
 		\label{deleteListValue}
 \end{algorithm}
-%DeleteValueFromList
 
-\subsubsection{Observation}
-The linked list associated to the measurement value stores the appropriate time point. Every new time point added to an existing linked list always has the newer time point than all other time points in the same list. Consequently, a new time point is always inserted at the tail position. Therefore, the linked list is always sorted by the time from head to tail. A $shift$ operation on the circular array leads to a deletion of the oldest measurement in time series $s$, thus, the measurements time point, as explained, is always at the head position. Also, a new measurement can be inserted without looping through the list. It is always added to the tail position. The newNeighborhood$(t,v,j,l)$ operation searches a specific measurement. Therefore, it cannot just take the oldest or newest time point position like the insertion or deletion method. In the worst case the entire linked list must be searched for the specific time point. We initialize $l$ $\times$ $d$ neighborhoods, one for each value in a query pattern $Q(t)$. Thus, $l$ neighborhoods in every time series $r$ which is part of the pattern. Hence, the newNeighborhood$(t,v,j,l)$ operation always is executed at the $l$ newest measurements in an involved time series. Thus, we can give an upper bound, namely the pattern length $l$. As a consequence, at most $l$ element examinations in a linked list are necessary, where $l$ represents the pattern length.
+
 
 
 \section{$B^+$tree Operations}
 \label{sec:OperationsOnBTree}
-The data in the circular array is updated with every arriving measurement. Therefore, every $shift$ execution updates the array. The update method is illustrated in Algrithm \ref{alg:UpdateCA}. The operation not only influences the array data but also the $B^+$tree. Therefore, the deletion and insertion of a measurement in the tree is executed within the update of the circular array.\\ The implementation of the insertion and the deletion within a $B^+$tree is described in Section \ref{sec:OperationsOnBTree}. The $randomAccess$ of a time point $t$ is presented in Algorithm \ref{alg:Lookup}.
-Further, the sortedAccess$(v,T)$ method in Algorithm \ref{NeighborhoodGrow} uses the $B^+$tree to return the time point $t \in T$ such that $|v-s(t)|$ is minimal, given a value \emph{v}.
-
+The data in the circular array is updated with every arriving measurement. Therefore, every $shift$ execution updates the array. The operation not only influences the array data but also the $B^+$tree. Therefore, the deletion and insertion of a measurement in the tree is executed within the update of the circular array.\\ The implementation of the deletion and the insertion in a $B^+$tree is described in Section \ref{deleteTree} and Section \ref{insertionTree}, respectively. 
 
 \begin{figure}[H]
 	\centering
@@ -1078,23 +1152,23 @@ Further, the sortedAccess$(v,T)$ method in Algorithm \ref{NeighborhoodGrow} uses
 	
 	
 	% list  value
-	\xyshift{-70mm}{-50mm}{
+	\xyshift{-50mm}{-50mm}{
 		\matrix [ampersand replacement=\&, outer sep=0pt, matrix anchor=north] (array) {
 			\node[circularptr] (c4)  {}; \\	
 			%
-			\node[circularval] (left)(right) {14:20}; \\
+			\node[circularval] (left)(right) {13:15}; \\
 		};
 	}
 	
 	% draw pointers between list value and B+ tree
-	\path[btlink2] ([yshift=-2pt] c4.center)  edge[out=90,in=270] ([yshift=2pt] n11-2.center);
+	\path[btlink2] ([yshift=-2pt] c4.center)  edge[out=90,in=270] ([yshift=2pt] n12-2.center);
 	
 	%circular links
 	\path[btlink] ([yshift=-16pt] c4.west)  edge[out=-1500,in=-60] ([yshift=-16pt] c4.east);
 	\path[btlink2] ([yshift=-24pt] c4.west)  edge[out=-1500,in=-60] ([yshift=-24pt] c4.east);
 	
 	\foreach \x in
-	{n12-1,n12-2,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
+	{n11-2, n12-1,n21-1,n21-2,n22-1, n23-1, n23-2, n23-3, n24-1,n24-2}
 	{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
 	
 	
@@ -1150,12 +1224,12 @@ Further, the sortedAccess$(v,T)$ method in Algorithm \ref{NeighborhoodGrow} uses
 
 
 \begin{example}
-	We assume we have the situation illustrated in Figure \ref{startSituation}. $25.4$ occurs two times. Hence, the associated list contains two elements. Further, all leaf keys have an associated time point. Some associated linked lists are not illustrated to improve clarity. The size of the circular array is $14$. The array is already filled. This significances that for every new arriving measurement a value has to be added to the $B^+tree$ and another one has to be deleted. 
+	We assume we have the situation illustrated in Figure \ref{startSituation}. Value $25.4$ occurs two times. Hence, the associated list contains two elements. Further, all leaf keys have an associated time point, but some linked lists are not illustrated to improve clarity. The size of window $W$ and the circular array is $|W|=14$. The array is already full, hence for every new arriving measurement a value has to be added to the circular array and the $B^+$tree and another one has to be deleted from both data structures. 
 \end{example}
 
 \subsection{Search in a $B^+$tree}
 Before we can delete or add a measurement, we have to find the right leaf. 
-Algorithm $FindLeaf$ presents the pseudo-code to find the appropriate leaf. 
+Algorithm \ref{findLeaf} presents the pseudo-code to find the appropriate leaf. First, the method starts at the root of the tree and traverses the tree until it reaches the appropriate leaf node that would contain the value. The current node is examined by looking for the smallest $i$ for which the searchkey value $k$ is greater or equal to. The current node is updated to the child node at pointer $P_i$. This procedure is repeated until a leaf node is reached. 
 \BlankLine
 
 %FindLeaf
@@ -1170,11 +1244,11 @@ Algorithm $FindLeaf$ presents the pseudo-code to find the appropriate leaf.
 		curNode $\leftarrow$ tree.root\; 
 		
 		\If{curNode = NIL}{
-			\Return curNode\;
+			\Return NIL\;
 		}
-		\While{curNode is no Leaf}{
+		\While{curNode is no leaf}{
 		Let $i$ $\leftarrow$ smallest number such that $k$ $\leq$ curNode.$K_i$\;
-		\eIf{no $i$}{
+		\eIf{no such $i$ exists}{
 			$m$ $\leftarrow$ last non-null pointer in the node\;
 			curNode $\leftarrow$ curNode.pointers[m]\;
 		}
@@ -1190,18 +1264,46 @@ Algorithm $FindLeaf$ presents the pseudo-code to find the appropriate leaf.
 \end{algorithm}
 
 \begin{example}
-	We assume we want to find the key $13.2$ in the $B^+$tree illustrated in Figure \ref{startSituation} because this was the overwritten measurement value. The function starts at the root of the tree and traverses the tree until it reaches the appropriate leaf node that would contain the value.\\
-	The current node is examined by looking for the smallest $i$ for which the searchkey value $13.2$ is greater or equal to.  In this case, the first pointer comes from the root at index position $0$, since $13.2$ is smaller than $17.1$. Then the new current node is set to the child node at pointer position $0$. This procedure is repeated until a leaf node is reached. 
+	We assume we want to find the key $13.2$ in the $B^+$tree illustrated in Figure \ref{startSituation} because this was the value that dropped out of the sliding window $W$. \\
+	The current node is examined by looking for the smallest $i$ for which the searchkey value $13.2$ is greater or equal to.  In this case, the first pointer comes from the root at index position $0$, since $13.2$ is smaller than $17.1$. Then the new current node is set to the child node at pointer position $0$ which includes the searchkey $7.2$. Afterwards, the current node is updated again to the node at pointer position $i=1$, hence $P_1$. Since the new current node is a leaf node, the algorithm returns the leaf node. 
 \end{example} 
 
 \subsection{Deletion in the $B^+$tree}
-\label{delete}
-In case there has been an overwritten measurement, we first have to delete this measurment from the tree, before we can add a new one. We first present the deletion, because it is normally executed before the insertion. \\
-First, the leaf containing the measurement to delete is located. Since our $B^+$tree accepts duplicates, it is afterwards checked if the associated linked list to the key has multiple list values. If the list has multiple list values, the identified list value is deleted and the deletion is already finished, as presented in Algorithm \ref{deleteListValue}. \\
-But if the entry time point is the single value in the list the key and its belonging list is deleted. Therefore, $DeleteEntry$ illustrated in Algorithm \ref{deleteEntry} is called. After removing the entry from the node, there are three possible consequences, the associated algorithms are attached to the end of this section:
+\label{deleteTree}
+In case there has been a measurement value that dropped out of the sliding window $W$, we first have to delete this measurement from the tree, before we can add a new one. We first present the deletion, because it is normally executed before the insertion. \\
+First, the leaf containing the measurement to delete is located with Algorithm \ref{findLeaf}. Since our $B^+$tree accepts duplicates, it is afterwards checked as illustrated in Algorithm \ref{delete} if the associated linked list to the key has multiple linked list elements. If the linked list has multiple elements, the identified element is deleted and the deletion is already finished, as presented in Algorithm \ref{deleteListValue}. If the entry time point is the single value in the linked list the leaf key and its belonging list is deleted.
+
+\begin{algorithm}[H]
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwIn{Tree $tree$, the measurement time point $t$ and key $k$}
+	\KwOut{Tree $tree$ such that t,k $\not\in tree$ }
+	
+	
+	leaf $\leftarrow$ findLeaf($tree$, $k$)\; 
+	
+	i $\leftarrow$ position index in leaf such that keys remain ordered\;
+	\BlankLine
+	\eIf{list on pointer i has multiple elements}{
+		\BlankLine
+		DeleteHead(leaf, i)\;
+	}
+	{
+		DeleteEntry(tree, leaf, leaf.keys[i])\; 
+	}	
+	
+	
+	\caption{Delete$(tree, t, k)$}	\label{delete}
+\end{algorithm}
+%Delete
+
+\BlankLine
+The $DeleteEntry$ method illustrated in Algorithm \ref{deleteEntry} is called if a measurement is the only linked list element. A node has to be at least half-full to remain in the same state after a deletion. In detail, the minimum number of keys depends on the node properties. If the node is a leaf node it contains at least $\ceil{(n-1)/2}$ keys. If the node is an internal node the minimum number of keys is $\ceil{n/2}-1$ and thus the minimum number of pointers is $\ceil{n/2}$. \\ 
+Hence, all nodes have to be half-full after is removed from a node. There are three possible cases to achieve a state where the $B^+$tree properties described in Section \ref{structureBtree} are still satisfied. Hence, the tree must be still balanced and all nodes must be at least half-full after a deletion.
 \begin{enumerate}
-	\item The node has still enough keys: The minimum number of keys depends on the node properties. If the node is a leaf node it contains at least $\ceil{(n-1)/2}$ keys. If the node is an internal node the minimum number of keys is $\ceil{n/2}-1$ and thus the minimum number of pointers is $\ceil{n/2}$. 
-	\begin{figure}[ht!]
+	\item The node is at least half-full: The node has still enough keys. Hence, the measurement is deleted and afterwards the algorithm stops. Figure \ref{fig:enoughkeys} illustrates the case where the leaf has still enough keys. 
+	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[
 		scale=0.7,
@@ -1251,60 +1353,8 @@ But if the entry time point is the single value in the list the key and its belo
 		\label{fig:enoughkeys}
 	\end{figure} 
 		
-	\item The node needs to be merged with a sibling: We merge the nodes by moving the entries from the right sibling into the left sibling, and deleting the now empty right sibling. If there is no left sibling the right sibling is selected to receive the additional entries. Once a node is deleted, we must also delete the entry in the parent node that pointed to the deleted node. Hence, we traverse the tree recursively upwards  until $deleteEntry$ stops.
-	
-	\begin{figure}[ht!]
-		\centering
-		\begin{tikzpicture}[
-		scale=0.7,
-		every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
-		every matrix/.style={cells={scale=0.7}},
-		]
-		% root node
-		\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17.2}{50.1}{}};
-		
-		%
-		% intermediate nodes
-		\xyshift{-50mm}{-15mm}{\btreelnodethree{n1}{7.5}{16.4}{}{}}
-		\xyshift{ -20mm}{-15mm}{\btreelnodethree{n2}{17.2}{33.1}{}}
-		\xyshift{ 10mm}{-15mm}{\btreelnodethree{n3}{50.1}{52.1}{}}
-		%
-		% connecting root to leaf level nodes
-		\foreach \x in {1,2, 3} { \btreelink{root-\x}{n\x} }
-		%
-		% leaf pointers
-		\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
-		\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
-		\draw[btlink] ([yshift=+3pt] n2-c.east) -- ([yshift=+3pt] n3-a.west);
-		\draw[btlink] ([yshift=-3pt] n3-a.west) -- ([yshift=-3pt] n2-c.east);
-		%
-		% root node
-		\xyshift{90mm}{0mm}{\btreeinodethree{root}{17.2}{}{}};
-			
-			%
-		% intermediate nodes
-		\xyshift{60mm}{-15mm}{\btreelnodethree{n1}{7.5}{16.4}{}{}}
-		\xyshift{ 120mm}{-15mm}{\btreelnodethree{n2}{17.2}{33.1}{52.1}}
-		%
-		% connecting root to leaf level nodes
-		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
-			%
-		% leaf pointers
-		\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
-		\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
-		%
-		
-		\draw[->]  (2,-1) -- (5,-1) node [pos=0.5,above,font=\footnotesize] {delete $50.1$};
-		
-		
-		\end{tikzpicture}
-		\vspace{2mm}
-		\caption{The node can be merged with its sibling.}
-		\label{fig:enoughkeys}
-	\end{figure} 
-	
-	
-	\item The values in a node have to be redistributed to ensure that each node is at least half-full and hence contains the minimum number of keys. Merging is not possible, if the sibling and node together have more than the allowed $n$ pointers. Since inner nodes that have $m$ keys have $m+1$ pointers, the nodes can only be merged if the sum of all keys in both nodes is smaller than the tree nodesize $n-1$. Leaf nodes can be merged if the sum of all keys in both leaves is smaller than $n$. Thus, if the keys and pointers do not fit into one node, the keys have to be redistributed. We redistribute the keys, such that each node has at least $\ceil{n/2}$ child pointers. Therefore, we move the rightmost pointer from the left sibling to the under-full right sibling. Consequently, we also need to replace the key in the parent to ensure the parent pointer to the new organised node is still separable from the other pointers.
+
+	\item The values in a node are redistributed: Provided that, the node is not half-full any more and the node cannot be merged with a sibling, the nodes have to be redistributed. To ensure that each node is at least half-full and hence contains the minimum number of keys. Merging is not possible, if the sibling and node together have more than the allowed $n$ pointers. Since inner nodes that have $m$ keys have $m+1$ pointers, the nodes can only be merged if the sum of all keys in both nodes is smaller than the tree node size $n-1$. Leaf nodes can be merged if the sum of all keys in both leaves is smaller than $n$. Thus, if the keys and pointers do not fit into one node, the keys have to be redistributed. We redistribute the keys, such that each interior node has at least $\ceil{n/2}-1$ keys and each leaf node has at least $\ceil{n-1/2}$. Therefore, we move the rightmost pointer from the left sibling to the under-full right sibling. Consequently, we also need to replace the key in the parent to ensure the parent pointer to the new organised node is still separable from the other pointers. Figure \ref{fig:redestribute} illustrates the case where some keys have to be redistributed. The Algorithm \ref{Redistribute} for the redistribution can be found in Appendix Section \ref{app:Del}.
 		\begin{figure}[ht!]
 			\centering
 			\begin{tikzpicture}[
@@ -1354,44 +1404,136 @@ But if the entry time point is the single value in the list the key and its belo
 			
 			\end{tikzpicture}
 			\vspace{2mm}
-			\caption{Some entries are redistributed.}
-			\label{fig:enoughkeys}
+			\caption{Some entries must be redistributed.}
+			\label{fig:redestribute}
 		\end{figure} 
-	
+		\item The node is merged with a sibling: Provided that, the keys and pointers of the node and its sibling fit into a single node, we merge them. We move the entries from the right sibling into the left sibling, and deleting the now empty right sibling. If there is no left sibling the right sibling is selected to receive the additional entries. Once a node is deleted, we must also delete the entry in the parent node that pointed to the deleted node. Hence, we traverse the tree recursively upwards  until $DeleteEntry$ stops. Figure \ref{fig:merge} illustrates the case where the node can be merged with a sibling. The Algorithm \ref{MergeNodes} for the redistribution can be found in Appendix Section \ref{app:Del}.
+		
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}[
+			scale=0.7,
+			every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
+			every matrix/.style={cells={scale=0.7}},
+			]
+			% root node
+			\xyshift{-20mm}{0mm}{\btreeinodethree{root}{17.2}{50.1}{}};
+			
+			%
+			% intermediate nodes
+			\xyshift{-50mm}{-15mm}{\btreelnodethree{n1}{7.5}{16.4}{}{}}
+			\xyshift{ -20mm}{-15mm}{\btreelnodethree{n2}{17.2}{33.1}{}}
+			\xyshift{ 10mm}{-15mm}{\btreelnodethree{n3}{50.1}{52.1}{}}
+			%
+			% connecting root to leaf level nodes
+			\foreach \x in {1,2, 3} { \btreelink{root-\x}{n\x} }
+			%
+			% leaf pointers
+			\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
+			\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
+			\draw[btlink] ([yshift=+3pt] n2-c.east) -- ([yshift=+3pt] n3-a.west);
+			\draw[btlink] ([yshift=-3pt] n3-a.west) -- ([yshift=-3pt] n2-c.east);
+			%
+			% root node
+			\xyshift{90mm}{0mm}{\btreeinodethree{root}{17.2}{}{}};
+			
+			%
+			% intermediate nodes
+			\xyshift{60mm}{-15mm}{\btreelnodethree{n1}{7.5}{16.4}{}{}}
+			\xyshift{ 120mm}{-15mm}{\btreelnodethree{n2}{17.2}{33.1}{52.1}}
+			%
+			% connecting root to leaf level nodes
+			\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+			%
+			% leaf pointers
+			\draw[btlink] ([yshift=+3pt] n1-c.east) -- ([yshift=+3pt] n2-a.west);
+			\draw[btlink] ([yshift=-3pt] n2-a.west) -- ([yshift=-3pt] n1-c.east);
+			%
+			
+			\draw[->]  (2,-1) -- (5,-1) node [pos=0.5,above,font=\footnotesize] {delete $50.1$};
+			
+			
+			\end{tikzpicture}
+			\vspace{2mm}
+			\caption{The node can be merged with its sibling.}
+			\label{fig:merge}
+		\end{figure} 
+		
+		
 	
 \end{enumerate} 
 
 
 
 
-\begin{exmp}
-	We again refer to the example in Figure \ref{startSituation}. The measurement with time point $\text{13:15}$ is overwritten by the new value. Therefore, it needs to be deleted. First, the $findLeaf$ method finds the leaf that contains $13.2$. Then it deletes the value and its associated linked list. The leaf after has just $1$ key left and therefore is smaller than the minimum allowed keys of $\ceil{(n-1)/2}$. Since $1<\ceil{(4-3)/2}$. The left neighbor has still enough space for the only key left in the node, namely $7.2$. The node is merged with its left sibling. As a consequence, the key in the parent is not correct any more. Since $7.2$ now is part of the left child. The key $7.2$ in the parent is removed as well by calling $DeleteEntry$ at the end of $MergeNodes$. Then the $DeleteEntry$ procedure checks weather this node can be merged with its sibling. Since the node has one pointer left to its now only child and the sibling has already three keys, $23.0,37.6, 43.1$ and hence 4 pointers. So $1+4$ is more than the allowed $4$ pointers in an inner node. As a consequence, the keys have to be redistributed. The node takes the root node key $17.1$ as a new key and adds the leftmost child of the sibling. This is the leaf node with the keys $17.1$ and $18.1$. The root node takes the leftmost key of its right children $23.0$. The right children now has the keys $37.6$ and $43.1$ left. \\
-	As a result, the tree after deleting $13.2$ looks as follows: 
-\end{exmp}
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[
 	scale=0.7,
 	every node/.style={outer sep=0pt, transform shape, font=\scriptsize},
 	every matrix/.style={cells={scale=0.7}},
 	]
+		% root node
+		\xyshift{-20mm}{70mm}{\btreeinodethree{root}{17.1}{}{}};
+		
+		%
+		% intermediate nodes
+		\xyshift{-50mm}{55mm}{\btreeinodethree{n1}{7.2}{}{}{}}
+		\xyshift{ 10mm}{55mm}{\btreeinodethree{n2}{23.0}{37.6}{43.1}}
+		%
+		% connecting root to intermediate level nodes
+		\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
+		%
+		% leaf nodes
+		\xyshift{-90mm}{40mm}{\btreelnodethree{n11}{2.5}{3.0}{}}
+		\xyshift{-60mm}{40mm}{\btreelnodethree{n12}{7.2}{13.2}{}}
+		\xyshift{-30mm}{40mm}{\btreelnodethree{n21}{17.1}{18.1}{}}
+		\xyshift{ 0mm}{40mm}{\btreelnodethree{n22}{23.0}{25.4}{}}
+		\xyshift{ 30mm}{40mm}{\btreelnodethree{n23}{37.6}{38.9}{40.3}}
+		\xyshift{ 60mm}{40mm}{\btreelnodethree{n24}{43.1}{47.1}{}}
+		%
+		% connecting intermediate level to leaf nodes
+		\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
+		\foreach \x in {1,2,3,4} { \btreelink{n2-\x}{n2\x} }
+		%
+		% leaf pointers
+		\draw[btlink] ([yshift=+3pt] n11-c.east) -- ([yshift=+3pt] n12-a.west);
+		\draw[btlink] ([yshift=-3pt] n12-a.west) -- ([yshift=-3pt] n11-c.east);
+		\draw[btlink] ([yshift=+3pt] n12-c.east) -- ([yshift=+3pt] n21-a.west);
+		\draw[btlink] ([yshift=-3pt] n21-a.west) -- ([yshift=-3pt] n12-c.east);
+		\draw[btlink] ([yshift=+3pt] n21-c.east) -- ([yshift=+3pt] n22-a.west);
+		\draw[btlink] ([yshift=-3pt] n22-a.west) -- ([yshift=-3pt] n21-c.east);
+		\draw[btlink] ([yshift=+3pt] n22-c.east) -- ([yshift=+3pt] n23-a.west);
+		\draw[btlink] ([yshift=-3pt] n23-a.west) -- ([yshift=-3pt] n22-c.east);
+		\draw[btlink] ([yshift=+3pt] n23-c.east) -- ([yshift=+3pt] n24-a.west);
+		\draw[btlink] ([yshift=-3pt] n24-a.west) -- ([yshift=-3pt] n23-c.east);
+		%
+		
+		%circular links
+	
+		\foreach \x in
+		{n11-1,n11-2, n12-1, n12-2,n21-1,n21-2,n22-1,n22-2, n23-1, n23-2, n23-3, n24-1,n24-2}
+		{ \path[<-] ([yshift=-15pt] \x.center) edge ([yshift=2pt] \x.center); }
+		
+	\draw[->]  (-3.2,1) -- (-1.5,1) node [pos=0.5,above,font=\footnotesize] {delete $13.2$};
+	
 	% root node
-	\xyshift{-30mm}{0mm}{\btreeinodethree{root}{23.0}{}{}};
+	\xyshift{-20mm}{0mm}{\btreeinodethree{root}{23.0}{}{}};
 	
 	%
 	% intermediate nodes
-	\xyshift{-50mm}{-15mm}{\btreeinodethree{n1}{17.1}{}{}{}}
-	\xyshift{ 0mm}{-15mm}{\btreeinodethree{n2}{37.6}{43.1}{}}
+	\xyshift{-40mm}{-15mm}{\btreeinodethree{n1}{17.1}{}{}{}}
+	\xyshift{ 10mm}{-15mm}{\btreeinodethree{n2}{37.6}{43.1}{}}
 	%
 	% connecting root to intermediate level nodes
 	\foreach \x in {1,2} { \btreelink{root-\x}{n\x} }
 	%
 	% leaf nodes
-	\xyshift{-90mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{7.2}}
-	\xyshift{-60mm}{-30mm}{\btreelnodethree{n12}{17.1}{18.1}{}}
-	\xyshift{-30mm}{-30mm}{\btreelnodethree{n21}{23.0}{25.4}{}}
-	\xyshift{ 0mm}{-30mm}{\btreelnodethree{n22}{37.6}{38.9}{40.3}}
-	\xyshift{ 30mm}{-30mm}{\btreelnodethree{n23}{43.1}{47.1}{}}
+	\xyshift{-80mm}{-30mm}{\btreelnodethree{n11}{2.5}{3.0}{7.2}}
+	\xyshift{-50mm}{-30mm}{\btreelnodethree{n12}{17.1}{18.1}{}}
+	\xyshift{-20mm}{-30mm}{\btreelnodethree{n21}{23.0}{25.4}{}}
+	\xyshift{ 10mm}{-30mm}{\btreelnodethree{n22}{37.6}{38.9}{40.3}}
+	\xyshift{ 40mm}{-30mm}{\btreelnodethree{n23}{43.1}{47.1}{}}
 	%
 	% connecting intermediate level to leaf nodes
 	\foreach \x in {1,2}     { \btreelink{n1-\x}{n1\x} }
@@ -1418,37 +1560,14 @@ But if the entry time point is the single value in the list the key and its belo
 	
 	\end{tikzpicture}
 	\vspace{2mm}
-	\caption{$B^+$tree after the deletion of $13.2$.}
+	\caption{Deleting $13.2$ from the $B^+$tree.}
 	\label{fig:deletionOf13}
 \end{figure}
 
 
-
-\begin{algorithm}[H]
-	\IncMargin{1em}
-	\SetAlgoLined
-	\DontPrintSemicolon
-	\KwIn{Tree $tree$, the measurement $m$ time point $t$ and key $k$}
-	\KwOut{Tree $tree$ such that $m$ $\not\in tree$ }
-
-		
-		leaf $\leftarrow$ findLeaf($tree$, $k$)\; 
-		
-		i $\leftarrow$ position index in leaf such that keys remain ordered\;
-		\BlankLine
-		\eIf{list on pointer i has multiple elements}{
-			\BlankLine
-			deleteHead(leaf, keyPosIndex)\;
-		}
-		{
-			deleteEntry(tree, leaf, leaf.keys[i])\; 
-		}	
-	
-	
-	\caption{Delete$(tree, t, k)$}	\label{delete}
-\end{algorithm}
-%Delete
-
+\begin{exmp}
+	We again refer to the example in Figure \ref{startSituation}. The measurement with time point $\text{13:15}$ dropped out of the sliding window $W$. Therefore, it needs to be deleted. First, the $findLeaf$ method finds the leaf that contains $13.2$. Then it deletes the value and its associated linked list. The leaf after has just $1$ key left and therefore is smaller than the minimum allowed keys of $2=\ceil{(n-1)/2}$. Since $1<\ceil{(4-3)/2}$. The left neighbor has still enough space for the only key left in the node, namely $7.2$. The node is merged with its left sibling. As a consequence, the key in the parent is not correct any more, since $7.2$ now is part of the left child. Key $7.2$ in the parent is removed as well by calling $DeleteEntry$ recursively. Then the $DeleteEntry$ procedure checks weather this node can be merged with its sibling. Since the node has one pointer left to its now only child and the sibling has already three keys, $23.0,37.6, 43.1$ and hence 4 pointers. So $1+4$ is more than the allowed $4$ pointers in an inner node. As a consequence, the keys have to be redistributed. The node takes the root node key $17.1$ as a new key and adds the leftmost child of the sibling. This is the leaf node with the keys $17.1$ and $18.1$. The root node takes the leftmost key of its right children $23.0$. The right children now has the keys $37.6$ and $43.1$ left. The tree before and after deleting $13.2$ is illustrated in Figure \ref{fig:deletionOf13}.
+\end{exmp}
 
 
 
@@ -1464,7 +1583,7 @@ But if the entry time point is the single value in the list the key and its belo
 
 		node $\leftarrow$ remove $k$ and associated linked list from $node$\; 
 		\If{node is the root}{
-			adjustTheRoot$(tree)$\;
+			AdjustRoot$(tree)$\;
 			\Return\; 	
 		}
 		\eIf{node is leaf}{
@@ -1487,24 +1606,24 @@ But if the entry time point is the single value in the list the key and its belo
 			neighbor $\leftarrow$ node.parent.pointers[1]\;
 		}
 		{
-			kIndex $\leftarrow$ neighborIndex; \;
-			neighbor $\leftarrow$ node.parent.pointers[neighborIndex]\;
+			kIndex $\leftarrow$ nIndex; \;
+			neighbor $\leftarrow$ node.parent.pointers[nIndex]\;
 		}
-		//keyPrime is the value between pointers to $node$ and $neighbor$ in parent\;
+		//innerKeyPrime is the value between pointers to $node$ and $neighbor$ in parent\;
 		innerKeyPrime $\leftarrow$ node.parent.pointers[kIndex]
 		
-		capacity $\leftarrow$ treeNodeSize\;	
+		capacity $\leftarrow$ n-1\;	
 	
 		\If{node is a leaf}{
-			capacity $\leftarrow$ treeNodeSize + 1\;
+			capacity $\leftarrow$ n\;
 		}
 
 		//Merge if both nodes together have enough space\;
 		\eIf{(neighbor.numOfKeys + node.numOfKeys ) < capacity}{
-		  	mergeNodes(tree, node, neighbor, neighbourIndex, innerKeyPrime)\;
+		  	MergeNodes(tree, node, neighbor, nIndex, innerKeyPrime)\;
 		 }
 		 {
-		  	redestributeNodes(tree, node, neighbor, neighbourIndex, kIndex, innerKeyPrime)\;
+		  	RedestributeNodes(tree, node, neighbor, nIndex, kIndex, innerKeyPrime)\;
 		}   
 	
 	
@@ -1515,11 +1634,10 @@ But if the entry time point is the single value in the list the key and its belo
 
 
 
-
 \subsection{Insertion in the $B^+$tree}
-
-To insert a value to the tree, we first find the leaf node where the key would appear by using $findLeaf$. After, we insert the entry such that the searchkeys are still in order and a list is allocated where the time point is inserted. If the searchkey already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the searchkeys in the leaf remain unchanged. In this case, refer to Algorithm \ref{AddToList}. \\
-The measurement is directly inserted to the leaf if there is an empty space. It is inserted, such that the leaf keys are still ordered from left to right. The $splitAndInsertIntoInnerNode$ method has the same principle as the $splitLeaves$ method. But if the inner nodes are split, one key is removed from the node and is given one level upwards to the parent level. This searchkey separates the children. 
+\label{insertionTree}
+To insert a value to the tree, we first find the leaf node where the key would appear with Algorithm \ref{findLeaf}. After, we insert the entry such that the searchkeys are still in order and a list is allocated where the time point is inserted. If the searchkey already exists in the leaf node, the time point of the measurement is added to the already existing associated list and the searchkeys in the leaf remain unchanged. In this case, refer to Algorithm \ref{AddToList}. \\
+The measurement is directly inserted to the leaf if there is an empty space, such that the leaf keys are still ordered from left to right. The $SplitAndInsertIntoInnerNode$ method has the same principle as the $SplitLeaves$ method. But if the inner nodes are split, one key is removed from the node and is given one level upwards to the parent level. This searchkey separates the children. 
 \BlankLine
 %addRecordToTree
 \begin{algorithm}[H]
@@ -1539,17 +1657,17 @@ The measurement is directly inserted to the leaf if there is an empty space. It 
 		 }
 		    
 		 leaf $\leftarrow$ findLeaf(tree, v)\;
-		//insert to leaf as doubly linked list value\;
+		//insert to leaf as linked list value\;
 		    \uIf{isDuplicateKey(leaf, t, v)}{
 		    	i $\leftarrow$ getInserPoint(tree, leaf, v)\;
-		    	addNewTail(leaf, i, t)\;
+		    	AddNewTail(leaf, i, t)\;
 		    }
-		    \uElseIf{leaf.numOfKeys < tree.nodeSize}{
+		    \uElseIf{leaf.numOfKeys < n-1}{
 		    	//enough space for new key value pair\;
-		    	insertRecordIntoLeaf(tree, leaf, t, v)\;
+		    	InsertRecordIntoLeaf(tree, leaf, t, v)\;
 		    }
 		    \Else{
-		    	splitAndInsertIntoLeaves(tree, leaf, t, v);\
+		    	SplitAndInsertIntoLeaves(tree, leaf, t, v);\
 		    }
 	
 		
@@ -1625,6 +1743,8 @@ We again consider the example from the beginning in Figure \ref{startSituation},
 
 \section{Neighborhood}
 
+The sortedAccess$(v,T)$ method in Algorithm \ref{NeighborhoodGrow} uses the $B^+$tree to return the time point $t \in T$ such that $|v-s(t)|$ is minimal, given a value \emph{v}. But before a neighborhood can grow it has to be initialized. The neighborhood initialization is described in Section \ref{initializeNeighborhood}.
+
 \subsection{Initialize Neighborhood}
 The Algorithm \ref{initializeNeighborhood} initializes a new neighborhood. A neighborhood consists of the following attributes: 
 \lstset{language=C}
@@ -1644,12 +1764,12 @@ struct Neighborhood{
 };
 \end{lstlisting}
 \BlankLine
-A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query pattern $Q(t)$, where leftPos$^-$ and rightPos$^+$ are positions in leaves of the $B^+$tree. They represent the left and right border of the neighborhood. Initially the neighborhood positions are set to the position of $q_{ij}$ in the $B^+$tree. In total $d \times l$ neighborhoods are initialized. Every time series $r$ in query pattern $Q(t)$ initializes $l$ patterns. The index $j$ represents the position of the measurement within the query pattern. If $j=1$ the oldest time point in the query pattern is meant and if $j=l$, thus $j$ is equal to the pattern length, the latest time point in the query pattern is meant. 
+A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query pattern $Q(t)$, where leftPos$^-$ and rightPos$^+$ are neighborhood positions of type $NeighborhoodPos$ in leaves of the $B^+$tree. They represent the left and right border of the neighborhood. Initially the neighborhood positions are set to the position of $q_{ij}$ in the $B^+$tree. In total $d \times l$ neighborhoods are initialized. Every time series $r$ in query pattern $Q(t)$ initializes $l$ neighborhoods. The index $j$ represents the position of the measurement within the query pattern. If $j=1$ the oldest time point in the query pattern is meant and if $j=l$, thus $j$ is equal to the pattern length, the latest time point in the query pattern is meant. 
 
 
 
 \begin{example}
-	If $d=1$ just one time series is part of pattern $P(t)$. Figure \ref{Qpatt} illustrates an example of a query pattern with $d=1$. In total $l$ neighborhoods are initialized in time series $r_1$. The Figure \ref{fig:initialize} shows the circular array and the $B^+$tree for the time series $r_1$ after initialization.
+	If $d=1$ just one time series is part of query pattern $Q(t)$. Figure \ref{Qpatt} illustrates an example of a query pattern with $d=1$. In total $l$ neighborhoods are initialized in time series $r_1$. The Figure \ref{fig:initialize} shows the circular array and the $B^+$tree for the time series $r_1$ after initialization.
 \end{example}
 
 \begin{figure}[H]
@@ -1868,26 +1988,25 @@ A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query patt
 	\KwIn{Tree $tree$, the node $node$ and its neighbor $neighbor$, the neighborIndex $nIndex$, the $kIndex$ and the the key $kPrime$}
 	\KwOut{The keys in the node and its neighbor, as well as the parents keys are redestributed}
 	
-
-		    neighboorhood.key $\leftarrow$ measurement.value\;
-		    neighboorhood.j $\leftarrow$ j\;
-		    neighboorhood.patternLength $\leftarrow$ l\;
+		    N.key $\leftarrow$ measurement.value\;
+		    N.j $\leftarrow$ j\;
+		    N.patternLength $\leftarrow$ l\;
 		    
 		    \BlankLine
-		    leafNode $\leftarrow$ findLeaf(tree, measurement.value)\;
-		    pointerIndex $\leftarrow$ getInsertionIndex(leafNode, measurement.value)\;
-		    elementOnThatKey $\leftarrow$ leafNode.pointers[pointerIndex]\;
+		    leafNode $\leftarrow$ FindLeaf(tree, measurement.value)\;
+		    pointerIndex $\leftarrow$ GetInsertionIndex(leafNode, measurement.value)\;
+		    element $\leftarrow$ leafNode.pointers[pointerIndex]\;
 		    \BlankLine
 		    //Upper Bound: The value is at most patternLength away form first list value\;
-		    maxSteps $\leftarrow$ patternLength\;
-		    \While{elementOnThatKey.timestamp $\neq$ measurement.timestamp \&\& maxSteps $\neq$ 0}{
+		    maxSteps $\leftarrow$ l\;
+		    \While{element.timestamp $\neq$ measurement.timestamp \&\& maxSteps $\neq$ 0}{
 		    	//go from newest value back towards oldest\;
-		    	elementOnThatKey $\leftarrow$ elementOnThatKey.prev\;
-		    	maxSteps--\;
+		    	element $\leftarrow$ element.prev\;
+		    	maxSteps$--$\;
 		    }
 
-		    neighboorhood.leftPos $\leftarrow$ set position to elementOnThatKey\;
-		    neighboorhood.rightPos $\leftarrow$ set position to elementOnThatKey\;
+		    N.leftPos $\leftarrow$ set position to element\;
+		    N.rightPos $\leftarrow$ set position to element\;
 		    \BlankLine
 		    \Return neighboorhood;
 	
@@ -1899,7 +2018,7 @@ A neighborhood $N(q_{ij})$ is defined around each value $q_{ij}$ of a query patt
 
 
 
-\subsection{Sorted Access: Grow Neighborhood}
+\subsection{Sorted Access}
 After the initialization of the $l \times d$ neighborhoods the $k$ non-overlapping patterns are calculated. Thus, the sortedAccess$(v, T)$ operation is executed until the $k$ patterns that contain the most similar values to $q_{ij}$ are retrieved.\\
 The sortedAccess$(v, T)$ operation searches the time point for the next most similar value to a query pattern cell $q_{ij}$ of the query pattern $Q(t)$. The neighborhood $N(q_{ij})$ is expanded until such a value is retrieved. Some time points may have to be skipped because the time point anchored a pattern previously. The next unseen most similar value to $q_{ij}$ is either at position $t^-$ or $t^+$, which represent the time points to the direct left or right of leftPos$^-$ and rightPos$^+$. If the $t^-$ is more or equally similar to $q_{ij}$ than $t^+$, the leftPos$^-$ is decremented and $t=t^-$. If $t^+$ is more similar $t=t^+$.
 
@@ -2148,40 +2267,40 @@ Hence, there are no additional time points anchored for a pattern previously and
 	\IncMargin{1em}
 	\SetAlgoLined
 	\DontPrintSemicolon
-	\KwIn{Query pattern value $v$ and the set of visited time points $T$ and the neighborhood itself $self$}
-	\KwOut{Time point of the next most similar value to $v$}
+	\KwIn{The neighborhood $N$ around query pattern value $q_{i,j}$ and the set of visited time points $T$}
+	\KwOut{Time point of the next most similar value to $q_{i,j}$}
 	
 
-		    leftPos$^-$ $\leftarrow$ self.leftPos\;
-		    rightPos$^+$ $\leftarrow$ self.rightPos\;
+		    leftPos$^-$ $\leftarrow$ N.leftPos\;
+		    rightPos$^+$ $\leftarrow$ N.rightPos\;
 
 
-		    \While{$t^-$ $\neq$ NIL and TimeSetContains($t^-$ $-(j + l)$)}{
+		    \While{$t^-$ $\neq$ NIL and ($t^-$ $-(j + l)$) $\in T$}{
 		    	
-			    leftPos$^-$ $\leftarrow$ leftPos$^-$ $- 1$\;
+			    leftPos$^-$ $\leftarrow$ prev(leftPos$^-$)\;
 		    }
 		    
 		    \While{$t^-$ $\neq$ NIL and TimeSetContains($t^-$ $-(j + l)$)}{
 		      	
-		     	rightPos$^+$ $\leftarrow$ rightPos$^+$ $+ 1$\;
+		     	rightPos$^+$ $\leftarrow$ next(rightPos$^+$)\;
 		    }
 		    
 		   \uIf{$t^-$ $\neq$ NIL and  $t^+$ $\neq$ NIL }{
-			   	\eIf{$|r_{i}(t^-)$ - self.key$|$ $\leq$ $|r_{i}(t^+)$ - self.key$|$}{
+			   	\eIf{$|r_{i}(t^-)$ - $q_{i,j}$$|$ $\leq$ $|r_{i}(t^+)$ - $q_{i,j}$$|$}{
 		   		
-			   		leftPos$^-\leftarrow$ leftPos$^- - 1$\; $t$ $\leftarrow$ $t^-$\;
+			   		leftPos$^-\leftarrow$ prev(leftPos$^-$); $t$ $\leftarrow$ $t^-$\;
 		 		
 			   	}
 			   	{
-			   		rightPos$^+\leftarrow$ rightPos$^+ + 1$\; $t$ $\leftarrow$ $t^+$\;
+			   		rightPos$^+\leftarrow$ next(rightPos$^+$); $t$ $\leftarrow$ $t^+$\;
 			   	}
 		   	}
 		   	\uElseIf{$t^-$ $\neq$ NIL}{
 		   		
-		   		leftPos$^-\leftarrow$ leftPos$^- - 1$\; $t$ $\leftarrow$ $t^-$\;
+		   		leftPos$^-\leftarrow$ prev(leftPos$^-$); $t$ $\leftarrow$ $t^-$\;
 		   	}
 		   	\uElseIf{$t^+$ $\neq$ NIL}{
-		   		rightPos$^+\leftarrow$ rightPos$^+ + 1$\; $t$ $\leftarrow$ $t^+$\;
+		   		rightPos$^+\leftarrow$ next(rightPos$^+$); $t$ $\leftarrow$ $t^+$\;
 		   		
 		   	}
 		   	\Else{
@@ -2194,7 +2313,7 @@ Hence, there are no additional time points anchored for a pattern previously and
 	
 	
 
-	\caption{SortedAccess$(v, T)$}	\label{NeighborhoodGrow}
+	\caption{SortedAccess$(N(q_{i,j}), T)$}	\label{NeighborhoodGrow}
 \end{algorithm}
 
 
@@ -2205,34 +2324,34 @@ Hence, there are no additional time points anchored for a pattern previously and
 This analysis refers to a single time series $s$ for which a $B^+$tree and a circular array are maintained and the complexity calculations are valid for our context, e.g. the linked list elements are traversed at most $l$ times. 
 \newtheorem{mydef}{Lemma}
 
-\subsection{Runtime Complexity}
+\section{Runtime Complexity}
 
 \paragraph{Circular, Doubly Linked List}
 \begin{mydef}
 	The insertion of a new time point to a linked list needs $O(1)$ time.
 \end{mydef}
 \begin{proof}
-	For each new value produced by a time series $s$ a linked list in the $B^+$tree is expanded. Since the new value is always inserted at the tail position it needs $O(1)$.
+	For each new value produced by a time series $s$ a linked list in the $B^+$tree is expanded. Since the new value is always inserted at the tail position it needs $O(1)$ time.
 \end{proof}
 \begin{mydef}
 	The deletion of a time point from a linked list needs $O(1)$ time.
 \end{mydef}
 \begin{proof}
-	For each deletion in a $B^+$tree a time point needs to be removed from a linked list. Since the oldest value is always at the head position, the deletion needs $O(1)$.
+	For each deletion in a $B^+$tree a time point needs to be removed from a linked list. Since the oldest value is always at the head position, the deletion needs $O(1)$ time.
 \end{proof}
 \begin{mydef}
 	The search of a specific time point in a linked list if newNeighborhood$(t,v,j,l)$ is executed takes at most $O(l)$ time.
 \end{mydef}
 \begin{proof}
-	A time series $s$ in a pattern $P(t)$ initializes $l$ neighborhoods. Hence in the worst case, if the $l$ newest measurements in the circular array of $s$ have the same value and thus are stored in the same linked list in the $B^+$tree, $l$ list elements have to be traversed to find the specific measurement time point. 
+	A time series $s$ in a pattern $P(t)$ initializes $l$ neighborhoods. Hence in the worst case, if the $l$ newest measurements in the circular array of $s$ have the same value and thus are stored in the same linked list in the $B^+$tree, $l$ list elements have to be traversed to find the specific measurement time point, starting from the tail and scanning backwards. 
 \end{proof}
 
-\subsubsection{Circular Array Operations}
+\paragraph{Circular Array Operations}
 \begin{mydef}
 	The update of the circular array takes $O(1)$ time.
 \end{mydef}
 \begin{proof}
-	The next update position in a circular array is computet in $O(1)$ time, hence the update takes $O(1)$ time. 
+	The next update position in a circular array is computed in $O(1)$ time, hence the update takes $O(1)$ time. 
 \end{proof}
 \begin{mydef}
 	The random access of a time point $t$ takes $O(1)$ time.
@@ -2252,29 +2371,30 @@ required I/O operations since I/O operations are expensive. The speed of operati
 	\label{def1}
 \end{mydef}
 \begin{proof}
-	To search the insertion and deletion position in a $B^+$tree takes $O(\log_{n}(|W|) \times n)$. For the sortedAccess$(v,T)$ operation the pattern length $l$ provides an upper bound for the maximum required value lookups in a doubly, linked list.\\ The nodes are traversed, recursively and downwards from the root of the tree. Therefore, the problem of size $|W|$ is divided by the tree order $n$. This leads to $log_n(|W|)$ complexity, where $|W|$ is the maximum number of keys in the tree, at the same time the size of the circular array, and $n$ is the order of the tree, representing the maximum number of pointers in a node. \\The time taken to find the appropriate pointer index $i$ in the $FindLeaf$ operation is at most $O(n)$. Hence, the total complexity to find a leaf key is $O((\log_{n}(|W|) \times n))$. 
+	To search the insertion and deletion position in a $B^+$tree takes $O(\log_{n}(|W|) \times n)$. For the sortedAccess$(v,T)$ operation the pattern length $l$ provides an upper bound for the maximum required value lookups in a linked list.\\ The nodes are traversed, recursively and downwards from the root of the tree. Therefore, the problem of size $|W|$ is divided by the tree order $n$. This leads to $log_n(|W|)$ complexity, where $|W|$ is the maximum number of keys in the tree, at the same time the size of the circular array, and $n$ is the order of the tree, representing the maximum number of pointers in a node. \\The time taken to find the appropriate pointer index $i$ in the $FindLeaf$ operation is at most $O(n)$. Hence, the total complexity to find a leaf key is $O((\log_{n}(|W|) \times n))$. 
 \end{proof}
 
 \begin{mydef}
 	The insertion of a measurement to the $B^+$tree takes $O(\log_{n}(|W|) \times n)$ time.
 \end{mydef}
 \begin{proof}
-	In the worst case for an insertion is proportional to $\log_{n}(|W|)$, where $n$ is the maximum number of pointers in a node. The number of keys in leaf nodes is at most $|W|$. If there are no duplicate values in the circular array. In our case the insertion point of a new measurement to a doubly, linked list is always found in $O(1)$, duplicates have no influence to the complexity of an insertion.  
+	In the worst case for an insertion is proportional to $\log_{n}(|W|)$, where $n$ is the maximum number of pointers in a node. The number of keys in leaf nodes is at most $|W|$. If there are no duplicate values in the circular array. In our case the insertion point of a new measurement to a linked list is always found in $O(1)$, duplicates have no influence to the complexity of an insertion.  
 \end{proof}
 \begin{mydef}
 	The deletion of a measurement from the $B^+$tree takes $O(\log_{n}(|W|) \times n)$ time.
 \end{mydef}
 \begin{proof}
-	 If there are no duplicate values the number of leaf keys is the size of the time window $|W|$. Since the deletion point of a new measurement from a doubly, linked list is always found in $O(1)$, duplicates as well have no influence to the complexity of a deletion. 
+	 If there are no duplicate values the number of leaf keys is the size of the time window $|W|$. Since the deletion point of a new measurement from a linked list is always found in $O(1)$, duplicates as well have no influence to the complexity of a deletion. 
 \end{proof}
 
 
 \subsubsection{Neighborhood Operations}
+ The newNeighborhood$(t,v,j,l)$ operation searches a specific measurement. Therefore, it cannot just take the oldest or newest time point position like the insertion or deletion method. In the worst case the entire linked list must be searched for the specific time point. We initialize $l$ $\times$ $d$ neighborhoods, one for each value in a query pattern $Q(t)$. Thus, $l$ neighborhoods in every time series $r$ which is part of the pattern. Hence, the newNeighborhood$(t,v,j,l)$ operation always is executed at the $l$ newest measurements in an involved time series. Thus, we can give an upper bound, namely the pattern length $l$. As a consequence, at most $l$ element examinations in a linked list are necessary, where $l$ represents the pattern length.
 \begin{mydef}
 	The initialization of a neighborhood in time series $s$ takes $O(l+(\log_{n}(|W|) \times n)))$ time.
 \end{mydef}
 \begin{proof}
-	The initialization of the neighborhood needs to search a specific measurement in the $B^+$tree. Hence the complexity is equal to the search operation in a $B^+$tree defined in \ref{def1}. The pattern length gives an upper bound to the maximum required value lookups in a doubly, linked list.
+	The initialization of the neighborhood needs to search a specific measurement in the $B^+$tree. Hence the complexity is equal to the search operation in a $B^+$tree defined in \ref{def1}. The pattern length gives an upper bound to the maximum required value lookups in a linked list.
 \end{proof}
 
 \begin{mydef}
@@ -2376,7 +2496,7 @@ table[x=W,y=ms,col sep=comma] {resultsw.csv};
 
 \chapter{Summary and Conclusion}
 \label{sec:Summary}
-We studied the requirements for keeping a portion of a streaming time series in main memory and simultaneously provide efficient access possibilities to the measurements in a time series. The system we presented uses two different data structures to achieve efficient access operations. Random access is efficiently performed on a circular array and sorted access is efficiently performed on a $B^+$tree with leaves linked in both directions, thus, to the respective successor and predecessor. \\Furthermore, the system can handle duplicate values with a simple but powerful circular, doubly linked list. The duplicate handling is not only simple to implement but also effective in terms of update velocity. Moreover, retrieving a specific value in the linked list has an upper bound and therefore is efficiently performed in most cases. 
+We studied the requirements for keeping a portion of a streaming time series in main memory and simultaneously provide efficient access possibilities to the measurements in a time series. The system we presented uses two different data structures to achieve efficient access operations. Random access is efficiently performed on a circular array and sorted access is efficiently performed on a $B^+$tree with leaves linked in both directions, thus, to the respective successor and predecessor. \\Furthermore, the system can handle duplicate values with a simple but powerful linked list. The duplicate handling is not only simple to implement but also effective in terms of update velocity. Moreover, retrieving a specific value in the linked list has an upper bound and therefore is efficiently performed in most cases. 
 
 
 
@@ -2406,9 +2526,10 @@ We studied the requirements for keeping a portion of a streaming time series in 
 \addappheadtotoc
 \chapter{Algorithms}
 
-
+\label{app:Algo}
 
 \section{Deletion}
+\label{app:Del}
 
 \begin{algorithm}[H]
 	\IncMargin{1em}
@@ -2432,9 +2553,55 @@ We studied the requirements for keeping a portion of a streaming time series in 
 	
 	tree.root $\leftarrow$ newRoot\;
 	
-	\caption{AdjustTheRoot$(tree)$}	\label{adjustTheRoot}
+	\caption{AdjustRoot$(tree)$}	\label{adjustTheRoot}
 \end{algorithm}
 
+
+\begin{algorithm}[H]
+	\IncMargin{1em}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\KwIn{Tree $tree$, the node $node$ and its neighbor $neighbor$, the neighborIndex $nIndex$, the $kIndex$ and the the key $kPrime$}
+	\KwOut{The keys in the $node$ and its $neighbor$, as well as the $parents$ keys are redestributed}
+	
+	
+	//node has neighbor to the left side\;
+	\eIf{nIndex != -1}{
+		//Pull neighbor's last key-pointer pair\; over from the neighbor's right end to n\;
+		\eIf{node is not a leaf}{
+			m $\leftarrow$ neighbor.pointers[neighbor.numOfKeys]\;
+			insert neighbor.pointers[m] and $kPrime$ to first position in node and shift other pointers and values right\;
+			remove neighbor.key[m-1], neighbor.pointers[m] from neighbor\;
+			replace $kPrime$ in node.parent by neighbor.keys[m-1]\;}
+		{
+			//last value pointer pair in the node\;
+			m $\leftarrow$ neighbor.pointers[neighbor.numOfKeys -1]\;
+			insert neighbor.pointers[m] and neighbor.keys[m] to first position in node and shift other pointers and values right\;
+			remove neighbor.key[m], neighbor.pointers[m] from neighbor\;
+			replace $kPrime$ in node.parent by node.keys[0]\;
+		}
+		
+	}	
+	{
+		//node is leftmost child. Take a key-pointer pair from the neighbor to the right\;
+		//Move the neighbor's leftmost key-pointer pair to n's rightmost position\;
+		\eIf{node is not a leaf}{
+			node.keys[node.numOfKeys] $\leftarrow$ $kPrime$\;
+			node.pointers[node.numOfKeys +1] $\leftarrow$ neighbor.pointers[0]\;
+			replace $kPrime$ in node.parent by neighbor.keys[0]\;
+			remove neighbor.keys[0], neighbor.pointers[0] from neighbor\;}
+		{
+			node.keys[node.numOfKeys] $\leftarrow$ neighbor.keys[0]\;
+			node.pointers[node.numOfKeys +1] $\leftarrow$ neighbor.pointers[0]\;
+			node.parent.keys[kIndex] = neighbor.keys[1]\;
+			remove neighbor.keys[0], neighbor.pointers[0] from neighbor\;
+		}
+	}
+	
+	
+	\caption{Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}	\label{Redistribute}
+\end{algorithm}
+%Redistribute
 
 
 \begin{algorithm}[H]
@@ -2492,52 +2659,6 @@ We studied the requirements for keeping a portion of a streaming time series in 
 \end{algorithm}
 %Merge
 
-\begin{algorithm}[H]
-	\IncMargin{1em}
-	\SetAlgoLined
-	\DontPrintSemicolon
-	\KwIn{Tree $tree$, the node $node$ and its neighbor $neighbor$, the neighborIndex $nIndex$, the $kIndex$ and the the key $kPrime$}
-	\KwOut{The keys in the $node$ and its $neighbor$, as well as the $parents$ keys are redestributed}
-	
-	
-	//node has neighbor to the left side\;
-	\eIf{nIndex != -1}{
-		//Pull neighbor's last key-pointer pair\; over from the neighbor's right end to n\;
-		\eIf{node is not a leaf}{
-			m $\leftarrow$ neighbor.pointers[neighbor.numOfKeys]\;
-			insert neighbor.pointers[m] and $kPrime$ to first position in node and shift other pointers and values right\;
-			remove neighbor.key[m-1], neighbor.pointers[m] from neighbor\;
-			replace $kPrime$ in node.parent by neighbor.keys[m-1]\;}
-		{
-			//last value pointer pair in the node\;
-			m $\leftarrow$ neighbor.pointers[neighbor.numOfKeys -1]\;
-			insert neighbor.pointers[m] and neighbor.keys[m] to first position in node and shift other pointers and values right\;
-			remove neighbor.key[m], neighbor.pointers[m] from neighbor\;
-			replace $kPrime$ in node.parent by node.keys[0]\;
-		}
-		
-	}	
-	{
-		//node is leftmost child. Take a key-pointer pair from the neighbor to the right\;
-		//Move the neighbor's leftmost key-pointer pair to n's rightmost position\;
-		\eIf{node is not a leaf}{
-			node.keys[node.numOfKeys] $\leftarrow$ $kPrime$\;
-			node.pointers[node.numOfKeys +1] $\leftarrow$ neighbor.pointers[0]\;
-			replace $kPrime$ in node.parent by neighbor.keys[0]\;
-			remove neighbor.keys[0], neighbor.pointers[0] from neighbor\;}
-		{
-			node.keys[node.numOfKeys] $\leftarrow$ neighbor.keys[0]\;
-			node.pointers[node.numOfKeys +1] $\leftarrow$ neighbor.pointers[0]\;
-			node.parent.keys[kIndex] = neighbor.keys[1]\;
-			remove neighbor.keys[0], neighbor.pointers[0] from neighbor\;
-		}
-	}
-	
-	
-	\caption{Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}	\label{Redistribute}
-\end{algorithm}
-%Redistribute
-
 \section{Insertion}
 
 \begin{algorithm}[H]
@@ -2575,7 +2696,7 @@ We studied the requirements for keeping a portion of a streaming time series in 
 	oldNode.numOfKeys $\leftarrow$ 0\;
 	\BlankLine
 	//calculate splitpoint by $\ceil{n/2}$\;
-	split = getSplitPoint(tree.nodeSize)\;
+	split = GetSplitPoint(n-1)\;
 	
 	//fill first leaf\;
 	\For{i $\leftarrow$ 0; i < split} {
@@ -2636,7 +2757,7 @@ We studied the requirements for keeping a portion of a streaming time series in 
 	
 	newInnerNode.numOfKeys $\leftarrow$ 0, oldInnerNode.numOfKeys $\leftarrow$ 0\;
 	
-	split $\leftarrow$ getSplitPoint(tree.nodeSize + 1)\;
+	split $\leftarrow$ getSplitPoint(n)\;
 	
 	
 	\For{x < split;} {
@@ -2693,7 +2814,7 @@ We studied the requirements for keeping a portion of a streaming time series in 
 	pointerPos $\leftarrow$ pointer position index from parent to $oldChild$\;
 	
 	//the new key fits into the node\;
-	\eIf {parent.numOfKeys < tree.nodeSize}{
+	\eIf {parent.numOfKeys < n-1}{
 		insertIntoTheNode(parent, pointerPos, k, newChild)\;
 	}
 	{
@@ -2712,7 +2833,7 @@ The entire source code can be found here: \\
 
 \chapter{Experimental Results}
 The entire source code can be found here: \\
-\url{https://github.com/memast2/BA-TimeSeriesData/tree/master/Dataset and Results}
+\url{https://github.com/memast2/BA-TimeSeriesData/tree/master/Experimental_Results}
 
 
 
