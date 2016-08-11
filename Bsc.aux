@@ -1,169 +1,180 @@
 \relax 
 \@writefile{loa}{\def \figurename{Algorithm}}
 \citation{BScT}
-\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{9}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{10}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \citation{BScT}
-\@writefile{toc}{\contentsline {chapter}{\numberline {2}Background}{10}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Background}{11}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{background}{{2}{10}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.1}TKCM}{10}}
-\newlabel{TKCM}{{2.1}{10}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.2}Access Methods}{11}}
-\newlabel{AccessMethods}{{2.2}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Query Pattern Q(t) of length $l=3$ and $d=2$ reference time series}}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Pattern for query pattern cell $q_{13}$}}{11}}
+\newlabel{background}{{2}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}TKCM}{11}}
+\newlabel{TKCM}{{2.1}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Example of a query pattern Q(t) of length $l=3$ and $d=2$ reference time series.}}{12}}
+\newlabel{def3}{{2.1.4}{12}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Access Methods}{12}}
+\newlabel{AccessMethods}{{2.2}{12}}
+\newlabel{sorted}{{2.2.1}{12}}
+\newlabel{random}{{2.2.2}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Pattern for query pattern cell $q_{1,3}$.}}{13}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces NextPattern}}{13}}
+\newlabel{NextPattern}{{1}{13}}
 \citation{BScT}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Problem Definition}{13}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Problem Definition}{14}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{ProblemDefinition}{{3}{13}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Context}{13}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Operations}{13}}
-\newlabel{sec:Op}{{3.2}{13}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Approach}{14}}
+\newlabel{ProblemDefinition}{{3}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Context}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Operations}{14}}
+\newlabel{sec:Op}{{3.2}{14}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Approach}{15}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{sec:Approach}{{4}{14}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Circular Array}{14}}
-\newlabel{sec:circularArray}{{4.1}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}States}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Unfilled circular array of size $|W|$}}{15}}
-\newlabel{fig:cat}{{4.1}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Filled circular array of size $|W|$}}{15}}
-\newlabel{fig:cat}{{4.2}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Observation}{15}}
+\newlabel{sec:Approach}{{4}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces A $B^+$tree with the related circular array.}}{15}}
+\newlabel{exampleTree}{{4.1}{15}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Circular Array}{15}}
+\newlabel{sec:circularArray}{{4.1}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}States}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Shifted circular array.}}{16}}
+\newlabel{fig:cat}{{4.2}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Shift$(\mathaccentV {bar}016{t}, v)$: Update The Circular Array}{16}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Shift$(tree, array, t, v)$}}{17}}
+\newlabel{alg:UpdateCA}{{2}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Circular Array after the insertion of 41.5.}}{17}}
+\newlabel{fig:circAfter}{{4.3}{17}}
 \citation{DatabaseSystemC}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}$B^+$tree}{16}}
-\newlabel{sec:BplusTree}{{4.2}{16}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{16}}
-\newlabel{structureBtree}{{4.2.1}{16}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Leaf.}{16}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Interior Node.}{16}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Root.}{16}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Left children keys < 17.2 and right children keys $\geq $ 17.2}}{17}}
-\newlabel{fig:BTreeBook}{{4.3}{17}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Example of a complete $B^+$tree}}{17}}
-\newlabel{fig:BTreeBook}{{4.4}{17}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Application to our System}{17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Random Access: Lookup a Value}{18}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces RandomAccess$(t)$}}{18}}
+\newlabel{alg:Lookup}{{3}{18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces $2.5$ is the value at time point $\text  {14:10}$.}}{18}}
+\newlabel{fig:circANow}{{4.4}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}$B^+$tree}{18}}
+\newlabel{sec:BplusTree}{{4.2}{18}}
+\citation{DatabaseSystemC}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{19}}
+\newlabel{structureBtree}{{4.2.1}{19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Left children keys < 17.2 and right children keys $\geq $ 17.2.}}{19}}
+\newlabel{fig:little}{{4.5}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Application to our System}{20}}
 \citation{LinkedListBook}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Observation}{18}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Handling Duplicate Values}{18}}
-\newlabel{sec:allowDV}{{4.3}{18}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Associated doubly, circular Linked List}{18}}
-\newlabel{doublyLinked}{{4.3.1}{18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Doubly, circular linked lists associated to leaf nodes}}{19}}
-\newlabel{fig:DoublyLinked}{{4.5}{19}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces AddNewTail$(node, i, t)$}}{20}}
-\newlabel{AddToList}{{1}{20}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces DeleteHead$(node, i)$}}{20}}
-\newlabel{deleteListValue}{{2}{20}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Observation}{20}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Operations}{21}}
-\newlabel{sec:OperationsOnBTree}{{4.4}{21}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Start situation}}{21}}
-\newlabel{startSituation}{{4.6}{21}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Shift$(\mathaccentV {bar}016{t}, v)$}{22}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Update the Circular Array}{22}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces UpdateArray$(tree, array, t, v)$}}{22}}
-\newlabel{alg:UpdateCA}{{3}{22}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Circular Array before}}{22}}
-\newlabel{fig:circAfter}{{4.7}{22}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Circular Array after the insertion of 41.5}}{23}}
-\newlabel{fig:circAfter}{{4.8}{23}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Search in a $B^+$tree}{23}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces FindLeaf$(tree, k)$}}{23}}
-\newlabel{findLeaf}{{4}{23}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Deletion in the $B^+$tree}{23}}
-\newlabel{delete}{{4.4.1}{23}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces The node has still enough keys}}{24}}
-\newlabel{fig:enoughkeys}{{4.9}{24}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces The node can be merged with its sibling}}{24}}
-\newlabel{fig:enoughkeys}{{4.10}{24}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.11}{\ignorespaces Some entries are redistributed}}{25}}
-\newlabel{fig:enoughkeys}{{4.11}{25}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.12}{\ignorespaces $B^+$tree after the deletion of $13.2$}}{25}}
-\newlabel{fig:deletionOf13}{{4.12}{25}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces Delete$(tree, t, k)$}}{26}}
-\newlabel{delete}{{5}{26}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {6}{\ignorespaces AdjustTheRoot$(tree)$}}{26}}
-\newlabel{deleteEntry}{{6}{26}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {7}{\ignorespaces DeleteEntry$(tree, node, k, pointer)$}}{27}}
-\newlabel{deleteEntry}{{7}{27}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {8}{\ignorespaces MergeNodes$(tree, node, neighbor, nIndex, kPrime)$}}{28}}
-\newlabel{MergeNodes}{{8}{28}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {9}{\ignorespaces Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}}{29}}
-\newlabel{Redistribute}{{9}{29}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Insertion in the $B^+$tree}{30}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {10}{\ignorespaces AddMeasurement$(tree, t, v)$}}{30}}
-\newlabel{AddMeasurement}{{10}{30}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {11}{\ignorespaces SplitLeaves$(tree, leaf, t, v)$}}{31}}
-\newlabel{SplitLeaves}{{11}{31}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {12}{\ignorespaces SplitInnerNodes$(tree, oldInnerNode, index, key, childNode)$}}{32}}
-\newlabel{SplitInnerNodes}{{12}{32}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {13}{\ignorespaces InsertIntoParent$(tree, oldChild, k, newChild)$}}{33}}
-\newlabel{InsertIntoParent}{{13}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.13}{\ignorespaces $B^+$tree after the insertion of $41.5$}}{33}}
-\newlabel{fig:insetionOf41}{{4.13}{33}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Sorted Access: Neighbor}{34}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Initialize Neighborhood}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.14}{\ignorespaces Query Pattern Q(t) of length $l=3$ and $d=1$ reference time series}}{34}}
-\newlabel{Qpatt}{{4.14}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.15}{\ignorespaces The circular array and the $B^+$tree for time series $r_1$ after initialization}}{35}}
-\newlabel{fig:initialize}{{4.15}{35}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {14}{\ignorespaces NewNeighborhood$(t,v,j,l)$}}{35}}
-\newlabel{initializeNeighborhood}{{14}{35}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Grow Neighborhood}{36}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.16}{\ignorespaces Status of $N(q_{12})$ after growing 3 times}}{36}}
-\newlabel{fig:increase}{{4.16}{36}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {15}{\ignorespaces Neighbor$(v, T)$}}{37}}
-\newlabel{NeighborhoodGrow}{{15}{37}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Random Access: Lookup a Value}{37}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {16}{\ignorespaces Lookup$(t)$}}{38}}
-\newlabel{alg:Lookup}{{16}{38}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.17}{\ignorespaces $2.5$ is the value at time point $\text  {14:10}$}}{38}}
-\newlabel{fig:circANow}{{4.17}{38}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Complexity Analysis}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Observation}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Handling Duplicate Values: Associated doubly, circular Linked List}{21}}
+\newlabel{sec:allowDV}{{4.2.4}{21}}
+\newlabel{doublyLinked}{{4.2.4}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Doubly, circular linked lists associated to leaf nodes.}}{22}}
+\newlabel{fig:DoublyLinked}{{4.6}{22}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces AddNewTail$(node, i, t)$}}{22}}
+\newlabel{AddToList}{{4}{22}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces DeleteHead$(node, i)$}}{23}}
+\newlabel{deleteListValue}{{5}{23}}
+\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Observation}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}$B^+$tree Operations}{23}}
+\newlabel{sec:OperationsOnBTree}{{4.3}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Start situation}}{24}}
+\newlabel{startSituation}{{4.7}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Search in a $B^+$tree}{24}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {6}{\ignorespaces FindLeaf$(tree, k)$}}{25}}
+\newlabel{findLeaf}{{6}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Deletion in the $B^+$tree}{25}}
+\newlabel{delete}{{4.3.2}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces The node has still enough keys.}}{26}}
+\newlabel{fig:enoughkeys}{{4.8}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces The node can be merged with its sibling.}}{26}}
+\newlabel{fig:enoughkeys}{{4.9}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces Some entries are redistributed.}}{26}}
+\newlabel{fig:enoughkeys}{{4.10}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.11}{\ignorespaces $B^+$tree after the deletion of $13.2$.}}{27}}
+\newlabel{fig:deletionOf13}{{4.11}{27}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {7}{\ignorespaces Delete$(tree, t, k)$}}{27}}
+\newlabel{delete}{{7}{27}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {8}{\ignorespaces DeleteEntry$(tree, node, k, pointer)$}}{28}}
+\newlabel{deleteEntry}{{8}{28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Insertion in the $B^+$tree}{28}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {9}{\ignorespaces AddMeasurement$(tree, t, v)$}}{29}}
+\newlabel{AddMeasurement}{{9}{29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.12}{\ignorespaces $B^+$tree after the insertion of $41.5$.}}{30}}
+\newlabel{fig:insetionOf41}{{4.12}{30}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Neighborhood}{30}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Initialize Neighborhood}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.13}{\ignorespaces Query Pattern Q(t) of length $l=3$ and $d=1$ reference time series.}}{31}}
+\newlabel{Qpatt}{{4.13}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.14}{\ignorespaces The circular array and the $B^+$tree for time series $r_1$ after initialization.}}{31}}
+\newlabel{fig:initialize}{{4.14}{31}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {10}{\ignorespaces NewNeighborhood$(t,v,j,l)$}}{32}}
+\newlabel{initializeNeighborhood}{{10}{32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Sorted Access: Grow Neighborhood}{32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.15}{\ignorespaces Status of $N(q_{1,2})$ after growing 3 times.}}{33}}
+\newlabel{fig:increase}{{4.15}{33}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {11}{\ignorespaces SortedAccess$(v, T)$}}{33}}
+\newlabel{NeighborhoodGrow}{{11}{33}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Complexity Analysis}{34}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{Complexity}{{5}{39}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{39}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Circular, Doubly Linked List}{39}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Circular Array Operations}{39}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{40}}
-\newlabel{def1}{{6}{40}}
-\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{40}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{41}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Experimental Evaluation}{42}}
+\newlabel{Complexity}{{5}{34}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Runtime Complexity}{34}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Circular, Doubly Linked List}{34}}
+\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Circular Array Operations}{34}}
+\@writefile{toc}{\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{35}}
+\newlabel{def1}{{6}{35}}
+\@writefile{toc}{\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{35}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}Space Complexity}{36}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Experimental Evaluation}{37}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{sec:Experimental}{{6}{42}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Setup}{42}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Runtime}{42}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Tree Node Size.}{42}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Window Size.}{43}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Memory}{43}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Summary and Conclusion}{44}}
+\newlabel{sec:Experimental}{{6}{37}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Setup}{37}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Runtime}{37}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Tree Node Size.}{37}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Shift operation with increasing values for $n-1$.}}{37}}
+\@writefile{toc}{\contentsline {paragraph}{\nonumberline Window Size.}{38}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Shift operation with increasing values for $|W|$.}}{38}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Summary and Conclusion}{39}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{sec:Summary}{{7}{44}}
+\newlabel{sec:Summary}{{7}{39}}
 \bibstyle{alpha}
 \bibcite{BScT}{1}
 \bibcite{DatabaseSystemC}{2}
 \bibcite{LinkedListBook}{3}
+\@writefile{toc}{\contentsline {chapter}{Appendices}{42}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Algorithms}{42}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{lol}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}Deletion}{42}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {12}{\ignorespaces AdjustTheRoot$(tree)$}}{42}}
+\newlabel{adjustTheRoot}{{12}{42}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {13}{\ignorespaces MergeNodes$(tree, node, neighbor, nIndex, kPrime)$}}{43}}
+\newlabel{MergeNodes}{{13}{43}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {14}{\ignorespaces Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}}{44}}
+\newlabel{Redistribute}{{14}{44}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}Insertion}{45}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {15}{\ignorespaces SplitLeaves$(tree, leaf, t, v)$}}{45}}
+\newlabel{SplitLeaves}{{15}{45}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {16}{\ignorespaces SplitInnerNodes$(tree, oldInnerNode, index, key, childNode)$}}{46}}
+\newlabel{SplitInnerNodes}{{16}{46}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {17}{\ignorespaces InsertIntoParent$(tree, oldChild, k, newChild)$}}{47}}
+\newlabel{InsertIntoParent}{{17}{47}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Experimental Results}{48}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{lol}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\global\@altsecnumformattrue
