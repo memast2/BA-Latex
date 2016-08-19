@@ -1,27 +1,27 @@
 \def \figurename {Algorithm}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {algocf}{\numberline {1}{\ignorespaces NextPattern}}{13}
+\contentsline {algocf}{\numberline {1}{\ignorespaces NextPattern($N(q_{i,j}),T$)}}{14}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {algocf}{\numberline {2}{\ignorespaces Shift$(tree, array, \mathaccentV {bar}016{t}, v)$}}{17}
-\contentsline {algocf}{\numberline {3}{\ignorespaces RandomAccess$(t)$}}{18}
-\contentsline {algocf}{\numberline {4}{\ignorespaces AddNewTail$(node, i, t)$}}{23}
-\contentsline {algocf}{\numberline {5}{\ignorespaces DeleteHead$(node, i)$}}{23}
-\contentsline {algocf}{\numberline {6}{\ignorespaces FindLeaf$(tree, k)$}}{25}
-\contentsline {algocf}{\numberline {7}{\ignorespaces Delete$(tree, t, k)$}}{26}
-\contentsline {algocf}{\numberline {8}{\ignorespaces DeleteEntry$(tree, node, k, pointer)$}}{29}
-\contentsline {algocf}{\numberline {9}{\ignorespaces AddMeasurement$(tree, t, v)$}}{30}
-\contentsline {algocf}{\numberline {10}{\ignorespaces NewNeighborhood$(t,v,j,l)$}}{33}
-\contentsline {algocf}{\numberline {11}{\ignorespaces SortedAccess$(N(q_{i,j}), T)$}}{34}
+\contentsline {algocf}{\numberline {2}{\ignorespaces Shift$(tree, array, \mathaccentV {bar}016{t}, v)$}}{19}
+\contentsline {algocf}{\numberline {3}{\ignorespaces RandomAccess$(array, t)$}}{20}
+\contentsline {algocf}{\numberline {4}{\ignorespaces AddNewTail$(node, i, t)$}}{25}
+\contentsline {algocf}{\numberline {5}{\ignorespaces DeleteHead$(node, i)$}}{25}
+\contentsline {algocf}{\numberline {6}{\ignorespaces FindLeaf$(tree, k)$}}{27}
+\contentsline {algocf}{\numberline {7}{\ignorespaces Delete$(tree, t, k)$}}{28}
+\contentsline {algocf}{\numberline {8}{\ignorespaces DeleteEntry$(tree, node, k, pointer)$}}{31}
+\contentsline {algocf}{\numberline {9}{\ignorespaces AddMeasurement$(tree, t, v)$}}{32}
+\contentsline {algocf}{\numberline {10}{\ignorespaces NewNeighborhood$(tree,q_{i,j},t,j,l)$}}{36}
+\contentsline {algocf}{\numberline {11}{\ignorespaces SortedAccess$(N(q_{i,j}), T)$}}{37}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {algocf}{\numberline {12}{\ignorespaces AdjustRoot$(tree)$}}{43}
-\contentsline {algocf}{\numberline {13}{\ignorespaces Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}}{44}
-\contentsline {algocf}{\numberline {14}{\ignorespaces MergeNodes$(tree, node, neighbor, nIndex, kPrime)$}}{45}
-\contentsline {algocf}{\numberline {15}{\ignorespaces SplitLeaves$(tree, leaf, t, v)$}}{46}
-\contentsline {algocf}{\numberline {16}{\ignorespaces SplitInnerNodes$(tree, oldInnerNode, index, key, childNode)$}}{47}
-\contentsline {algocf}{\numberline {17}{\ignorespaces InsertIntoParent$(tree, oldChild, k, newChild)$}}{48}
+\contentsline {algocf}{\numberline {12}{\ignorespaces AdjustRoot$(tree)$}}{51}
+\contentsline {algocf}{\numberline {13}{\ignorespaces MergeNodes$(tree, node, neighbor, nIndex, kPrime)$}}{52}
+\contentsline {algocf}{\numberline {14}{\ignorespaces Redistribute$(tree, node, neighbor, nIndex, kIndex, kPrime)$}}{53}
+\contentsline {algocf}{\numberline {15}{\ignorespaces SplitLeaves$(tree, leaf, t, v)$}}{54}
+\contentsline {algocf}{\numberline {16}{\ignorespaces SplitInnerNodes$(tree, oldInnerNode, index, key, childNode)$}}{55}
+\contentsline {algocf}{\numberline {17}{\ignorespaces InsertIntoParent$(tree, oldChild, k, newChild)$}}{56}
 \addvspace {10\p@ }

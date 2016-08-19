@@ -1,43 +1,71 @@
 \contentsline {chapter}{\numberline {1}Introduction}{10}
-\contentsline {chapter}{\numberline {2}Background}{11}
-\contentsline {section}{\numberline {2.1}TKCM}{11}
-\contentsline {section}{\numberline {2.2}Access Methods}{12}
-\contentsline {chapter}{\numberline {3}Problem Definition}{14}
-\contentsline {section}{\numberline {3.1}Context}{14}
-\contentsline {section}{\numberline {3.2}Operations}{14}
-\contentsline {chapter}{\numberline {4}Approach}{15}
-\contentsline {section}{\numberline {4.1}Circular Array}{15}
-\contentsline {subsection}{\numberline {4.1.1}States}{16}
-\contentsline {subsection}{\numberline {4.1.2}Shift$(\mathaccentV {bar}016{t}, v)$}{16}
-\contentsline {subsection}{\numberline {4.1.3}Random Access}{17}
-\contentsline {section}{\numberline {4.2}$B^+$tree}{18}
-\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{19}
-\contentsline {subsubsection}{\nonumberline Observation}{20}
-\contentsline {subsubsection}{\nonumberline Application to our System}{20}
-\contentsline {subsection}{\numberline {4.2.2}Handling Duplicate Values: Associated Circular Doubly Linked List}{21}
-\contentsline {subsubsection}{\nonumberline Observation}{22}
-\contentsline {section}{\numberline {4.3}$B^+$tree Operations}{23}
-\contentsline {subsection}{\numberline {4.3.1}Search in a $B^+$tree}{24}
-\contentsline {subsection}{\numberline {4.3.2}Deletion in the $B^+$tree}{25}
-\contentsline {subsection}{\numberline {4.3.3}Insertion in the $B^+$tree}{29}
-\contentsline {section}{\numberline {4.4}Neighborhood}{31}
-\contentsline {subsection}{\numberline {4.4.1}Initialize Neighborhood}{31}
-\contentsline {subsection}{\numberline {4.4.2}Sorted Access}{33}
-\contentsline {chapter}{\numberline {5}Complexity Analysis}{35}
-\contentsline {section}{\numberline {5.1}Runtime Complexity}{35}
-\contentsline {paragraph}{\nonumberline Circular, Doubly Linked List}{35}
-\contentsline {paragraph}{\nonumberline Circular Array Operations}{35}
-\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{36}
-\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{36}
-\contentsline {subsection}{\numberline {5.1.1}Space Complexity}{37}
-\contentsline {chapter}{\numberline {6}Experimental Evaluation}{38}
-\contentsline {section}{\numberline {6.1}Setup}{38}
-\contentsline {section}{\numberline {6.2}Runtime}{38}
-\contentsline {paragraph}{\nonumberline Tree Node Size.}{38}
-\contentsline {paragraph}{\nonumberline Window Size.}{39}
-\contentsline {chapter}{\numberline {7}Summary and Conclusion}{40}
-\contentsline {chapter}{Appendices}{43}
-\contentsline {chapter}{\numberline {A}Algorithms}{43}
-\contentsline {section}{\numberline {A.1}Deletion}{43}
-\contentsline {section}{\numberline {A.2}Insertion}{46}
-\contentsline {chapter}{\numberline {B}Experimental Results}{49}
+\contentsline {chapter}{\numberline {2}Background}{12}
+\contentsline {section}{\numberline {2.1}TKCM}{12}
+\contentsline {section}{\numberline {2.2}Access Methods}{13}
+\contentsline {chapter}{\numberline {3}Problem Definition}{15}
+\contentsline {section}{\numberline {3.1}Context}{15}
+\contentsline {section}{\numberline {3.2}Operations}{15}
+\contentsline {chapter}{\numberline {4}Approach}{17}
+\contentsline {section}{\numberline {4.1}Circular Array}{17}
+\contentsline {subsection}{\numberline {4.1.1}States}{18}
+\contentsline {subsection}{\numberline {4.1.2}Shift}{19}
+\contentsline {subsection}{\numberline {4.1.3}Random Access}{20}
+\contentsline {section}{\numberline {4.2}$B^+$tree}{21}
+\contentsline {subsection}{\numberline {4.2.1}The Structure of the used $B^+$tree}{21}
+\contentsline {subsubsection}{\nonumberline Observation}{23}
+\contentsline {subsubsection}{\nonumberline Application to our System}{23}
+\contentsline {subsection}{\numberline {4.2.2}Handling Duplicate Values: Associated Circular Doubly Linked List}{23}
+\contentsline {subsubsection}{\nonumberline Observation}{25}
+\contentsline {section}{\numberline {4.3}$B^+$tree Operations}{26}
+\contentsline {subsection}{\numberline {4.3.1}Search in a $B^+$tree}{26}
+\contentsline {subsection}{\numberline {4.3.2}Deletion in the $B^+$tree}{27}
+\contentsline {subsection}{\numberline {4.3.3}Insertion in the $B^+$tree}{32}
+\contentsline {section}{\numberline {4.4}Neighborhood}{34}
+\contentsline {subsection}{\numberline {4.4.1}Initialize a Neighborhood}{34}
+\contentsline {subsection}{\numberline {4.4.2}Sorted Access}{36}
+\contentsline {chapter}{\numberline {5}Complexity Analysis}{39}
+\contentsline {section}{\numberline {5.1}Runtime Complexity}{39}
+\contentsline {paragraph}{\nonumberline Circular, Doubly Linked List}{39}
+\contentsline {paragraph}{\nonumberline Circular Array Operations}{39}
+\contentsline {subsubsection}{\nonumberline $B^+$tree Operations}{39}
+\contentsline {subsubsection}{\nonumberline Neighborhood Operations}{41}
+\contentsline {section}{\numberline {5.2}Space Complexity}{42}
+\contentsline {chapter}{\numberline {6}Experimental Evaluation}{43}
+\contentsline {section}{\numberline {6.1}Setup}{43}
+\contentsline {section}{\numberline {6.2}Runtime}{43}
+\contentsline {subsection}{\numberline {6.2.1}Shift}{43}
+\contentsline {subsubsection}{\nonumberline Increased Tree Node Size}{43}
+\contentsline {paragraph}{\nonumberline Aim}{43}
+\contentsline {paragraph}{\nonumberline Method}{43}
+\contentsline {paragraph}{\nonumberline Variables}{43}
+\contentsline {paragraph}{\nonumberline Prediction}{43}
+\contentsline {paragraph}{\nonumberline Results}{44}
+\contentsline {subsubsection}{\nonumberline Increased Window Size}{44}
+\contentsline {paragraph}{\nonumberline Aim}{44}
+\contentsline {paragraph}{\nonumberline Method}{44}
+\contentsline {paragraph}{\nonumberline Variables}{44}
+\contentsline {paragraph}{\nonumberline Prediction}{44}
+\contentsline {paragraph}{\nonumberline Results}{45}
+\contentsline {subsection}{\numberline {6.2.2}New Neighborhood}{45}
+\contentsline {paragraph}{\nonumberline Aim}{45}
+\contentsline {paragraph}{\nonumberline Method}{45}
+\contentsline {paragraph}{\nonumberline Variables}{46}
+\contentsline {paragraph}{\nonumberline Prediction}{46}
+\contentsline {paragraph}{\nonumberline Results}{46}
+\contentsline {subsection}{\numberline {6.2.3}Sorted Access}{46}
+\contentsline {paragraph}{\nonumberline Aim}{46}
+\contentsline {paragraph}{\nonumberline Method}{47}
+\contentsline {paragraph}{\nonumberline Variables}{47}
+\contentsline {paragraph}{\nonumberline Prediction}{47}
+\contentsline {paragraph}{\nonumberline Results}{47}
+\contentsline {chapter}{\numberline {7}Summary and Conclusion}{48}
+\contentsline {chapter}{Appendices}{51}
+\contentsline {chapter}{\numberline {A}Algorithms}{51}
+\contentsline {section}{\numberline {A.1}$B^+$tree Deletion}{51}
+\contentsline {section}{\numberline {A.2}$B^+$tree Insertion}{54}
+\contentsline {chapter}{\numberline {B}Contents of the CD-ROM}{57}
+\contentsline {paragraph}{\nonumberline Abstract.txt}{57}
+\contentsline {paragraph}{\nonumberline Zusfsg.txt}{57}
+\contentsline {paragraph}{\nonumberline Thesis.pdf}{57}
+\contentsline {paragraph}{\nonumberline Experiments}{57}
+\contentsline {section}{\numberline {B.1}CD-ROM}{58}
